@@ -10,13 +10,14 @@ import {
   AMPLITUDE_DEV_KEY,
   APPSFLYER_DEV_KEY,
 } from './app/src/apimanager/ApiEndpoint';
-import {logOnConsole} from './app/src/utility/Utils';
-import {init} from '@amplitude/analytics-react-native';
+import { logOnConsole } from './app/src/utility/Utils';
+import { init } from '@amplitude/analytics-react-native';
+import { SafeAreaView, StatusBar } from 'react-native';
 
 console.disableYellowBox = true;
 
 const App = () => {
-  
+
   const myLocalFlashMessage = useRef();
   useEffect(() => {
     checkPermission();
@@ -57,10 +58,13 @@ const App = () => {
   };
 
   return (
-    <Provider store={Store}>
-      <AppNavigation />
-      <FlashMessage position="top" ref={myLocalFlashMessage} />
-    </Provider>
+    <SafeAreaView style={{ flex: 1,marginTop:20 }}>
+      <Provider store={Store}>
+        <StatusBar translucent={true} backgroundColor="transparent" />
+        <AppNavigation />
+        <FlashMessage position="top" ref={myLocalFlashMessage} />
+      </Provider>
+    </SafeAreaView>
   );
 };
 
