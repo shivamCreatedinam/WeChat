@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Cityfurnish.ipa</key>
+	<array>
+		<dict>
+			<key>architectures</key>
+			<array>
+				<string>armv7</string>
+				<string>arm64</string>
+			</array>
+			<key>certificate</key>
+			<dict>
+				<key>SHA1</key>
+				<string>9DEB401DB26A1B5F0EA846F0488B9617D7BF4371</string>
+				<key>dateExpires</key>
+				<string>23/03/21</string>
+				<key>type</key>
+				<string>Apple Development</string>
+			</dict>
+			<key>entitlements</key>
+			<dict>
+				<key>application-identifier</key>
+				<string>3S6BV7TWX7.com.cityfurnish</string>
+				<key>com.apple.developer.team-identifier</key>
+				<string>8QF396N54V</string>
+				<key>get-task-allow</key>
+				<true/>
+				<key>keychain-access-groups</key>
+				<array>
+					<string>3S6BV7TWX7.com.cityfurnish</string>
+				</array>
+			</dict>
+			<key>name</key>
+			<string>Cityfurnish.app</string>
+			<key>profile</key>
+			<dict>
+				<key>UUID</key>
+				<string>16dceda2-b473-4891-9a6d-78e9bda7323f</string>
+				<key>name</key>
+				<string>UniversalAlgoworksProv</string>
+			</dict>
+			<key>team</key>
+			<dict>
+				<key>id</key>
+				<string>8QF396N54V</string>
+				<key>name</key>
+				<string>Algoworks Technologies Pvt Ltd</string>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>

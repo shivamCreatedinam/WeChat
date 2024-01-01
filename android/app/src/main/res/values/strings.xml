@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">WeConnect</string>
+    <string name="facebook_app_id">220005992559209</string>
+    <string name="facebook_client_token">13a665c76c23e5feb0919dab3591fd43</string>
+    <string name="fb_login_protocol_scheme">fb220005992559209</string>
+</resources>

@@ -1,0 +1,41 @@
+React Native Coding Guidelines
+
+We will be following the below Guidelines in the project.
+
+* Naming Conventions:
+1. A folder and subfolder name should always start with small letters and the files belong to the folders are always in pascal case.
+2. To name the components, we follow the pattern path based component naming, which includes naming the component accordingly to it’s the relative path to the folders components or to src. Basically, a component that is located at components/common/Button.js would be named as Button.js. Component Name should follow the pascal case.
+3. When the file is inside a folder with the same name, we don’t need to repeat the name. That means, components/user/form/Form.js, would be named as UserForm and not as UserFormForm.
+4. Include all the control in a single import belong to the same module end with a semicolon. There should be no space between the two imports. For example: import {ListView,  Alert, View, TouchableOpacity, KeyboardAvoidingView, } from ‘react-native’;
+5. import all the core modules at top and then the custom modules will be imported.
+6. Imorting only required functions of node modules instead of importing the complete module.
+7. Minimal usage of node modules so that build size would be less.
+8. The class name should be declared as the file name that will be easy during importing and to maintain the standard declaration.
+9. The object and variable declaration should always in the camel case statement.
+
+
+*Layout Conventions:
+1. We should create a class component when we have to use state otherwise we should use functional components.
+2. If continuation lines are not indented automatically, indent them one tab stop (four spaces).
+3. Add at least one blank line between method and property definitions.
+4. There should be no line space between a similar-looking statement or a similar bunch of code applies for the same activity.
+5. Define arrow functions as class instances and since arrow functions do not have their own scope, this inside arrow function will always point to the class. Therefore you do not need to do binding of this inside constructor. And in most of the cases, you would not be required to use constructor at all. In our project, we never used constructor in any of the components.
+
+
+*Commenting Conventions:
+1. Place the comment on a separate line, not at the end of a line of code.
+2. Begin comment text with an uppercase letter.
+3. End comment text with a period.
+4. Insert one space between the comment delimiter (//) and the comment text.
+
+
+
+*Additional guidelines:
+1. Do not add any libraries to the application without express permission from the CTO. Libraries generally come with a lot of bloats and needlessly increase load time.  ( PLEASE ALWAYS get this approved by @Amandeep Singh)
+2. Comment your functions and services with their purpose. Functions should also include @param and @returns as well to help indicate proper usage. The service level comments need to indicate the technical and business purpose of the object.
+3. Boolean values should always start with is or has.
+4. For better understanding use long names, do not use short abbreviations, ever.
+5. Use lazy loading for faster loading.
+6. Never duplicate a name. The hierarchy lives within can give you a prefix. In the case of services, if you are creating a second one, you are doing it wrong. Just add the behavior to the other service. If it is not accessible, you are probably building it wrong. So look at your design with someone else to see how you can bring it into the existing structure.
+7. Format your code. Make it really easy to read. Not just the constructor, but most importantly your logic blocks should have neat formatting making them very easy to understand.
+8. Versioning of the application should always be there.

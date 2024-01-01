@@ -1,0 +1,73 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/Cityfurnish 2020-04-15 18-53-49/DistributionSummary.plist",
+      "sha1": "dfa4afb0f9ae6bbaf277317eac8ecbc196a2f0d0"
+    },
+    {
+      "path": "assets/fonts/Cityfurnish 2020-04-15 18-53-49/ExportOptions.plist",
+      "sha1": "150a9fc9d443fe7283830d1d07a5f32fe6418e38"
+    },
+    {
+      "path": "assets/fonts/Cityfurnish 2020-04-15 18-53-49/Packaging.log",
+      "sha1": "4181be0a1e4d1c3de6edd3d6226f1256b8089135"
+    },
+    {
+      "path": "assets/fonts/Nunito-Bold.ttf",
+      "sha1": "5aec430ff329bbe0e7c1137aac390f2e1d4260a3"
+    },
+    {
+      "path": "assets/fonts/Nunito-Light.ttf",
+      "sha1": "d6fcfd33bb8cef2884bd84bfbc8299b6c91b2315"
+    },
+    {
+      "path": "assets/fonts/Nunito-Medium.ttf",
+      "sha1": "e920ebbb6ae345487d586c6f9330f60537697ea1"
+    },
+    {
+      "path": "assets/fonts/Nunito-Regular.ttf",
+      "sha1": "4c54e16115bd3d375447600da62e8f6b5b660f9a"
+    },
+    {
+      "path": "assets/fonts/Poppins-Black.ttf",
+      "sha1": "4e91803235bc44c8db587b8e3d98105ecb611c9d"
+    },
+    {
+      "path": "assets/fonts/Poppins-Bold.ttf",
+      "sha1": "3bc8164396c3e6c1e4fae0cf2a51ea66381c1c2d"
+    },
+    {
+      "path": "assets/fonts/Poppins-ExtraBold.ttf",
+      "sha1": "6f007dac8dacf714ddcfaa3132a887e6a71cf792"
+    },
+    {
+      "path": "assets/fonts/Poppins-ExtraBoldItalic.ttf",
+      "sha1": "cb7ca77911e100755dec21fcebd123d3914f0af7"
+    },
+    {
+      "path": "assets/fonts/Poppins-ExtraLight.ttf",
+      "sha1": "13c6360196875d19f488e709809701cb367296d6"
+    },
+    {
+      "path": "assets/fonts/Poppins-Light.ttf",
+      "sha1": "0eba831cb91221e799ba55fc1b7c1805a0799623"
+    },
+    {
+      "path": "assets/fonts/Poppins-Medium.ttf",
+      "sha1": "cf83e7582e60ed83f67c7d68b4f7482ac9fc6958"
+    },
+    {
+      "path": "assets/fonts/Poppins-Regular.ttf",
+      "sha1": "52f9413b264e8ecefbbf12830e3dfadebbf72986"
+    },
+    {
+      "path": "assets/fonts/Poppins-SemiBold.ttf",
+      "sha1": "bb68fa19e20495d26a20308b90712bd2c6150642"
+    },
+    {
+      "path": "assets/fonts/Poppins-Thin.ttf",
+      "sha1": "9bebfeda7e983ad8d9d78059e44f937622c42dd7"
+    }
+  ]
+}
