@@ -1,5 +1,5 @@
 import { Text, View, Image, SafeAreaView, Dimensions, TouchableOpacity, StatusBar, useWindowDimensions, ActivityIndicator, TextInput, Alert, BackHandler, ScrollView, StyleSheet } from 'react-native'
-import React, { Component, useCallback } from 'react'
+import React, { Component, useCallback, useRef } from 'react'
 import AsyncStorage from '@react-native-community/async-storage';
 import AsyncStorageContaints from '../../utility/AsyncStorageConstants';
 import { showMessage, hideMessage } from "react-native-flash-message";
@@ -55,7 +55,36 @@ const BlockDSurveyScreen = () => {
     const [differentlyAble, setDifferently] = React.useState('');
     const [smartPhone, setSmartphone] = React.useState('');
     const [anyGroup, setAnyGroup] = React.useState('');
-
+    const [life, setLife] = React.useState(false);
+    const [nonLife, setNonLife] = React.useState(false);
+    const [getInsurance, setGetInsurance] = React.useState(false);
+    const [selectedReason, setSelectedReason] = React.useState([]);
+    const [awareA, setAwareA] = React.useState(false);
+    const [enrollA, setEnrollA] = React.useState(false);
+    const [renewalA, setRenewalA] = React.useState(false);
+    const [inactiveA, setInactiveA] = React.useState(false);
+    const [awareB, setAwareB] = React.useState(false);
+    const [enrollB, setEnrollB] = React.useState(false);
+    const [renewalB, setRenewalB] = React.useState(false);
+    const [inactiveB, setInactiveB] = React.useState(false);
+    const [awareC, setAwareC] = React.useState(false);
+    const [enrollC, setEnrollC] = React.useState(false);
+    const [renewalC, setRenewalC] = React.useState(false);
+    const [inactiveC, setInactiveC] = React.useState(false);
+    const [awareD, setAwareD] = React.useState(false);
+    const [enrollD, setEnrollD] = React.useState(false);
+    const [renewalD, setRenewalD] = React.useState(false);
+    const [inactiveD, setInactiveD] = React.useState(false);
+    const [privateBorrowing, setprivateBorrowing] = React.useState(false);
+    const [privateBorrowingFocus, setPrivateBorrowingFocus] = React.useState(false);
+    const [reasonForEnroll, setReasonForEnroll] = React.useState([]);
+    const [enrolledOtherInsurance, setEnrolledOtherInsurance] = React.useState(false);
+    const [rupayCover, setRupayCover] = React.useState(false);
+    const [PMJJBY, setPMJJBY] = React.useState(false);
+    const [PMFBY, setPMFBY] = React.useState(false);
+    const [other, setOther] = React.useState(false);
+    const [insuranceInactive, setInsuranceInactive] = React.useState([]);
+    const multiSelectRef = useRef(null);
     // gender setDifferently
     const data = [
         {
@@ -97,13 +126,40 @@ const BlockDSurveyScreen = () => {
         }
     ];
 
+    const reason = [
+        { id: 1, lable: 'Don’t need it' },
+        { id: 2, lable: 'Don’t trust' },
+        { id: 3, lable: 'No money to pay premium' },
+        { id: 4, lable: 'Any other reason' },
+    ]
+
+    const enrolPlace = [
+        { id: 1, lable: 'Bank Branch ' },
+        { id: 2, lable: 'BC Agent' },
+        { id: 3, lable: 'Digital App' },
+        { id: 4, lable: 'Insurance Agent ' },
+    ]
+    const enrolReason = [
+        { id: 1, lable: 'Needed the product ' },
+        { id: 2, lable: 'Liked the benefits' },
+        { id: 3, lable: 'Enrolled by the bank on its own' },
+        { id: 4, lable: 'Convinced by Family/Friends' },
+    ]
+
+    const InsuranceInactiveReason = [
+        { id: 1, lable: 'Lack of Funds' },
+        { id: 2, lable: 'No Trust' },
+        { id: 3, lable: 'No intimation received' },
+        { id: 4, lable: 'Don’t like the service/support' },
+    ]
+
     const adults = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
 
     const childern = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
 
     useFocusEffect(
         React.useCallback(() => {
-            getLoadingData();
+            // getLoadingData();
             readMessages();
             return () => {
                 // Useful for cleanup functions
@@ -252,7 +308,7 @@ const BlockDSurveyScreen = () => {
                 />
                 <View style={{ marginLeft: 10, flex: 1 }}>
                     <Text style={{ fontWeight: 'bold' }}>{userName} - {user.name}</Text>
-                    {user.active && <Text style={{ color: 'green', fontSize: 12, fontWeight: 'bold' }}>Active Survey Token - <Text style={{fontWeight:'bold',fontSize:14,color:'red'}}>Block D</Text> </Text>}
+                    {user.active && <Text style={{ color: 'green', fontSize: 12, fontWeight: 'bold' }}>Active Survey Token - <Text style={{ fontWeight: 'bold', fontSize: 14, color: 'red' }}>Block D</Text> </Text>}
                 </View>
                 {isRecording === true ? <View style={{ height: 10, width: 10, borderRadius: 100, backgroundColor: 'green' }} /> : <View style={{ height: 10, width: 10, borderRadius: 100, backgroundColor: 'red' }} />}
             </View>
@@ -449,12 +505,12 @@ const BlockDSurveyScreen = () => {
 
     }
 
-    const onSelectedItemsChange = (selectedItems) => {
-        setSelectedAreas(selectedItems);
+    const onSelectedReason = (selectedItems) => {
+        setReasonForEnroll(selectedItems);
     }
 
-    const onSelectedEducationChange = (selectedItems) => {
-        setSelectedEducation(selectedItems);
+    const onSelectedInsuranceInactiveReason = (selectedItems) => {
+        setInsuranceInactive(selectedItems);
     }
 
     const onSelectedOccupationsChange = (selectedItems) => {
@@ -465,10 +521,20 @@ const BlockDSurveyScreen = () => {
         setSelectedIncomes(selectedItems);
     }
 
+    const SelectedReasonForEnrolLabels = reasonForEnroll.map((selectedId) => {
+        const selectedReason = enrolReason.find((reason) => reason.id === selectedId);
+        return selectedReason ? selectedReason.lable : '';
+    });
+
+    const SelectedInsuranceInactiveLabels = insuranceInactive.map((selectedId) => {
+        const selectedReason = InsuranceInactiveReason.find((reason) => reason.id === selectedId);
+        return selectedReason ? selectedReason.lable : '';
+    });
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#F8F8FF' }}>
             {renderCustomHeader()}
-            <Modal isVisible={isInstruction}>
+            {/* <Modal isVisible={isInstruction}>
                 <View style={{ height: 200, width: Dimensions.get('screen').width - 50, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 5, padding: 20 }}>
                     <View style={{ alignItems: 'center' }}>
                         <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Survey Instructions</Text>
@@ -478,264 +544,340 @@ const BlockDSurveyScreen = () => {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </Modal>
+            </Modal> */}
             {/* <TouchableOpacity onPress={() => startRecording()}>
                 <Text>Start Recording</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => stopRecording()}>
                 <Text>Stop Recording</Text>
             </TouchableOpacity> */}
-            <Text style={{ fontWeight: 'bold', paddingLeft: 20, paddingTop: 10 }}>B. ACCESS and USAGE OF FINANCIAL SERVICES – BANK ACCOUNT</Text>
+            <Text style={{ fontWeight: 'bold', paddingLeft: 20, paddingTop: 10 }}>D. ACCESS and USAGE OF FINANCIAL SERVICES – INSURANCE FACILITIES</Text>
             {isLoading === false ?
                 <ScrollView>
                     <View style={{ padding: 10 }}>
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>1. Name</Text>
-                            <TextInput onChangeText={(e) => setSurveyName(e)} style={{ backgroundColor: '#fff', paddingLeft: 15 }} placeholder='Enter Name' />
-                        </View>
-                        <View style={{ padding: 10, }} />
-                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>2. Gender</Text>
-                            <RadioButtonRN
-                                data={data}
-                                selectedBtn={(e) => setGender(e)}
-                            />
-                        </View>
-                        <View style={{ padding: 10, }} />
-                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>3. Age</Text>
-                            <TextInput onChangeText={(e) => setAgeNumber(e)} style={{ backgroundColor: '#fff', paddingLeft: 15 }} placeholder='Age' keyboardType={'number-pad'} maxLength={2} />
-                        </View>
-                        <View style={{ padding: 10, }} />
-                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>4. Occupation (In case of Overlap, report primary occupation)</Text>
-                            <MultiSelect
-                                hideTags
-                                items={occupations}
-                                uniqueKey="id"
-                                // ref={(component) => { this.multiSelect = component }}
-                                onSelectedItemsChange={(items) => onSelectedOccupationsChange(items)}
-                                selectedItems={selectedOccupations}
-                                selectText="Occupation"
-                                // searchInputPlaceholderText="Search Items..."
-                                // onChangeInput={(text) => console.log(text)}
-                                altFontFamily="ProximaNova-Light"
-                                tagRemoveIconColor="#CCC"
-                                tagBorderColor="#CCC"
-                                tagTextColor="#CCC"
-                                selectedItemTextColor="#CCC"
-                                selectedItemIconColor="#CCC"
-                                itemTextColor="#000"
-                                displayKey="occupation_name"
-                                searchInputStyle={{ color: '#CCC', paddingLeft: 10 }}
-                                submitButtonColor="#CCC"
-                                submitButtonText="Submit"
-                            />
-                        </View>
-                        <View style={{ padding: 10, }} />
-                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>5. Education</Text>
-                            <MultiSelect
-                                hideTags
-                                items={educations}
-                                uniqueKey="id"
-                                // ref={(component) => { this.multiSelect = component }}
-                                onSelectedItemsChange={(items) => onSelectedEducationChange(items)}
-                                selectedItems={selectedEducation}
-                                selectText="Education"
-                                // searchInputPlaceholderText="Search Items..."
-                                // onChangeInput={(text) => console.log(text)}
-                                altFontFamily="ProximaNova-Light"
-                                tagRemoveIconColor="#CCC"
-                                tagBorderColor="#CCC"
-                                tagTextColor="#CCC"
-                                selectedItemTextColor="#CCC"
-                                selectedItemIconColor="#CCC"
-                                itemTextColor="#000"
-                                displayKey="education_title"
-                                searchInputStyle={{ color: '#CCC', paddingLeft: 10 }}
-                                submitButtonColor="#CCC"
-                                submitButtonText="Submit"
-                            />
-                        </View>
-                        <View style={{ padding: 10, }} />
-                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>6. Annual Income (For non-earning respondents, the income of parents or spouse can be reported)</Text>
-                            <MultiSelect
-                                hideTags
-                                items={incomes}
-                                uniqueKey="id"
-                                // ref={(component) => { this.multiSelect = component }}
-                                onSelectedItemsChange={(items) => onSelectedIncomesChange(items)}
-                                selectedItems={selectedIncomes}
-                                selectText="Annual Income"
-                                // searchInputPlaceholderText="Search Items..."
-                                // onChangeInput={(text) => console.log(text)}
-                                altFontFamily="ProximaNova-Light"
-                                tagRemoveIconColor="#CCC"
-                                tagBorderColor="#CCC"
-                                tagTextColor="#CCC"
-                                selectedItemTextColor="#CCC"
-                                selectedItemIconColor="#CCC"
-                                itemTextColor="#000"
-                                displayKey="icomes_title"
-                                searchInputStyle={{ color: '#CCC', paddingLeft: 10 }}
-                                submitButtonColor="#CCC"
-                                submitButtonText="Submit"
-                            />
-                        </View>
-                        <View style={{ padding: 10, }} />
-                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>7. Location</Text>
-                            <View>
-                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>State</Text>
-                                <Dropdown
-                                    style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-                                    placeholderStyle={styles.placeholderStyle}
-                                    selectedTextStyle={styles.selectedTextStyle}
-                                    inputSearchStyle={styles.inputSearchStyle}
-                                    // iconStyle={styles.iconStyle}
-                                    data={state}
-                                    // search
-                                    maxHeight={300}
-                                    labelField="name"
-                                    valueField="id"
-                                    placeholder={!isFocus ? 'Select State' : value}
-                                    // searchPlaceholder="Search..."
-                                    value={value}
-                                    onFocus={() => setIsFocus(true)}
-                                    onBlur={() => setIsFocus(false)}
-                                    onChange={item => {
-                                        console.log('______>', JSON.stringify(item))
-                                        setValue(item?.name);
-                                        loadDistrict(item?.id);
-                                        setIsFocus(false);
-                                    }}
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>23. Do you have any insurance facility?</Text>
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>23(a). Life</Text>
+                                <RadioButtonRN
+                                    data={dataGroup}
+                                    selectedBtn={(e) => setLife(e)}
                                 />
                             </View>
-                            <View>
-                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>District</Text>
-                                <Dropdown
-                                    style={[styles.dropdown, isDistrictFocus && { borderColor: 'blue' }]}
-                                    placeholderStyle={styles.placeholderStyle}
-                                    selectedTextStyle={styles.selectedTextStyle}
-                                    inputSearchStyle={styles.inputSearchStyle}
-                                    // iconStyle={styles.iconStyle}
-                                    data={DistrictData}
-                                    // search
-                                    maxHeight={300}
-                                    labelField="name"
-                                    valueField="distic_code"
-                                    placeholder={!isDistrictFocus ? 'Select District' : valueDistrict}
-                                    // searchPlaceholder="Search..."
-                                    value={valueDistrict}
-                                    onFocus={() => setIsDistrictFocus(true)}
-                                    onBlur={() => setIsDistrictFocus(false)}
-                                    onChange={item => {
-                                        console.log(JSON.stringify(item))
-                                        setDistrictValue(item.name);
-                                        setIsDistrictFocus(false);
-                                    }}
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>23(b). Non-Life</Text>
+                                <RadioButtonRN
+                                    data={dataGroup}
+                                    selectedBtn={(e) => setNonLife(e)}
                                 />
                             </View>
-                            <View>
-                                <View style={{ padding: 10, }} />
+                            {nonLife?.label === "No" ? <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>23(c). If not, do you want to get any insurance facilities?</Text>
+                                <RadioButtonRN
+                                    data={dataGroup}
+                                    selectedBtn={(e) => { console.log("RRRRR", e); setGetInsurance(e) }}
+                                />
+                            </View> : null}
+                            {getInsurance?.label === "No" ? <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
+                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>23(d). If not interested in any insurance facility, what could be the reasons?</Text>
+
+
                                 <MultiSelect
                                     hideTags
-                                    items={areas}
+                                    items={reason}
                                     uniqueKey="id"
-                                    // ref={(component) => { this.multiSelect = component }}
-                                    onSelectedItemsChange={(items) => onSelectedItemsChange(items)}
-                                    selectedItems={areasSelected}
-                                    selectText="Select Areas"
-                                    // searchInputPlaceholderText="Search Items..."
-                                    // onChangeInput={(text) => console.log(text)}
+                                    ref={multiSelectRef}
+                                    onSelectedItemsChange={(items) =>
+                                        onSelectedReason(items)
+                                    }
+                                    selectedItems={selectedReason}
+                                    selectText="Select Reason"
+                                    onChangeInput={(text) => console.log(text)}
                                     altFontFamily="ProximaNova-Light"
-                                    tagRemoveIconColor="#CCC"
-                                    tagBorderColor="#CCC"
-                                    tagTextColor="#CCC"
-                                    selectedItemTextColor="#CCC"
-                                    selectedItemIconColor="#CCC"
+                                    tagRemoveIconColor="#000"
+                                    tagBorderColor="#000"
+                                    tagTextColor="#000"
+                                    selectedItemTextColor="#000"
+                                    selectedItemIconColor="#000"
                                     itemTextColor="#000"
-                                    displayKey="area_title"
-                                    searchInputStyle={{ color: '#CCC', paddingLeft: 10 }}
-                                    submitButtonColor="#CCC"
+                                    displayKey="lable"
+                                    searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                    submitButtonColor="#000"
                                     submitButtonText="Submit"
+                                    itemBackground="#000"
+                                    styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
+                                />
+                                <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                    {SelectedReasonTypeLabels.map((label, index) => (
+                                        <View style={{ margin: 5 }}>
+                                            <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                        </View>
+                                    ))}
+                                </View>
+                            </View> : null}
+
+                        </View>
+                        <View style={{ padding: 10, }} />
+                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>24. Specific Insurance Facility/Scheme</Text>
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>24(a). In-built Insurance Accident Cover on RuPay card holders under PM Jan Dhan Account [Accidental]</Text>
+                                <Text style={{ marginBottom: 5, fontWeight: '500' }}>Awareness</Text>
+                                <RadioButtonRN
+                                    data={dataGroup}
+                                    selectedBtn={(e) => setAwareA(e)}
+                                />
+                            </View>
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: '500' }}>Enrolled (wherever applicable)</Text>
+                                <RadioButtonRN
+                                    data={dataGroup}
+                                    selectedBtn={(e) => setEnrollA(e)}
+                                />
+                            </View>
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: '500' }}>Received intimation of renewal/ premium payment (wherever applicable)</Text>
+                                <RadioButtonRN
+                                    data={dataGroup}
+                                    selectedBtn={(e) => setRenewalA(e)}
+                                />
+                            </View>
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: '500' }}>Insurance is inactive due to non-payment of premium (wherever applicable)</Text>
+                                <RadioButtonRN
+                                    data={dataGroup}
+                                    selectedBtn={(e) => setInactiveA(e)}
+                                />
+                            </View>
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>24(b). Pradhan Mantri Suraksha Bima Yojana (PMSBY) having an annual premium of ₹ 20- per year</Text>
+                                <Text style={{ marginBottom: 5, fontWeight: '500' }}>Awareness</Text>
+                                <RadioButtonRN
+                                    data={dataGroup}
+                                    selectedBtn={(e) => setAwareB(e)}
+                                />
+                            </View>
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: '500' }}>Enrolled (wherever applicable)</Text>
+                                <RadioButtonRN
+                                    data={dataGroup}
+                                    selectedBtn={(e) => setEnrollB(e)}
+                                />
+                            </View>
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: '500' }}>Received intimation of renewal/ premium payment (wherever applicable)</Text>
+                                <RadioButtonRN
+                                    data={dataGroup}
+                                    selectedBtn={(e) => setRenewalB(e)}
+                                />
+                            </View>
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: '500' }}>Insurance is inactive due to non-payment of premium (wherever applicable)</Text>
+                                <RadioButtonRN
+                                    data={dataGroup}
+                                    selectedBtn={(e) => setInactiveB(e)}
+                                />
+                            </View>
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>24(c). Pradhan Mantri Jeevan Jyoti Bima Yojana (PMJJBY)</Text>
+                                <Text style={{ marginBottom: 5, fontWeight: '500' }}>Awareness</Text>
+                                <RadioButtonRN
+                                    data={dataGroup}
+                                    selectedBtn={(e) => setAwareC(e)}
+                                />
+                            </View>
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: '500' }}>Enrolled (wherever applicable)</Text>
+                                <RadioButtonRN
+                                    data={dataGroup}
+                                    selectedBtn={(e) => setEnrollC(e)}
+                                />
+                            </View>
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: '500' }}>Received intimation of renewal/ premium payment (wherever applicable)</Text>
+                                <RadioButtonRN
+                                    data={dataGroup}
+                                    selectedBtn={(e) => setRenewalC(e)}
+                                />
+                            </View>
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: '500' }}>Insurance is inactive due to non-payment of premium (wherever applicable)</Text>
+                                <RadioButtonRN
+                                    data={dataGroup}
+                                    selectedBtn={(e) => setInactiveC(e)}
+                                />
+                            </View>
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>24(d). PM Fasal Bima Yojana [PMFBY]</Text>
+                                <Text style={{ marginBottom: 5, fontWeight: '500' }}>Awareness</Text>
+                                <RadioButtonRN
+                                    data={dataGroup}
+                                    selectedBtn={(e) => setAwareD(e)}
+                                />
+                            </View>
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: '500' }}>Enrolled (wherever applicable)</Text>
+                                <RadioButtonRN
+                                    data={dataGroup}
+                                    selectedBtn={(e) => setEnrollD(e)}
+                                />
+                            </View>
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: '500' }}>Received intimation of renewal/ premium payment (wherever applicable)</Text>
+                                <RadioButtonRN
+                                    data={dataGroup}
+                                    selectedBtn={(e) => setRenewalD(e)}
+                                />
+                            </View>
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: '500' }}>Insurance is inactive due to non-payment of premium (wherever applicable)</Text>
+                                <RadioButtonRN
+                                    data={dataGroup}
+                                    selectedBtn={(e) => setInactiveD(e)}
                                 />
                             </View>
                         </View>
-                        <View style={{ padding: 10, }} />
-                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>8. Are you differently abled?</Text>
-                            <RadioButtonRN
-                                data={differently}
-                                selectedBtn={(e) => setDifferently(e)}
+
+                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold', flex: 1 }}>25. Where did you enrol for any of the above insurance product?</Text>
+                            <Dropdown
+                                style={[styles.dropdown, privateBorrowingFocus && { borderColor: 'blue' }]}
+                                placeholderStyle={styles.placeholderStyle}
+                                selectedTextStyle={styles.selectedTextStyle}
+                                inputSearchStyle={styles.inputSearchStyle}
+                                // iconStyle={styles.iconStyle}
+                                // data={AccountType}
+                                data={enrolPlace}
+                                // search
+                                maxHeight={300}
+                                labelField="lable"
+                                valueField="id"
+                                placeholder={!privateBorrowingFocus ? 'Select' : privateBorrowing}
+                                // searchPlaceholder="Search..."
+                                value={privateBorrowing}
+                                onFocus={() => setPrivateBorrowingFocus(true)}
+                                onBlur={() => setPrivateBorrowingFocus(false)}
+                                onChange={item => {
+                                    console.log(JSON.stringify(item))
+                                    setprivateBorrowing(item.id);
+                                    setPrivateBorrowingFocus(false);
+                                }}
                             />
                         </View>
-                        <View style={{ padding: 10, }} />
-                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={{ marginBottom: 5, fontWeight: 'bold', flex: 1 }}>9. Size of Household</Text>
-                                <Text style={{ marginBottom: 5, fontWeight: 'bold', marginRight: 10 }}>Total : {Number(adult) + Number(children)}</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <View style={{ flex: 1 }}>
-                                    <Text style={{ fontWeight: 'bold' }}>Adults</Text>
-                                    <SelectDropdown
-                                        data={adults}
-                                        onSelect={(selectedItem, index) => {
-                                            console.log(selectedItem, index)
-                                            setAdults(selectedItem);
-                                        }}
-                                        buttonTextAfterSelection={(selectedItem, index) => {
-                                            // text represented after item is selected
-                                            // if data array is an array of objects then return selectedItem.property to render after item is selected
-                                            return selectedItem
-                                        }}
-                                        rowTextForSelection={(item, index) => {
-                                            // text represented for each item in dropdown
-                                            // if data array is an array of objects then return item.property to represent item in dropdown
-                                            return item
-                                        }}
-                                    />
-                                </View>
-                                <View style={{ flex: 1, marginLeft: 5 }}>
-                                    <Text style={{ fontWeight: 'bold' }}>Children's</Text>
-                                    <SelectDropdown
-                                        data={childern}
-                                        onSelect={(selectedItem, index) => {
-                                            console.log(selectedItem, index);
-                                            setChildren(selectedItem)
-                                        }}
-                                        buttonTextAfterSelection={(selectedItem, index) => {
-                                            // text represented after item is selected
-                                            // if data array is an array of objects then return selectedItem.property to render after item is selected
-                                            return selectedItem
-                                        }}
-                                        rowTextForSelection={(item, index) => {
-                                            // text represented for each item in dropdown
-                                            // if data array is an array of objects then return item.property to represent item in dropdown
-                                            return item
-                                        }}
-                                    />
-                                </View>
+                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>26 . Why did you enrol in this product?</Text>
+
+
+                            <MultiSelect
+                                hideTags
+                                items={enrolReason}
+                                uniqueKey="id"
+                                ref={multiSelectRef}
+                                onSelectedItemsChange={(items) =>
+                                    onSelectedReason(items)
+                                }
+                                selectedItems={reasonForEnroll}
+                                selectText="Select Reason"
+                                onChangeInput={(text) => console.log(text)}
+                                altFontFamily="ProximaNova-Light"
+                                tagRemoveIconColor="#000"
+                                tagBorderColor="#000"
+                                tagTextColor="#000"
+                                selectedItemTextColor="#000"
+                                selectedItemIconColor="#000"
+                                itemTextColor="#000"
+                                displayKey="lable"
+                                searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                submitButtonColor="#000"
+                                submitButtonText="Submit"
+                                itemBackground="#000"
+                                styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
+                            />
+                            <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                {SelectedReasonForEnrolLabels.map((label, index) => (
+                                    <View style={{ margin: 5 }}>
+                                        <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                    </View>
+                                ))}
                             </View>
                         </View>
-                        <View style={{ padding: 10, }} />
+
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>10. Are you part of any group (SHG/JLG or formal group) ?</Text>
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>27. Are you enrolled in any other life insurance (other than above)?</Text>
                             <RadioButtonRN
                                 data={dataGroup}
-                                selectedBtn={(e) => setAnyGroup(e)}
+                                selectedBtn={(e) => setEnrolledOtherInsurance(e)}
                             />
                         </View>
-                        <View style={{ padding: 10, }} />
+
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>11. Do you own a smartphone ?</Text>
-                            <RadioButtonRN
-                                data={smartphone}
-                                selectedBtn={(e) => setSmartphone(e)}
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>28. Do you know anybody, who has received an insurance claim from banks or other insurance agency for the following schemes</Text>
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+
+                                <Text style={{ marginBottom: 5, fontWeight: '500' }}>Rupay Accidental Cover</Text>
+                                <RadioButtonRN
+                                    data={dataGroup}
+                                    selectedBtn={(e) => setRupayCover(e)}
+                                />
+                            </View>
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: '500' }}>PMJJBY</Text>
+                                <RadioButtonRN
+                                    data={dataGroup}
+                                    selectedBtn={(e) => setPMJJBY(e)}
+                                />
+                            </View>
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: '500' }}>PMSBY</Text>
+                                <RadioButtonRN
+                                    data={dataGroup}
+                                    selectedBtn={(e) => setPMFBY(e)}
+                                />
+                            </View>
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: '500' }}>Any Other</Text>
+                                <RadioButtonRN
+                                    data={dataGroup}
+                                    selectedBtn={(e) => setOther(e)}
+                                />
+                            </View>
+                        </View>
+                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>29 . If your insurance has become inactive, please indicate the reasons?</Text>
+
+
+                            <MultiSelect
+                                hideTags
+                                items={InsuranceInactiveReason}
+                                uniqueKey="id"
+                                ref={multiSelectRef}
+                                onSelectedItemsChange={(items) =>
+                                    onSelectedInsuranceInactiveReason(items)
+                                }
+                                selectedItems={insuranceInactive}
+                                selectText="Select Reason"
+                                onChangeInput={(text) => console.log(text)}
+                                altFontFamily="ProximaNova-Light"
+                                tagRemoveIconColor="#000"
+                                tagBorderColor="#000"
+                                tagTextColor="#000"
+                                selectedItemTextColor="#000"
+                                selectedItemIconColor="#000"
+                                itemTextColor="#000"
+                                displayKey="lable"
+                                searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                submitButtonColor="#000"
+                                submitButtonText="Submit"
+                                itemBackground="#000"
+                                styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
                             />
+                            <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                {SelectedInsuranceInactiveLabels.map((label, index) => (
+                                    <View style={{ margin: 5 }}>
+                                        <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                    </View>
+                                ))}
+                            </View>
                         </View>
                         <View style={{ padding: 10, }} />
                         <TouchableOpacity onPress={() => navigation.replace('BlockESurveyScreen')} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
