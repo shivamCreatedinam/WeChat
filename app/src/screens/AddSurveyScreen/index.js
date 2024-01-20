@@ -252,7 +252,7 @@ const AddSurveyScreen = () => {
                 />
                 <View style={{ marginLeft: 10, flex: 1 }}>
                     <Text style={{ fontWeight: 'bold' }}>{userName} - {user.name}</Text>
-                    {user.active && <Text style={{ color: 'green', fontSize: 12, fontWeight: 'bold' }}>Active Survey Token - <Text style={{fontWeight:'bold',fontSize:14,color:'red'}}>Block A</Text> </Text>}
+                    {user.active && <Text style={{ color: 'green', fontSize: 12, fontWeight: 'bold' }}>Active Survey Token - <Text style={{ fontWeight: 'bold', fontSize: 14, color: 'red' }}>Block A</Text> </Text>}
                 </View>
                 {isRecording === true ? <View style={{ height: 10, width: 10, borderRadius: 100, backgroundColor: 'green' }} /> : <View style={{ height: 10, width: 10, borderRadius: 100, backgroundColor: 'red' }} />}
             </View>
@@ -262,16 +262,17 @@ const AddSurveyScreen = () => {
     const startRecording = async () => {
         setSurveyInstruction(false);
         setIsRecording(true);
-        // AudioRecord.start();
+        AudioRecord.start();
     };
 
     const stopRecording = async () => {
         // or to get the wav file path
-        console.warn('startRecording')
+        console.warn('stopRecording')
         const audioFile = await AudioRecord.stop();
         console.warn(audioFile)
         setAudioPath(audioFile);
-        submitSurvey(audioFile);
+        // submitSurvey(audioFile);
+        submitSurveyFetch(audioFile)
     };
 
     const validationCheck = () => {
@@ -427,7 +428,7 @@ const AddSurveyScreen = () => {
                 'Authorization': 'Bearer ' + userSendToken,
                 "Content-Type": "multipart/form-data",
             },
-            data: data
+            data: data,
         };
         console.warn('startRecording', JSON.stringify(config))
         Axios.request(config)
@@ -457,6 +458,55 @@ const AddSurveyScreen = () => {
                 });
             });
 
+    }
+
+    const submitSurveyFetch = async (file_urls) => {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + userSendToken);
+        var formdata = new FormData();
+        formdata.append("user_name", surveryName);
+        formdata.append("survey_token", name);
+        formdata.append("gender", gender?.label);
+        formdata.append("age_of_repons", Number(age) + '');
+        formdata.append("city", value + '');
+        formdata.append("state", valueDistrict + '');
+        formdata.append("occupation_id", selectedOccupations + '');
+        formdata.append("education_id", selectedEducation + '');
+        formdata.append("income_id", selectedIncomes + '');
+        formdata.append("area_id", areasSelected + '');
+        formdata.append("diff_abled", differentlyAble?.label + '');
+        formdata.append("adults", adult + '');
+        formdata.append("children", children + '');
+        formdata.append("total", Number(adult) + Number(children));
+        formdata.append("part_of_group", anyGroup?.label);
+        formdata.append("own_smartphone", smartPhone?.label);
+        formdata.append("latitude", "27.98878");
+        formdata.append("longitude", "28.00000");
+        formdata.append("other_occupation", "");
+        formdata.append("audio_file", file_urls, "recording_block_a.wav");
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'follow'
+        };
+
+        fetch("https://createdinam.in/RBI-CBCD/public/api/create-survey-demographics", requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                console.log(result?.status)
+                if (result?.status === true) {
+                    navigation.replace('BlockBSurveyScreen')
+                } else {
+                    showMessage({
+                        message: "Something went wrong!",
+                        description: result?.message,
+                        type: "danger",
+                    });
+                }
+            })
+            .catch(error => console.log('error', error));
     }
 
     const onSelectedItemsChange = (selectedItems) => {
@@ -764,7 +814,7 @@ const AddSurveyScreen = () => {
                             />
                         </View>
                         <View style={{ padding: 10, }} />
-                        <TouchableOpacity onPress={() => navigation.replace('BlockBSurveyScreen')} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
+                        <TouchableOpacity onPress={() => validationCheck()} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
                             <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Next Block B</Text>
                         </TouchableOpacity>
                     </View>
@@ -772,7 +822,7 @@ const AddSurveyScreen = () => {
         </SafeAreaView >
     )
 }
-
+// 
 const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',

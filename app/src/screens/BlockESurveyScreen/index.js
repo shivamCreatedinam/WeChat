@@ -103,7 +103,6 @@ const BlockESurveyScreen = () => {
 
     useFocusEffect(
         React.useCallback(() => {
-            getLoadingData();
             readMessages();
             return () => {
                 // Useful for cleanup functions
@@ -131,60 +130,6 @@ const BlockESurveyScreen = () => {
         } catch (error) {
             console.log("error_", error)
         }
-    }
-
-    const getLoadingData = async () => {
-        setLoading(true);
-        const UserToken = await AsyncStorage.getItem(AsyncStorageContaints.UserId);
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${UserToken}`
-        }
-        Axios.get(`https://createdinam.in/RBI-CBCD/public/api/get-demographic-details`, {
-            headers: headers
-        })
-            .then((response) => {
-                console.log('getLoadingData', JSON.stringify(response.data))
-                if (response.data.status === true) {
-                    setAreas(response.data?.areas);
-                    setEducations(response.data?.educations);
-                    setIncomes(response.data?.incomes);
-                    setOccupations(response.data?.occupations);
-                    getState(UserToken);
-                } else {
-                    setLoading(false);
-                    showMessage({
-                        message: "Something went wrong!",
-                        description: "Something went wrong. Try again!",
-                        type: "danger",
-                    });
-                }
-            });
-    }
-
-    const getState = (token) => {
-        let url = `https://createdinam.in/RBI-CBCD/public/api/get-states`;
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        }
-        Axios.get(url, {
-            headers: headers
-        })
-            .then((response) => {
-                console.log('getState', JSON.stringify(response?.data?.data))
-                if (response.data.status === true) {
-                    setLoading(false);
-                    setStateData(response?.data?.data);
-                } else {
-                    setLoading(false);
-                    showMessage({
-                        message: "Something went wrong!",
-                        description: "Something went wrong. Try again!",
-                        type: "danger",
-                    });
-                }
-            });
     }
 
     const loadDistrict = async (state) => {
@@ -252,7 +197,7 @@ const BlockESurveyScreen = () => {
                 />
                 <View style={{ marginLeft: 10, flex: 1 }}>
                     <Text style={{ fontWeight: 'bold' }}>{userName} - {user.name}</Text>
-                    {user.active && <Text style={{ color: 'green', fontSize: 12, fontWeight: 'bold' }}>Active Survey Token - <Text style={{fontWeight:'bold',fontSize:14,color:'red'}}>Block E</Text> </Text>}
+                    {user.active && <Text style={{ color: 'green', fontSize: 12, fontWeight: 'bold' }}>Active Survey Token - <Text style={{ fontWeight: 'bold', fontSize: 14, color: 'red' }}>Block E</Text> </Text>}
                 </View>
                 {isRecording === true ? <View style={{ height: 10, width: 10, borderRadius: 100, backgroundColor: 'green' }} /> : <View style={{ height: 10, width: 10, borderRadius: 100, backgroundColor: 'red' }} />}
             </View>

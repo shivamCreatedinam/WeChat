@@ -103,7 +103,6 @@ const BlockFSurveyScreen = () => {
 
     useFocusEffect(
         React.useCallback(() => {
-            getLoadingData();
             readMessages();
             return () => {
                 // Useful for cleanup functions
@@ -133,59 +132,6 @@ const BlockFSurveyScreen = () => {
         }
     }
 
-    const getLoadingData = async () => {
-        setLoading(true);
-        const UserToken = await AsyncStorage.getItem(AsyncStorageContaints.UserId);
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${UserToken}`
-        }
-        Axios.get(`https://createdinam.in/RBI-CBCD/public/api/get-demographic-details`, {
-            headers: headers
-        })
-            .then((response) => {
-                console.log('getLoadingData', JSON.stringify(response.data))
-                if (response.data.status === true) {
-                    setAreas(response.data?.areas);
-                    setEducations(response.data?.educations);
-                    setIncomes(response.data?.incomes);
-                    setOccupations(response.data?.occupations);
-                    getState(UserToken);
-                } else {
-                    setLoading(false);
-                    showMessage({
-                        message: "Something went wrong!",
-                        description: "Something went wrong. Try again!",
-                        type: "danger",
-                    });
-                }
-            });
-    }
-
-    const getState = (token) => {
-        let url = `https://createdinam.in/RBI-CBCD/public/api/get-states`;
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        }
-        Axios.get(url, {
-            headers: headers
-        })
-            .then((response) => {
-                console.log('getState', JSON.stringify(response?.data?.data))
-                if (response.data.status === true) {
-                    setLoading(false);
-                    setStateData(response?.data?.data);
-                } else {
-                    setLoading(false);
-                    showMessage({
-                        message: "Something went wrong!",
-                        description: "Something went wrong. Try again!",
-                        type: "danger",
-                    });
-                }
-            });
-    }
 
     const loadDistrict = async (state) => {
         console.log('loadDistrict______', JSON.stringify(state))
@@ -262,7 +208,7 @@ const BlockFSurveyScreen = () => {
     const startRecording = async () => {
         setSurveyInstruction(false);
         setIsRecording(true);
-        AudioRecord.start();
+        // AudioRecord.start();
     };
 
     const stopRecording = async () => {
@@ -485,7 +431,7 @@ const BlockFSurveyScreen = () => {
             <TouchableOpacity onPress={() => stopRecording()}>
                 <Text>Stop Recording</Text>
             </TouchableOpacity> */}
-            <Text style={{ fontWeight: 'bold', paddingLeft: 20, paddingTop: 10 }}>B. ACCESS and USAGE OF FINANCIAL SERVICES – BANK ACCOUNT</Text>
+            <Text style={{ fontWeight: 'bold', paddingLeft: 20, paddingTop: 10 }}>F. QUALITY OF FINANCIAL SERVICES – FINANCIAL LITERACY, CUSTOMER SERVICE AND GRIEVANCE REDRESSAL</Text>
             {isLoading === false ?
                 <ScrollView>
                     <View style={{ padding: 10 }}>
