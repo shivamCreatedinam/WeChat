@@ -1,6 +1,7 @@
 package com.createdinam.weconnect;
 
 import com.facebook.react.ReactActivity;
+import com.kevinresol.react_native_sound_recorder.RNSoundRecorderPackage;
 
 public class MainActivity extends ReactActivity {
 

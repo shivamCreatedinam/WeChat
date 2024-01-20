@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
-import {Image, Linking} from 'react-native';
+import React, { Component } from 'react';
+import { Image, Linking } from 'react-native';
 import resources from '../../../res';
 import * as actions from '../../redux/actions/SelectCityAction';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import APILoadingHOC from '../../genriccomponents/HOCS/APILoadingHOC';
 import {
   isiPhoneX,
@@ -15,7 +15,7 @@ import {
   getCustomerPaymentParameters,
   logOnConsole,
 } from '../../utility/Utils';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AsyncStorage from '@react-native-community/async-storage';
 import {
   updateFcmTokenToServer,
@@ -38,24 +38,25 @@ const ios_access_key =
   'BiwZs%2F4HDO%2F6aHAaeCXX1Nljv9XCGoPmyx722%2Fylia%2FvVCCUIz8vDT5AkJW0RJME%2B73IDl9r0FLEeJ2VnwpICh%2Bv5uLJ8A%2BP8Ntn8PciS2BXOpx3gJzCax2RYRRDmlMaSYBv7afMKracv9lQtwghLRPCANC9LnQa';
 
 import FCMServices from '../../utility/FCMServices';
-import {NotificationsScreen} from '../../utility/FCMServices';
-import {WishlistIconWithBadge} from '../../genriccomponents/badge/CartBadge';
+import { NotificationsScreen } from '../../utility/FCMServices';
+import { WishlistIconWithBadge } from '../../genriccomponents/badge/CartBadge';
 import AppToast from '../../genriccomponents/appToast/AppToast';
 import ProductPage from '../../genriccomponents/subCategory/category/Product';
 import {
   HomeStack,
   ProductStack,
   ProfileStack,
+  ProfileScreen
 } from '../../appnavigation/AppNavigation';
-import {createStackNavigator} from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorageContaints from '../../utility/AsyncStorageConstants';
-import {CommonActions} from '@react-navigation/native';
+import { CommonActions } from '@react-navigation/native';
 import WishListScreen from '../wishList/WishlistScreen';
 const MessageStack = createStackNavigator();
-
 const Tab = createBottomTabNavigator();
 
 class DashboardScreen extends Component {
+
   static ROUTE_NAME = 'DashboardScreen';
   constructor(props) {
     super(props);
@@ -97,9 +98,9 @@ class DashboardScreen extends Component {
       } else {
         let navigate_url = url.split('/')[3];
         if (navigate_url === 'upfront_tenure_extension') {
-          this.props.navigation.navigate('TenureExtensionScreen', {id});
+          this.props.navigation.navigate('TenureExtensionScreen', { id });
         } else if (navigate_url === 'city_shield') {
-          this.props.navigation.navigate('CityShieldExtension', {id});
+          this.props.navigation.navigate('CityShieldExtension', { id });
         } else if (navigate_url === 'customerpayment') {
           let code = getNavigateUrlCode('q', url);
           this.customerPaymentRedirect(url, code);
@@ -142,30 +143,30 @@ class DashboardScreen extends Component {
           for (var key of Object.keys(paramsData)) {
             'email' in paramsData
               ? await AsyncStorage.setItem(
-                  '@CUSTOMER_EMAIL',
-                  paramsData['email'],
-                )
+                '@CUSTOMER_EMAIL',
+                paramsData['email'],
+              )
               : '';
             'invoice_number' in paramsData
               ? await AsyncStorage.setItem(
-                  '@CUSTOMER_INVOICE_NUMBER',
-                  paramsData['invoice_number'],
-                )
+                '@CUSTOMER_INVOICE_NUMBER',
+                paramsData['invoice_number'],
+              )
               : '';
             'amount' in paramsData
               ? await AsyncStorage.setItem(
-                  '@CUSTOMER_AMOUNT',
-                  paramsData['amount'],
-                )
+                '@CUSTOMER_AMOUNT',
+                paramsData['amount'],
+              )
               : '';
             'name' in paramsData
               ? await AsyncStorage.setItem('@CUSTOMER_NAME', paramsData['name'])
               : '';
             'customer_id' in paramsData
               ? await AsyncStorage.setItem(
-                  '@CUSTOMER_CUSTOMER_ID',
-                  paramsData['customer_id'],
-                )
+                '@CUSTOMER_CUSTOMER_ID',
+                paramsData['customer_id'],
+              )
               : '';
             console.log(key + ' => ' + paramsData[key]);
           }
@@ -187,7 +188,7 @@ class DashboardScreen extends Component {
     if (userId === null || userId === '') {
       const resetAction = CommonActions.reset({
         index: 0,
-        routes: [{name: 'SigninScreen'}],
+        routes: [{ name: 'SigninScreen' }],
       });
       this.props.navigation.dispatch(resetAction);
     }
@@ -236,15 +237,8 @@ class DashboardScreen extends Component {
         <MessageStack.Screen
           name={'ProductPage'}
           component={ProductPage}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
-        {/* <MessageStack.Screen
-        name={"Products"}
-        component={CategoryScreen}
-        options={{headerShown: false}}
-      /> */}
-
-        {/* <MessageStack.Screen name={"FrpCategoryScreen"} component={FrpCategoryScreen} /> */}
       </MessageStack.Navigator>
     );
   }
@@ -252,8 +246,8 @@ class DashboardScreen extends Component {
   render() {
     return (
       <Tab.Navigator
-        screenOptions={({route}) => ({
-          tabBarIcon: ({focused, color, size}) => {
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
             let iconName;
             if (route.name === 'Home') {
               iconName = focused
@@ -298,35 +292,35 @@ class DashboardScreen extends Component {
           },
         })}
         tabBarOptions={{
-          style: {height: isiPhoneX ? 85 : 57, paddingVertical: 5},
-          tabStyle: {height: isiPhoneX ? 55 : 45, backgroundColor: 'white'},
+          style: { height: isiPhoneX ? 85 : 57, paddingVertical: 5 },
+          tabStyle: { height: isiPhoneX ? 55 : 45, backgroundColor: 'white' },
           activeTintColor: 'black',
           inactiveTintColor: 'gray',
-          labelStyle: {fontFamily: resources.fonts.medium, fontSize: 12},
+          labelStyle: { fontFamily: resources.fonts.medium, fontSize: 12 },
         }}>
         <Tab.Screen
           name="Home"
-          listeners={({navigation, route}) => ({
+          listeners={({ navigation, route }) => ({
             tabPress: e => {
               navigation.navigate('Home');
               // Do something with the `navigation` object
               //navigation.navigate('AnotherPlace');
               checkForAppUpdates();
-             
+
             },
           })}
           component={HomeStack}
         />
         {/* <Tab.Screen name="Products" component={CategoryScreen} /> */}
-        <Tab.Screen
+        {/* <Tab.Screen
           name="Calls"
           component={ProductStack}
           listeners={({navigation, route}) => ({
          
           })}
-        />
+        /> */}
         {/* <Tab.Screen name="Search" component={SearchScreen} /> */}
-        <Tab.Screen
+        {/* <Tab.Screen
           name="Favorite"
           component={WishListScreen}
           listeners={({navigation, route}) => ({
@@ -340,12 +334,12 @@ class DashboardScreen extends Component {
               //navigation.navigate('AnotherPlace');
             },
           })}
-        />
+        /> */}
         <Tab.Screen
           name="Profile"
           component={ProfileStack}
-          listeners={({navigation, route}) => ({
-          
+          listeners={({ navigation, route }) => ({
+
           })}
         />
       </Tab.Navigator>
@@ -393,7 +387,7 @@ class DashboardScreen extends Component {
         notification.data.product_id !== ''
       ) {
         let id = notification.data.product_id;
-        this.props.navigation.navigate(screen_name, {productId: id});
+        this.props.navigation.navigate(screen_name, { productId: id });
       } else {
         this.props.navigation.navigate(screen_name);
       }

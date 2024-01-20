@@ -7,9 +7,17 @@ import SignupScreen from '../screens/signup/SignupScreen';
 import SigninScreen from '../screens/signin/SigninScreen';
 import DashboardScreen from '../screens/dashboard/DashboardScreen';
 import OnboardingScreen from '../screens/OnBoarding/index';
-import HomeScreen from '../screens/home/HomeScreen';
+import HomeScreen from '../screens/ProfileScreen/HomeScreen';
 import AsyncStorage from '@react-native-community/async-storage';
 import ChatScreen from '../screens/ChatScreen';
+import ProfileScreen from '../screens/ProfileScreen';
+import AddSurveyScreen from '../screens/AddSurveyScreen';
+import PermissionScreenMain from '../screens/PremissionScreen';
+import BlockBSurveyScreen from '../screens/BlockBSurveyScreen';
+import BlockCSurveyScreen from '../screens/BlockCSurveyScreen';
+import BlockDSurveyScreen from '../screens/BlockDSurveyScreen';
+import BlockESurveyScreen from '../screens/BlockESurveyScreen';
+import BlockFSurveyScreen from '../screens/BlockFSurveyScreen';
 
 const Stack = createStackNavigator();
 
@@ -69,7 +77,7 @@ export const ProfileStack = () => {
       screenOptions={{
         headerShown: false,
       }}>
-      <Stack.Screen name={'HomeScreen'} component={HomeScreen} />
+      <Stack.Screen name={'ProfileScreen'} component={ProfileScreen} />
       {commonStack()}
     </Stack.Navigator>
   );
@@ -118,18 +126,24 @@ function AppNavigation() {
         routeNameRef.current = currentRouteName;
       }}>
       <Stack.Navigator
-        initialRouteName={'SigninScreen'}
-        screenOptions={{
-          headerShown: false,
-        }}>
+        initialRouteName={'PermissionScreenMain'}
+        screenOptions={{ headerShown: false }}>
         <Stack.Screen name={'ChatScreen'} component={ChatScreen} />
+        <Stack.Screen name={'ProfileScreen'} component={ProfileScreen} />
         <Stack.Screen name={'OnboardingScreen'} component={OnboardingScreen} />
         <Stack.Screen name={'DashboardScreen'} component={DashboardScreen} />
         <Stack.Screen name={'SigninScreen'} component={SigninScreen} />
-
+        <Stack.Screen name={'SplashScreen'} component={SplashScreen} />
+        <Stack.Screen name={'PermissionScreenMain'} component={PermissionScreenMain} />
+        <Stack.Screen name={'AddSurveyScreen'} component={AddSurveyScreen} />
+        <Stack.Screen name={'BlockBSurveyScreen'} component={BlockBSurveyScreen} />
+        <Stack.Screen name={'BlockCSurveyScreen'} component={BlockCSurveyScreen} />
+        <Stack.Screen name={'BlockDSurveyScreen'} component={BlockDSurveyScreen} />
+        <Stack.Screen name={'BlockESurveyScreen'} component={BlockESurveyScreen} />
+        <Stack.Screen name={'BlockFSurveyScreen'} component={BlockFSurveyScreen} />
         {/* <Stack.Screen
-          name={'AutoPaymentScreen'}
-          component={AutoPaymentScreen}
+          name={'AutoPaymentScreen'}  BlockBSurveyScreen
+          component={AutoPaymentScreen}PermissionScreenMain
         />
         <Stack.Screen
           name={'AutoPaymentNACHScreen'}
@@ -176,7 +190,6 @@ function AppNavigation() {
           name={'ProfileSettingScreen'}
           component={ProfileSettingScreen}
         />
-        <Stack.Screen name={'SplashScreen'} component={SplashScreen} />
         <Stack.Screen name={'SignupScreen'} component={SignupScreen} />
         <Stack.Screen name={'SigninScreen'} component={SigninScreen} />
         <Stack.Screen
@@ -311,7 +324,6 @@ function AppNavigation() {
         <Stack.Screen name={'HelpAndSupport'} component={HelpAndSupport} />
         <Stack.Screen name={'serviceRequest'} component={serviceRequest} /> */}
       </Stack.Navigator>
-      {/* <OfflineNotice /> */}
     </NavigationContainer>
   );
 }

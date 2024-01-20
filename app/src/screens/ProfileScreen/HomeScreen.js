@@ -12,7 +12,10 @@ import {
   SafeAreaView,
   ImageBackground,
 } from 'react-native';
-
+import { showMessage, hideMessage } from "react-native-flash-message";
+import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorageContaints from '../../utility/AsyncStorageConstants';
+import axios from "axios";
 import { Dropdown } from 'react-native-material-dropdown';
 import AppUser from '../../utility/AppUser';
 import events from '../../utility/Events';
@@ -23,9 +26,9 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import HorizontalBaannerImageView from '../../genriccomponents/productView/horizontalBannerImage/HorizontalBaannerImageView';
 import resources from '../../../res';
 import Modal from 'react-native-modal';
-import styles from './styles';
+import styles from '../home/styles';
 import NetInfo from '@react-native-community/netinfo';
-import { CategoriesView } from './views/CategoriesView';
+import { CategoriesView } from '../home/views/CategoriesView';
 import * as actions from '../../redux/actions/HomeAction';
 import DeviceInfo from 'react-native-device-info';
 import { checkForAppUpdates } from '../../redux/actions/HomeAction';
@@ -55,8 +58,6 @@ import {
   hitChatBotQueryRequestApi,
 } from '../../redux/actions/DocumentAction';
 import { getCartDetailApi } from '../../redux/actions/CartAction';
-
-
 import database from '@react-native-firebase/database';
 import { TextInput } from 'react-native';
 
@@ -67,14 +68,17 @@ class HomeScreen extends Component {
     super(props);
     console.log("props", props?.navigation?.navigate)
     this.state = {
-      allUsers: []
+      allUsers: [],
+      name: '',
+      userToken: '',
+      loading: false
     };
 
   }
   renderHeader = () => {
     return (
       <HeaderWithLocation
-        headerTitle={this.state.currentSeletcedCity}
+        headerTitle={this.state.name}
         appLogoVisible={true}
         isBackIconVisible={false}
         isLogoutVisible={false}
@@ -87,43 +91,14 @@ class HomeScreen extends Component {
 
   componentDidMount() {
     this.readMessages();
-    // try {
-    //   const item = {
-    //     receiver_id: 1,
-    //     sender_id: 2,
-    //     name: "pooja",
-    //     profile_image: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
-    //     last_message: "Hello",
-    //     is_read: false,
-    //     last_update: new Date().getDate(),
-    //     sent_time: new Date()
-    //   }
-    //   database().ref('/AllMessages/users').push(
-    //     item
-    //   ).then((snap) => {
-    //     const key = snap.key
-    //     console.log("key", key)
-    //     const loadRef = database().ref('/AllMessages/users').child(String(key)).update({ key: String(key) });
-    //     console.log("loadRef", loadRef)
-    //   });
-
-    //   console.log("save", reference)
-    // } catch (error) {
-    //   console.log("error", error)
-    // }
   }
 
-  readMessages() {
+  async readMessages() {
     try {
-      const dataRef = database().ref('/AllMessages/users');
-      dataRef.on('value', snapshot => {
-        const newData = [];
-        snapshot.forEach(childSnapshot => {
-          newData.push(childSnapshot.val());
-        });
-        this.setState({ allUsers: newData })
-        console.log("snapshot", JSON.stringify(newData))
-      });
+      const userId = await AsyncStorage.getItem(AsyncStorageContaints.UserId);
+      const UserData = await AsyncStorage.getItem(AsyncStorageContaints.UserData);
+      this.setState({ name: UserData, userToken: userId });
+      console.log("error", userId)
     } catch (error) {
       console.log("error", error)
     }
@@ -143,6 +118,50 @@ class HomeScreen extends Component {
     );
   }
 
+  async navigateToSurvey() {
+    // api/generate-survey-token
+    let SERVER = 'https://createdinam.in/RBI-CBCD/public/api/generate-survey-token'
+    let tempServerTokenId = ';'
+    this.setState({ loading: true });
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.state.userToken}`
+    }
+    axios.get(`${SERVER}`, {
+      headers: headers
+    })
+      .then((response) => {
+        if (response.data.status === true) {
+          let serverToken = response?.data?.surveyToken
+          console.log('navigateToSurvey', JSON.stringify(response.data))
+          AsyncStorage.setItem(AsyncStorageContaints.tempServerTokenId, serverToken);
+          showMessage({
+            message: "Survey Token Generated",
+            description: "Survey Token Generated, You can take survey!",
+            type: "success",
+          });
+          this.setState({ loading: false });
+          this.props.navigation.navigate('AddSurveyScreen');
+        } else {
+          console.log('navigateToSurvey', JSON.stringify(response.data))
+          showMessage({
+            message: "Something went wrong!",
+            description: "Something went wrong. Try again!",
+            type: "danger",
+          });
+          this.setState({ loading: false });
+        }
+      })
+      .catch((error) => {
+        console.log('navigateToSurvey', JSON.stringify(error))
+        showMessage({
+          message: "Something went wrong!",
+          description: "Something went wrong. " + error,
+          type: "danger",
+        });
+        this.setState({ loading: false });
+      })
+  }
 
   render() {
     return (
@@ -152,13 +171,11 @@ class HomeScreen extends Component {
         <View style={{ height: 50, width: '90%', marginHorizontal: 20, marginVertical: 10, borderRadius: 15, borderColor: 'grey', borderWidth: 1, elevation: 5, backgroundColor: '#fff' }} >
           <TextInput placeholder='Search' style={{ flex: 1, paddingLeft: 15 }} />
         </View>
-        <View>
-          <FlatList
-            data={this.state.allUsers}
-            renderItem={(item) => this.renderItem(item)}
-            keyExtractor={(index) => index.toString()}
-            ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
-          />
+        <View style={{ marginLeft: 20, marginRight: 20 }}>
+          <TouchableOpacity onPress={() => this.navigateToSurvey()} style={{ paddingVertical: 14, paddingHorizontal: 20, backgroundColor: '#000', borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
+            <Image style={{ width: 20, height: 20, resizeMode: 'contain', tintColor: '#fff' }} source={require('../../../res/images/add_survery_logo.png')} />
+            {this.state.loading === false ? <Text style={{ textAlign: 'center', fontWeight: 'bold', color: '#fff', flex: 1 }}>Create New Survey</Text> : <ActivityIndicator style={{ alignSelf: 'center', flex: 1 }} color={'#fff'} />}
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     );

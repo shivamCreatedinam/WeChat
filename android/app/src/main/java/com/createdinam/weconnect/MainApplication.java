@@ -8,7 +8,7 @@ import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.brentvatne.react.ReactVideoPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
-//import com.faizal.OtpVerify.RNOtpVerifyPackage;
+import com.kevinresol.react_native_sound_recorder.RNSoundRecorderPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.razorpay.rn.RazorpayPackage;

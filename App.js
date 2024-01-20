@@ -5,46 +5,35 @@ import Store from './app/src/redux/store/Store';
 import RNOtpVerify from 'react-native-otp-verify';
 import FlashMessage from 'react-native-flash-message';
 import messaging from '@react-native-firebase/messaging';
-import appsFlyer from 'react-native-appsflyer';
-import {
-  AMPLITUDE_DEV_KEY,
-  APPSFLYER_DEV_KEY,
-} from './app/src/apimanager/ApiEndpoint';
 import { logOnConsole } from './app/src/utility/Utils';
 import { init } from '@amplitude/analytics-react-native';
 import { SafeAreaView, StatusBar } from 'react-native';
+import AudioRecord from 'react-native-audio-record';
 
 console.disableYellowBox = true;
+
+const options = {
+  sampleRate: 16000,  // default 44100
+  channels: 1,        // 1 or 2, default 1
+  bitsPerSample: 16,  // 8 or 16, default 16
+  audioSource: 6,     // android only (see below)
+  wavFile: 'test.wav' // default 'audio.wav'
+};
 
 const App = () => {
 
   const myLocalFlashMessage = useRef();
   useEffect(() => {
     checkPermission();
-    RNOtpVerify.getHash()
-      .then(console.log)
-      .catch(console.log);
     try {
-      // appsFlyer.initSdk(
-      //   {
-      //     devKey: APPSFLYER_DEV_KEY,
-      //     isDebug: false,
-      //     appId: '1526271477',
-      //     onInstallConversionDataListener: true,
-      //     onDeepLinkListener: true,
-      //     timeToWaitForATTUserAuthorization: 10,
-      //   },
-      //   result => {
-      //     logOnConsole(result, 'from appsflyer');
-      //   },
-      //   error => {
-      //     logOnConsole(error);
-      //   },
-      // );
+      RNOtpVerify.getHash()
+        .then(console.log)
+        .catch(console.log);
+
+      AudioRecord.init(options);
     } catch (error) {
       logOnConsole('Failed to initialise appsflyer !!')
     }
-    // init(AMPLITUDE_DEV_KEY);
   }, []);
 
   const checkPermission = async () => {
@@ -58,11 +47,11 @@ const App = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1,marginTop:20 }}>
+    <SafeAreaView style={{ flex: 1, marginTop: 0 }}>
       <Provider store={Store}>
         <StatusBar translucent={true} backgroundColor="transparent" />
         <AppNavigation />
-        <FlashMessage position="top" ref={myLocalFlashMessage} />
+        <FlashMessage style={{ marginBottom: 0 }} position={'bottom'} ref={myLocalFlashMessage} />
       </Provider>
     </SafeAreaView>
   );

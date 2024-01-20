@@ -1,7 +1,8 @@
 export const APP_THEME = 'APP_THEME';
 
-export const CHECK_FILTER_CELL = "CHECK_FILTER_CELL"
-export const CATEGORY = "CATEGORY"
+export const CHECK_FILTER_CELL = "CHECK_FILTER_CELL";
+export const CATEGORY = "CATEGORY";
+
 //Api type
 export const API = 'API';
 export const API_START = 'API_START';
@@ -45,7 +46,6 @@ export const GET_DEBIT_DETAIL = "GET_DEBIT_DETAIL"
 
 // Cart badge action
 export const UPDATE_CART_BADGE_COUNT = "UPDATE_CART_BADGE_COUNT"
-
 
 // Wishlist badge action
 export const UPDATE_WISHLIST_BADGE_COUNT = "UPDATE_WISHLIST_BADGE_COUNT"

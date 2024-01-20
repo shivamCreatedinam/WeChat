@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import {statusBarHeight, widthScale} from '../../utility/Utils';
+import { statusBarHeight, widthScale } from '../../utility/Utils';
 import {
   View,
   Text,
@@ -11,10 +11,10 @@ import {
   NativeModules,
 } from 'react-native';
 import res from '../../../res';
-import {Badge} from 'native-base';
+import { Badge } from 'native-base';
 import resources from '../../../res';
-import {CartIconWithBadge} from '../badge/CartBadge';
-import {isPlatformIOS} from '../../utility/Utils';
+import { CartIconWithBadge } from '../badge/CartBadge';
+import { isPlatformIOS } from '../../utility/Utils';
 import AsyncStorage from '@react-native-community/async-storage';
 
 const HeaderWithLocation = props => {
@@ -63,7 +63,7 @@ const HeaderWithLocation = props => {
         <TouchableOpacity
           onPress={props.onBackClick}
           style={styles.backBtnCont}
-          hitSlop={{top: 10, left: 20, right: 20, bottom: 10}}>
+          hitSlop={{ top: 10, left: 20, right: 20, bottom: 10 }}>
           <Image
             style={styles.backIconStyle}
             source={res.images.icn_back}
@@ -79,7 +79,7 @@ const HeaderWithLocation = props => {
         <TouchableOpacity
           onPress={props.onAppLogoClick}
           style={[styles.backBtnCont]}
-          hitSlop={{top: 10, left: 20, right: 20, bottom: 10}}>
+          hitSlop={{ top: 10, left: 20, right: 20, bottom: 10 }}>
           <Image
             style={styles.backIconStyle}
             source={res.images.inc_appLogo_header}
@@ -96,7 +96,7 @@ const HeaderWithLocation = props => {
         <TouchableOpacity
           onPress={onClickLogout}
           style={styles.logoutBtnCont}
-          hitSlop={{top: 10, left: 20, right: 20, bottom: 10}}>
+          hitSlop={{ top: 10, left: 20, right: 20, bottom: 10 }}>
           <Image source={res.images.icn_logout} resizeMode={'contain'} />
           <Text style={styles.logoutText}>Logout</Text>
         </TouchableOpacity>
@@ -105,11 +105,11 @@ const HeaderWithLocation = props => {
   };
   const renderLeftEmptyViewToBalanceFlex = () => {
     if (!isBackIconVisible && !appLogoVisible) {
-      return <View style={{width: 20, height: 20}} />;
+      return <View style={{ width: 20, height: 20 }} />;
     }
   };
   const renderRightEmptyViewToBalanceFlex = () => {
-    return <View style={{width: 40, height: 20}} />;
+    return <View style={{ width: 40, height: 20 }} />;
   };
 
   return (
@@ -126,100 +126,31 @@ const HeaderWithLocation = props => {
       <View style={[styles.headerContainer, headerColor]}>
         {/* {renderBackIcon()} */}
         {/* {renderAppLogo()} */}
-        {renderLeftEmptyViewToBalanceFlex()}
+        {/* {renderLeftEmptyViewToBalanceFlex()} */}
         <TouchableOpacity
           onPress={() => onClickLocation()}
-          style={{flexDirection: 'row'}}>
-          <View style={{justifyContent: 'center'}}>
+          style={{ flexDirection: 'row' }}>
+          <View style={{ justifyContent: 'center', elevation: 5 }}>
             <Image
-              style={{width: 18, height: 18}}
-              source={require('../../../res/images/Image/location.png')}
+              style={{ width: 28, height: 28, resizeMode: 'contain' }}
+              source={require('../../../res/images/appLogo/app_logo_main.png')}
             />
           </View>
-          <View style={{marginLeft: 10}}>
-            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+          <View style={{ marginLeft: 10 }}>
+            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
               {props.headerTitle}
             </Text>
           </View>
         </TouchableOpacity>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          {isSearch ? (
-            <TouchableOpacity
-              onPress={() =>
-                props.navigateProps.push('SearchScreen', {data: homePageData})
-              }
-              style={{marginRight: 15}}>
-              <Image
-                style={{height: 24, width: 24}}
-                source={resources.images.icn_searchPage}
-              />
-            </TouchableOpacity>
-          ) : (
-            <></>
-          )}
-          <TouchableOpacity
-            style={{marginRight: 10}}
-            onPress={() => props.navigateProps.push('CartScreen')}>
-            <Image
-              style={{width: 25, height: 25}}
-              source={require('../../../res/images/Image/cart.png')}
-            />
-            <View style={{position: 'absolute', top: -10}}>
-              <CartIconWithBadge />
-            </View>
-          </TouchableOpacity>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         </View>
-
-        {/* <View style={styles.titleView}>
-          <Text style={styles.txtYourLocation}>Your Location</Text>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            style={{
-              alignItems: 'center',
-              flexDirection: 'row',
-            }}
-            onPress={onClickLocation}>
-            <Image
-              style={styles.navigationIconStyle}
-              source={res.images.navigation_icn}
-              resizeMode={'contain'}
-            />
-            <Text
-              numberOfLines={1}
-              ellipsizeMode={'tail'}
-              style={[styles.textHeaderStyle, customStyle ? customStyle : {}]}>
-              {props.headerTitle}
-            </Text>
-            <Image
-              style={styles.downlwardArrowIconStyle}
-              source={res.images.inc_right_arrow}
-              resizeMode={'contain'}
-            />
-          </TouchableOpacity>
-        </View> */}
-        {/* {!isLogoutVisible ? (
-          isProfileIconVisible ? (
-            <TouchableOpacity
-              onPress={() => {
-                navigateProps.navigate('MyAccountScreen');
-              }}
-              style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Image source={res.images.img_avtar} style={styles.avtarStyle} />
-              <Image source={res.images.icn_menu} />
-            </TouchableOpacity>
-          ) : (
-            renderRightEmptyViewToBalanceFlex()
-          )
-        ) : (
-          renderLogoutText()
-        )} */}
       </View>
     </View>
   );
 };
 
-export const MyStatusBar = ({backgroundColor, ...props}) => (
-  <View style={[styles.statusBar, {backgroundColor}]}>
+export const MyStatusBar = ({ backgroundColor, ...props }) => (
+  <View style={[styles.statusBar, { backgroundColor }]}>
     <StatusBar translucent backgroundColor={'white'} {...props} />
   </View>
 );
@@ -308,7 +239,7 @@ const styles = StyleSheet.create({
     height: 13,
     borderWidth: 0,
     tintColor: 'white',
-    transform: [{rotate: '90deg'}],
+    transform: [{ rotate: '90deg' }],
   },
   avtarStyle: {
     height: 30,

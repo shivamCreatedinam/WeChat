@@ -135,8 +135,8 @@ lintOptions {
         applicationId "com.createdinam.weconnect"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion 33
-        versionCode 64
-        versionName "8.4"
+        versionCode 1
+        versionName "1.1"
         // Enabling multidex support.
         multiDexEnabled true
     }
@@ -198,7 +198,7 @@ dependencies {
     implementation project(':react-native-video')
     implementation project(':react-native-push-notification')
     implementation project(':react-native-otp-verify')
-//    implementation project(':payu-non-seam-less-react')
+    implementation 'com.google.android.gms:play-services-auth:20.7.0'
     implementation project(':react-native-razorpay')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
@@ -206,8 +206,8 @@ dependencies {
     implementation 'com.facebook.fresco:animated-gif:2.0.0'
     implementation 'com.google.android.gms:play-services-auth:18.1.0'
     implementation 'com.facebook.android:facebook-android-sdk:4.19.0'
-
-    compile project(':react-native-geocoder')
+    implementation project(':react-native-sound-recorder')
+    implementation project(':react-native-geocoder')
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
