@@ -1,5 +1,5 @@
 import { Text, View, Image, SafeAreaView, Dimensions, TouchableOpacity, StatusBar, useWindowDimensions, ActivityIndicator, TextInput, Alert, BackHandler, ScrollView, StyleSheet } from 'react-native'
-import React, { Component, useCallback } from 'react'
+import React, { Component, useCallback, useRef } from 'react'
 import AsyncStorage from '@react-native-community/async-storage';
 import AsyncStorageContaints from '../../utility/AsyncStorageConstants';
 import { showMessage, hideMessage } from "react-native-flash-message";
@@ -55,6 +55,8 @@ const BlockBSurveyScreen = () => {
     const [selectedEducation, setSelectedEducation] = React.useState([]);
     const [selectedOccupations, setSelectedOccupations] = React.useState([]);
     const [selectedIncomes, setSelectedIncomes] = React.useState([]);
+    const [selectCashReceipt, setSelectCashReceipt] = React.useState([]);
+    const [SelectedSaveMoney, setSelectSaveMoney] = React.useState([]);
     const [differentlyAble, setDifferently] = React.useState('');
     const [smartPhone, setSmartphone] = React.useState('');
     const [anyGroup, setAnyGroup] = React.useState('');
@@ -63,7 +65,11 @@ const BlockBSurveyScreen = () => {
     const [visitBranch, setVisitBranch] = React.useState('');
     const [isAccountTypeFocus, setAccountTypeFocus] = React.useState(false);
     const [AccountTypeValue, setAccountTypeValue] = React.useState(null);
-
+    const [transaction, sTransaction] = React.useState(null);
+    const [istransactionFocus, setIsTransactionFocus] = React.useState(false);
+    const [subsidy, setSubsidy] = React.useState(null);
+    const [subsidyFocus, setSubsidyFocus] = React.useState(false);
+    const multiSelectRef = useRef(null);
 
     const AccountType = [
         { id: 1, lable: 'Savings Account' },
@@ -80,6 +86,60 @@ const BlockBSurveyScreen = () => {
         { id: 5, lable: 'Not used in a year' },
         { id: 6, lable: 'Not used for more than a year' },
         { id: 7, lable: 'Not used for more than two years' }
+    ];
+
+    const reasons = [
+        { id: 1, lable: 'No source of deposit to bank account.' },
+        { id: 2, lable: 'Receive and pay only in cash.' },
+        { id: 3, lable: 'Fee and Charges.' },
+        { id: 4, lable: 'Family Members have an account.' },
+        { id: 5, lable: 'Have more than one account.' },
+
+    ];
+
+    const mostTransact = [
+        { id: 1, lable: 'Branch.' },
+        { id: 2, lable: 'ATM.' },
+        { id: 3, lable: 'BC Outlet.' },
+        { id: 4, lable: 'Digital.' },
+
+    ];
+
+    const subsidyTimes = [
+        { id: 1, lable: 'Up to 4 times' },
+        { id: 2, lable: '4 to 8 times' },
+        { id: 3, lable: '9 to 12 times' },
+        { id: 4, lable: 'More than 12 times' },
+
+    ];
+
+    const Incomedata = [
+        { id: 1, lable: 'Cash' },
+        { id: 2, lable: 'Direct Credit to Bank Account ' },
+        { id: 3, lable: 'QR-Based/Inward UPI' },
+        { id: 4, lable: 'Debit Card Swipe' },
+        { id: 5, lable: 'Credit Card Swipe' },
+    ];
+
+    const cashReceipt = [
+        { id: 1, lable: 'Easy' },
+        { id: 2, lable: 'No Cost involved' },
+        { id: 3, lable: 'QR-Based/Inward UPI' },
+        { id: 4, lable: 'Pay only in Cash' },
+        { id: 5, lable: 'Any other reason' },
+    ];
+
+    const saveMoney = [
+        { id: 1, lable: 'Bank Account' },
+        { id: 2, lable: 'NBFC' },
+        { id: 3, lable: 'Chit Fund' },
+        { id: 4, lable: 'Monthly Kitty' },
+        { id: 5, lable: 'Daily Deposit in Credit Society' },
+        { id: 6, lable: 'Mutual Fund' },
+        { id: 7, lable: 'With Relatives' },
+        { id: 8, lable: 'Any other' },
+        { id: 9, lable: 'Not able to save' },
+        { id: 10, lable: 'Do not wish to save' },
     ];
 
     // gender setDifferently
@@ -480,13 +540,44 @@ const BlockBSurveyScreen = () => {
         setSelectedEducation(selectedItems);
     }
 
+    const selectedLabels = selectedOccupations.map((selectedId) => {
+        const selectedReason = reasons.find((reason) => reason.id === selectedId);
+        return selectedReason ? selectedReason.lable : '';
+    });
+
+    const selectedIncomeLabels = selectedIncomes.map((selectedId) => {
+        const selectedReason = reasons.find((reason) => reason.id === selectedId);
+        return selectedReason ? selectedReason.lable : '';
+    });
+
+    const selectedCashReceiptLabels = selectCashReceipt.map((selectedId) => {
+        const selectedReason = reasons.find((reason) => reason.id === selectedId);
+        return selectedReason ? selectedReason.lable : '';
+    });
+
+    const selectedSaveMoneyLabels = SelectedSaveMoney.map((selectedId) => {
+        const selectedReason = reasons.find((reason) => reason.id === selectedId);
+        return selectedReason ? selectedReason.lable : '';
+    });
+
     const onSelectedOccupationsChange = (selectedItems) => {
         setSelectedOccupations(selectedItems);
+    }
+
+    const onSelectedCashReceipt = (selectedItems) => {
+        setSelectCashReceipt(selectedItems);
+    }
+
+    const onSelectedSaveMoney = (selectedItems) => {
+        console.log("selectedItems", selectedItems)
+        setSelectSaveMoney(selectedItems);
     }
 
     const onSelectedIncomesChange = (selectedItems) => {
         setSelectedIncomes(selectedItems);
     }
+
+
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#F8F8FF' }}>
@@ -787,7 +878,8 @@ const BlockBSurveyScreen = () => {
                                 selectedTextStyle={styles.selectedTextStyle}
                                 inputSearchStyle={styles.inputSearchStyle}
                                 // iconStyle={styles.iconStyle}
-                                data={AccountType}
+                                // data={AccountType}
+                                data={frequentlyBank}
                                 // search
                                 maxHeight={300}
                                 labelField="lable"
@@ -805,39 +897,226 @@ const BlockBSurveyScreen = () => {
                             />
                         </View>
                         <View style={{ padding: 10, }} />
+
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>13. If you are not using your bank account, please indicate reasons?</Text>
+
+
+                            <MultiSelect
+                                hideTags
+                                items={reasons}
+                                uniqueKey="id"
+                                ref={multiSelectRef}
+                                onSelectedItemsChange={(items) =>
+                                    onSelectedOccupationsChange(items)
+                                }
+                                selectedItems={selectedOccupations}
+                                selectText="Select Reasons"
+                                onChangeInput={(text) => console.log(text)}
+                                altFontFamily="ProximaNova-Light"
+                                tagRemoveIconColor="#000"
+                                tagBorderColor="#000"
+                                tagTextColor="#000"
+                                selectedItemTextColor="#000"
+                                selectedItemIconColor="#000"
+                                itemTextColor="#000"
+                                displayKey="lable"
+                                searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                submitButtonColor="#000"
+                                submitButtonText="Submit"
+                                itemBackground="#000"
+                                styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
+                            />
+                            <View>
+                                {selectedLabels.map((label, index) => (
+                                    <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                        <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                    </View>
+                                ))}
+                            </View>
+                        </View>
+
+                        <View style={{ padding: 10, }} />
+                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold', flex: 1 }}>14. How do you mostly transact (receive and pay money) in your bank account?</Text>
                             <Dropdown
-                                style={[styles.dropdown, isAccountTypeFocus && { borderColor: 'blue' }]}
+                                style={[styles.dropdown, istransactionFocus && { borderColor: 'blue' }]}
                                 placeholderStyle={styles.placeholderStyle}
                                 selectedTextStyle={styles.selectedTextStyle}
                                 inputSearchStyle={styles.inputSearchStyle}
                                 // iconStyle={styles.iconStyle}
-                                data={AccountType}
+                                // data={AccountType}
+                                data={mostTransact}
                                 // search
                                 maxHeight={300}
                                 labelField="lable"
                                 valueField="id"
-                                placeholder={!isAccountTypeFocus ? 'Select Type of account' : AccountTypeValue}
+                                placeholder={!istransactionFocus ? 'Select Type of account' : transaction}
                                 // searchPlaceholder="Search..."
-                                value={AccountTypeValue}
-                                onFocus={() => setAccountTypeFocus(true)}
-                                onBlur={() => setAccountTypeFocus(false)}
+                                value={transaction}
+                                onFocus={() => setIsTransactionFocus(true)}
+                                onBlur={() => setIsTransactionFocus(false)}
                                 onChange={item => {
                                     console.log(JSON.stringify(item))
-                                    setAccountTypeValue(item.id);
-                                    setAccountTypeFocus(false);
+                                    sTransaction(item.id);
+                                    setIsTransactionFocus(false);
                                 }}
                             />
                         </View>
+
                         <View style={{ padding: 10, }} />
+                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold', flex: 1 }}>15. If you receive a subsidy/govt benefit in your account, how many times do you get it in a year?</Text>
+                            <Dropdown
+                                style={[styles.dropdown, subsidyFocus && { borderColor: 'blue' }]}
+                                placeholderStyle={styles.placeholderStyle}
+                                selectedTextStyle={styles.selectedTextStyle}
+                                inputSearchStyle={styles.inputSearchStyle}
+                                // iconStyle={styles.iconStyle}
+                                // data={AccountType}
+                                data={subsidyTimes}
+                                // search
+                                maxHeight={300}
+                                labelField="lable"
+                                valueField="id"
+                                placeholder={!subsidyFocus ? 'Select Type of account' : subsidy}
+                                // searchPlaceholder="Search..."
+                                value={subsidy}
+                                onFocus={() => setSubsidyFocus(true)}
+                                onBlur={() => setSubsidyFocus(false)}
+                                onChange={item => {
+                                    console.log(JSON.stringify(item))
+                                    setSubsidy(item.id);
+                                    setSubsidyFocus(false);
+                                }}
+                            />
+                        </View>
+
+                        <View style={{ padding: 10, }} />
+                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>16. If you are not using your bank account, please indicate reasons?</Text>
+
+
+                            <MultiSelect
+                                hideTags
+                                items={Incomedata}
+                                uniqueKey="id"
+                                ref={multiSelectRef}
+                                onSelectedItemsChange={(items) =>
+                                    onSelectedIncomesChange(items)
+                                }
+                                selectedItems={selectedIncomes}
+                                selectText="Select Income Stream"
+                                onChangeInput={(text) => console.log(text)}
+                                altFontFamily="ProximaNova-Light"
+                                tagRemoveIconColor="#000"
+                                tagBorderColor="#000"
+                                tagTextColor="#000"
+                                selectedItemTextColor="#000"
+                                selectedItemIconColor="#000"
+                                itemTextColor="#000"
+                                displayKey="lable"
+                                searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                submitButtonColor="#000"
+                                submitButtonText="Submit"
+                                itemBackground="#000"
+                                styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
+                            />
+                            <View>
+                                {selectedIncomeLabels.map((label, index) => (
+                                    <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                        <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                    </View>
+                                ))}
+                            </View>
+                        </View>
+
+                        <View style={{ padding: 10, }} />
+                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>17. In case you prefer cash receipts, please indicate the reason?</Text>
+
+
+                            <MultiSelect
+                                hideTags
+                                items={cashReceipt}
+                                uniqueKey="id"
+                                ref={multiSelectRef}
+                                onSelectedItemsChange={(items) =>
+                                    onSelectedCashReceipt(items)
+                                }
+                                selectedItems={selectCashReceipt}
+                                selectText="Select reason"
+                                onChangeInput={(text) => console.log(text)}
+                                altFontFamily="ProximaNova-Light"
+                                tagRemoveIconColor="#000"
+                                tagBorderColor="#000"
+                                tagTextColor="#000"
+                                selectedItemTextColor="#000"
+                                selectedItemIconColor="#000"
+                                itemTextColor="#000"
+                                displayKey="lable"
+                                searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                submitButtonColor="#000"
+                                submitButtonText="Submit"
+                                itemBackground="#000"
+                                styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
+                            />
+                            <View>
+                                {selectedCashReceiptLabels.map((label, index) => (
+                                    <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                        <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                    </View>
+                                ))}
+                            </View>
+                        </View>
+
+                        <View style={{ padding: 10, }} />
+                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>18. How do you save money?</Text>
+
+
+                            <MultiSelect
+                                hideTags
+                                items={saveMoney}
+                                uniqueKey="id"
+                                ref={multiSelectRef}
+                                onSelectedItemsChange={(items) =>
+                                    onSelectedSaveMoney(items)
+                                }
+                                selectedItems={SelectedSaveMoney}
+                                selectText="Select reason"
+                                onChangeInput={(text) => console.log(text)}
+                                altFontFamily="ProximaNova-Light"
+                                tagRemoveIconColor="#000"
+                                tagBorderColor="#000"
+                                tagTextColor="#000"
+                                selectedItemTextColor="#000"
+                                selectedItemIconColor="#000"
+                                itemTextColor="#000"
+                                displayKey="lable"
+                                searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                submitButtonColor="#000"
+                                submitButtonText="Submit"
+                                itemBackground="#000"
+                                styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
+                            />
+                            <View>
+                                {selectedSaveMoneyLabels.map((label, index) => (
+                                    <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                        <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                    </View>
+                                ))}
+                            </View>
+                        </View>
+
+                        {/* <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>11. Do you own a smartphone ?</Text>
                             <RadioButtonRN
                                 data={smartphone}
                                 selectedBtn={(e) => setSmartphone(e)}
                             />
-                        </View>
+                        </View> */}
                         <View style={{ padding: 10, }} />
                         <TouchableOpacity onPress={() => navigation.replace('BlockCSurveyScreen')} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
                             <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Next Block C</Text>
