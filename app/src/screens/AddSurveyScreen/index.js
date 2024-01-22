@@ -497,13 +497,14 @@ const AddSurveyScreen = () => {
             .then(result => {
                 console.log(result?.status)
                 if (result?.status === true) {
-                    navigation.replace('BlockBSurveyScreen')
+                    navigation.replace('BlockBSurveyScreen');
                 } else {
-                    showMessage({
-                        message: "Something went wrong!",
-                        description: result?.message,
-                        type: "danger",
-                    });
+                    navigation.replace('BlockBSurveyScreen');
+                    // showMessage({
+                    //     message: "Something went wrong!",
+                    //     description: result?.message,
+                    //     type: "danger",
+                    // });
                 }
             })
             .catch(error => console.log('error', error));

@@ -13,16 +13,19 @@ import AudioRecord from 'react-native-audio-record';
 import Modal from 'react-native-modal';
 import Axios from 'axios';
 import { Children } from 'react';
+import { TENURE_EXTENSION_PRICE } from '../../apimanager/ApiEndpoint';
 // import fs from 'fs';
 
 const BlockESurveyScreen = () => {
 
     const navigation = useNavigation();
     const [name, setName] = React.useState('');
+    const multiSelectRef = React.useRef(null);
     const [userName, setUserName] = React.useState('');
     const [isRecording, setIsRecording] = React.useState(false);
     const [isInstruction, setSurveyInstruction] = React.useState(true);
     const [isLoading, setLoading] = React.useState(false);
+    const [selectedFreeLoanRefuseReason, setSelectedFreeLoanRefuseReason] = React.useState([]);
     const [userSendToken, setUserSendToken] = React.useState('');
     const [audioPath, setAudioPath] = React.useState('');
     const [areas, setAreas] = React.useState([]);
@@ -56,16 +59,15 @@ const BlockESurveyScreen = () => {
     const [smartPhone, setSmartphone] = React.useState('');
     const [anyGroup, setAnyGroup] = React.useState('');
 
+    const [selectedReason, setSelectedReason] = React.useState([]);
+
     // gender setDifferently
     const data = [
         {
-            label: 'Male'
+            label: 'Yes'
         },
         {
-            label: 'Female'
-        },
-        {
-            label: 'Prefer not to say'
+            label: 'No'
         }
     ];
 
@@ -96,6 +98,29 @@ const BlockESurveyScreen = () => {
             label: 'No'
         }
     ];
+
+    const pensionschemes = [
+        { id: 1, lable: 'Don’t need it ' },
+        { id: 2, lable: 'Don’t trust' },
+        { id: 3, lable: 'No money to pay subscription' },
+        { id: 4, lable: 'Any other reason' },
+    ]
+
+    const reason = [
+        { id: 1, lable: 'Don’t need it' },
+        { id: 2, lable: 'Don’t trust' },
+        { id: 3, lable: 'No money to pay subscription' },
+        { id: 4, lable: 'Any other reason ' },
+    ]
+
+    const SelectedReasonTypeLabels = selectedReason.map((selectedId) => {
+        const selectedReason = reason.find((reason) => reason.id === selectedId);
+        return selectedReason ? selectedReason.lable : '';
+    });
+
+    const onSelectedReason = (selectedItems) => {
+        setSelectedReason(selectedItems);
+    }
 
     const adults = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
 
@@ -132,30 +157,6 @@ const BlockESurveyScreen = () => {
         }
     }
 
-    const loadDistrict = async (state) => {
-        console.log('loadDistrict______', JSON.stringify(state))
-        const UserToken = await AsyncStorage.getItem(AsyncStorageContaints.UserId);
-        let url = `https://createdinam.in/RBI-CBCD/public/api/get-city/${Number(state)}`;
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${UserToken}`
-        }
-        Axios.get(url, {
-            headers: headers,
-        })
-            .then((response) => {
-                if (response.data.status === true) {
-                    setDistrictData(response?.data?.data);
-                } else {
-                    setLoading(false);
-                    showMessage({
-                        message: "Something went wrong!",
-                        description: "Something went wrong. Try again!",
-                        type: "danger",
-                    });
-                }
-            });
-    }
 
     // AudioRecord.on('data', data => {
     //     // base64-encoded audio data chunks
@@ -207,7 +208,7 @@ const BlockESurveyScreen = () => {
     const startRecording = async () => {
         setSurveyInstruction(false);
         setIsRecording(true);
-        AudioRecord.start();
+        // AudioRecord.start();
     };
 
     const stopRecording = async () => {
@@ -413,7 +414,7 @@ const BlockESurveyScreen = () => {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#F8F8FF' }}>
             {renderCustomHeader()}
-            <Modal isVisible={isInstruction}>
+            <Modal isVisible={false}>
                 <View style={{ height: 200, width: Dimensions.get('screen').width - 50, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 5, padding: 20 }}>
                     <View style={{ alignItems: 'center' }}>
                         <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Survey Instructions</Text>
@@ -430,257 +431,101 @@ const BlockESurveyScreen = () => {
             <TouchableOpacity onPress={() => stopRecording()}>
                 <Text>Stop Recording</Text>
             </TouchableOpacity> */}
-            <Text style={{ fontWeight: 'bold', paddingLeft: 20, paddingTop: 10 }}>B. ACCESS and USAGE OF FINANCIAL SERVICES – BANK ACCOUNT</Text>
+            <Text style={{ fontWeight: 'bold', paddingLeft: 20, paddingTop: 10 }}>E. ACCESS and USAGE OF FINANCIAL SERVICES – PENSION FACILITIES</Text>
             {isLoading === false ?
                 <ScrollView>
                     <View style={{ padding: 10 }}>
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>1. Name</Text>
-                            <TextInput onChangeText={(e) => setSurveyName(e)} style={{ backgroundColor: '#fff', paddingLeft: 15 }} placeholder='Enter Name' />
-                        </View>
-                        <View style={{ padding: 10, }} />
-                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>2. Gender</Text>
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>Specific Pension Facility/Scheme</Text>
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>30 (a). Atal Pension Yojana (APY)</Text>
+                            <Text>30 (a) 1. Awareness</Text>
                             <RadioButtonRN
                                 data={data}
                                 selectedBtn={(e) => setGender(e)}
                             />
+                            <View style={{ padding: 10, }} />
+                            <Text>30 (a) 2. Enrolled</Text>
+                            <RadioButtonRN
+                                data={data}
+                                selectedBtn={(e) => setGender(e)}
+                            />
+                            <View style={{ padding: 10, }} />
+                            <Text>30 (a) 3. Received intimation of subscription payment</Text>
+                            <RadioButtonRN
+                                data={data}
+                                selectedBtn={(e) => setGender(e)}
+                            />
+                            <View style={{ padding: 10, }} />
+                            <Text>30 (a) 4. Account is inactive due to non-payment of subscription.</Text>
+                            <RadioButtonRN
+                                data={data}
+                                selectedBtn={(e) => setGender(e)}
+                            />
+                            <View style={{ padding: 10, }} />
                         </View>
                         <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>3. Age</Text>
-                            <TextInput onChangeText={(e) => setAgeNumber(e)} style={{ backgroundColor: '#fff', paddingLeft: 15 }} placeholder='Age' keyboardType={'number-pad'} maxLength={2} />
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>30 (b).  Any other Pension Schemes?</Text>
+                            <Text>30 (b) 1. Awareness</Text>
+                            <RadioButtonRN
+                                data={data}
+                                selectedBtn={(e) => setGender(e)}
+                            />
+                            <View style={{ padding: 10, }} />
+                            <Text>30 (b) 2. Enrolled</Text>
+                            <RadioButtonRN
+                                data={data}
+                                selectedBtn={(e) => setGender(e)}
+                            />
+                            <View style={{ padding: 10, }} />
+                            <Text>30 (b) 3. Received intimation of subscription payment</Text>
+                            <RadioButtonRN
+                                data={data}
+                                selectedBtn={(e) => setGender(e)}
+                            />
+                            <View style={{ padding: 10, }} />
+                            <Text>30 (b) 4. Account is inactive due to non-payment of subscription.</Text>
+                            <RadioButtonRN
+                                data={data}
+                                selectedBtn={(e) => setGender(e)}
+                            />
+                            <View style={{ padding: 10, }} />
                         </View>
                         <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>4. Occupation (In case of Overlap, report primary occupation)</Text>
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>31. If you are not enrolled in any of pension schemes, please indicate the reasons?</Text>
                             <MultiSelect
                                 hideTags
-                                items={occupations}
+                                items={reason}
                                 uniqueKey="id"
-                                // ref={(component) => { this.multiSelect = component }}
-                                onSelectedItemsChange={(items) => onSelectedOccupationsChange(items)}
-                                selectedItems={selectedOccupations}
-                                selectText="Occupation"
-                                // searchInputPlaceholderText="Search Items..."
-                                // onChangeInput={(text) => console.log(text)}
+                                ref={multiSelectRef}
+                                onSelectedItemsChange={(items) =>
+                                    onSelectedReason(items)
+                                }
+                                selectedItems={selectedReason}
+                                selectText="Select Reason"
+                                onChangeInput={(text) => console.log(text)}
                                 altFontFamily="ProximaNova-Light"
-                                tagRemoveIconColor="#CCC"
-                                tagBorderColor="#CCC"
-                                tagTextColor="#CCC"
-                                selectedItemTextColor="#CCC"
-                                selectedItemIconColor="#CCC"
+                                tagRemoveIconColor="#000"
+                                tagBorderColor="#000"
+                                tagTextColor="#000"
+                                selectedItemTextColor="#000"
+                                selectedItemIconColor="#000"
                                 itemTextColor="#000"
-                                displayKey="occupation_name"
-                                searchInputStyle={{ color: '#CCC', paddingLeft: 10 }}
-                                submitButtonColor="#CCC"
+                                displayKey="lable"
+                                searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                submitButtonColor="#000"
                                 submitButtonText="Submit"
+                                itemBackground="#000"
+                                styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
                             />
-                        </View>
-                        <View style={{ padding: 10, }} />
-                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>5. Education</Text>
-                            <MultiSelect
-                                hideTags
-                                items={educations}
-                                uniqueKey="id"
-                                // ref={(component) => { this.multiSelect = component }}
-                                onSelectedItemsChange={(items) => onSelectedEducationChange(items)}
-                                selectedItems={selectedEducation}
-                                selectText="Education"
-                                // searchInputPlaceholderText="Search Items..."
-                                // onChangeInput={(text) => console.log(text)}
-                                altFontFamily="ProximaNova-Light"
-                                tagRemoveIconColor="#CCC"
-                                tagBorderColor="#CCC"
-                                tagTextColor="#CCC"
-                                selectedItemTextColor="#CCC"
-                                selectedItemIconColor="#CCC"
-                                itemTextColor="#000"
-                                displayKey="education_title"
-                                searchInputStyle={{ color: '#CCC', paddingLeft: 10 }}
-                                submitButtonColor="#CCC"
-                                submitButtonText="Submit"
-                            />
-                        </View>
-                        <View style={{ padding: 10, }} />
-                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>6. Annual Income (For non-earning respondents, the income of parents or spouse can be reported)</Text>
-                            <MultiSelect
-                                hideTags
-                                items={incomes}
-                                uniqueKey="id"
-                                // ref={(component) => { this.multiSelect = component }}
-                                onSelectedItemsChange={(items) => onSelectedIncomesChange(items)}
-                                selectedItems={selectedIncomes}
-                                selectText="Annual Income"
-                                // searchInputPlaceholderText="Search Items..."
-                                // onChangeInput={(text) => console.log(text)}
-                                altFontFamily="ProximaNova-Light"
-                                tagRemoveIconColor="#CCC"
-                                tagBorderColor="#CCC"
-                                tagTextColor="#CCC"
-                                selectedItemTextColor="#CCC"
-                                selectedItemIconColor="#CCC"
-                                itemTextColor="#000"
-                                displayKey="icomes_title"
-                                searchInputStyle={{ color: '#CCC', paddingLeft: 10 }}
-                                submitButtonColor="#CCC"
-                                submitButtonText="Submit"
-                            />
-                        </View>
-                        <View style={{ padding: 10, }} />
-                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>7. Location</Text>
-                            <View>
-                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>State</Text>
-                                <Dropdown
-                                    style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-                                    placeholderStyle={styles.placeholderStyle}
-                                    selectedTextStyle={styles.selectedTextStyle}
-                                    inputSearchStyle={styles.inputSearchStyle}
-                                    // iconStyle={styles.iconStyle}
-                                    data={state}
-                                    // search
-                                    maxHeight={300}
-                                    labelField="name"
-                                    valueField="id"
-                                    placeholder={!isFocus ? 'Select State' : value}
-                                    // searchPlaceholder="Search..."
-                                    value={value}
-                                    onFocus={() => setIsFocus(true)}
-                                    onBlur={() => setIsFocus(false)}
-                                    onChange={item => {
-                                        console.log('______>', JSON.stringify(item))
-                                        setValue(item?.name);
-                                        loadDistrict(item?.id);
-                                        setIsFocus(false);
-                                    }}
-                                />
+                            <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                {SelectedReasonTypeLabels.map((label, index) => (
+                                    <View style={{ margin: 5 }}>
+                                        <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                    </View>
+                                ))}
                             </View>
-                            <View>
-                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>District</Text>
-                                <Dropdown
-                                    style={[styles.dropdown, isDistrictFocus && { borderColor: 'blue' }]}
-                                    placeholderStyle={styles.placeholderStyle}
-                                    selectedTextStyle={styles.selectedTextStyle}
-                                    inputSearchStyle={styles.inputSearchStyle}
-                                    // iconStyle={styles.iconStyle}
-                                    data={DistrictData}
-                                    // search
-                                    maxHeight={300}
-                                    labelField="name"
-                                    valueField="distic_code"
-                                    placeholder={!isDistrictFocus ? 'Select District' : valueDistrict}
-                                    // searchPlaceholder="Search..."
-                                    value={valueDistrict}
-                                    onFocus={() => setIsDistrictFocus(true)}
-                                    onBlur={() => setIsDistrictFocus(false)}
-                                    onChange={item => {
-                                        console.log(JSON.stringify(item))
-                                        setDistrictValue(item.name);
-                                        setIsDistrictFocus(false);
-                                    }}
-                                />
-                            </View>
-                            <View>
-                                <View style={{ padding: 10, }} />
-                                <MultiSelect
-                                    hideTags
-                                    items={areas}
-                                    uniqueKey="id"
-                                    // ref={(component) => { this.multiSelect = component }}
-                                    onSelectedItemsChange={(items) => onSelectedItemsChange(items)}
-                                    selectedItems={areasSelected}
-                                    selectText="Select Areas"
-                                    // searchInputPlaceholderText="Search Items..."
-                                    // onChangeInput={(text) => console.log(text)}
-                                    altFontFamily="ProximaNova-Light"
-                                    tagRemoveIconColor="#CCC"
-                                    tagBorderColor="#CCC"
-                                    tagTextColor="#CCC"
-                                    selectedItemTextColor="#CCC"
-                                    selectedItemIconColor="#CCC"
-                                    itemTextColor="#000"
-                                    displayKey="area_title"
-                                    searchInputStyle={{ color: '#CCC', paddingLeft: 10 }}
-                                    submitButtonColor="#CCC"
-                                    submitButtonText="Submit"
-                                />
-                            </View>
-                        </View>
-                        <View style={{ padding: 10, }} />
-                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>8. Are you differently abled?</Text>
-                            <RadioButtonRN
-                                data={differently}
-                                selectedBtn={(e) => setDifferently(e)}
-                            />
-                        </View>
-                        <View style={{ padding: 10, }} />
-                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={{ marginBottom: 5, fontWeight: 'bold', flex: 1 }}>9. Size of Household</Text>
-                                <Text style={{ marginBottom: 5, fontWeight: 'bold', marginRight: 10 }}>Total : {Number(adult) + Number(children)}</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <View style={{ flex: 1 }}>
-                                    <Text style={{ fontWeight: 'bold' }}>Adults</Text>
-                                    <SelectDropdown
-                                        data={adults}
-                                        onSelect={(selectedItem, index) => {
-                                            console.log(selectedItem, index)
-                                            setAdults(selectedItem);
-                                        }}
-                                        buttonTextAfterSelection={(selectedItem, index) => {
-                                            // text represented after item is selected
-                                            // if data array is an array of objects then return selectedItem.property to render after item is selected
-                                            return selectedItem
-                                        }}
-                                        rowTextForSelection={(item, index) => {
-                                            // text represented for each item in dropdown
-                                            // if data array is an array of objects then return item.property to represent item in dropdown
-                                            return item
-                                        }}
-                                    />
-                                </View>
-                                <View style={{ flex: 1, marginLeft: 5 }}>
-                                    <Text style={{ fontWeight: 'bold' }}>Children's</Text>
-                                    <SelectDropdown
-                                        data={childern}
-                                        onSelect={(selectedItem, index) => {
-                                            console.log(selectedItem, index);
-                                            setChildren(selectedItem)
-                                        }}
-                                        buttonTextAfterSelection={(selectedItem, index) => {
-                                            // text represented after item is selected
-                                            // if data array is an array of objects then return selectedItem.property to render after item is selected
-                                            return selectedItem
-                                        }}
-                                        rowTextForSelection={(item, index) => {
-                                            // text represented for each item in dropdown
-                                            // if data array is an array of objects then return item.property to represent item in dropdown
-                                            return item
-                                        }}
-                                    />
-                                </View>
-                            </View>
-                        </View>
-                        <View style={{ padding: 10, }} />
-                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>10. Are you part of any group (SHG/JLG or formal group) ?</Text>
-                            <RadioButtonRN
-                                data={dataGroup}
-                                selectedBtn={(e) => setAnyGroup(e)}
-                            />
-                        </View>
-                        <View style={{ padding: 10, }} />
-                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>11. Do you own a smartphone ?</Text>
-                            <RadioButtonRN
-                                data={smartphone}
-                                selectedBtn={(e) => setSmartphone(e)}
-                            />
                         </View>
                         <View style={{ padding: 10, }} />
                         <TouchableOpacity onPress={() => navigation.replace('BlockFSurveyScreen')} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>

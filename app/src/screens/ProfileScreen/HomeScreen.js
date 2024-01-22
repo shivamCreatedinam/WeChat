@@ -141,8 +141,8 @@ class HomeScreen extends Component {
             type: "success",
           });
           this.setState({ loading: false });
-          // this.props.navigation.navigate('AddSurveyScreen');
-          this.props.navigation.navigate('BlockFSurveyScreen');
+          this.props.navigation.navigate('AddSurveyScreen');
+          // this.props.navigation.navigate('BlockESurveyScreen');
         } else {
           console.log('navigateToSurvey', JSON.stringify(response.data))
           showMessage({

@@ -56,16 +56,19 @@ const BlockFSurveyScreen = () => {
     const [smartPhone, setSmartphone] = React.useState('');
     const [anyGroup, setAnyGroup] = React.useState('');
 
+
+    // 
+    const [SpecificInformation, setSpecificInformation] = React.useState(null);
+    const [comfortableConducting, setComfortableConducting] = React.useState(null);
+    const [grievanceRelated, setGrievanceRelated] = React.useState(null);
+
     // gender setDifferently
     const data = [
         {
-            label: 'Male'
+            label: 'Yes'
         },
         {
-            label: 'Female'
-        },
-        {
-            label: 'Prefer not to say'
+            label: 'No'
         }
     ];
 
@@ -94,8 +97,122 @@ const BlockFSurveyScreen = () => {
         },
         {
             label: 'No'
+        },
+        {
+            label: 'Can’t say/ Never approached'
+        },
+        {
+            label: 'NA (do not use agent point)'
         }
     ];
+
+    const possessnecessary = [
+        { id: 1, lable: 'Yes, I know it all ' },
+        { id: 2, lable: 'Yes, but I want to know more' },
+        { id: 3, lable: 'No, I want to know' },
+    ];
+
+    const languagewhich = [
+        { id: 1, lable: 'Hindi' },
+        { id: 2, lable: 'English' },
+        { id: 3, lable: 'Local Language/Dialect' },
+    ];
+
+    const informationsharing = [
+        { id: 1, lable: ' Pamphlets/ Brochures/ Public Hoardings' },
+        { id: 2, lable: 'Newspaper Advertisements' },
+        { id: 3, lable: 'Television/Radio Advertisements' },
+        { id: 4, lable: 'School Syllabus' },
+        { id: 5, lable: 'Email/SMS' },
+        { id: 6, lable: 'Small Group Meetings' },
+        { id: 7, lable: 'Visit Designated Centers' },
+    ]
+
+    const financialliteracy = [
+        { id: 1, lable: 'At the Designated Centre (bank Branches/BC Point etc.' },
+        { id: 2, lable: 'At Schools/Colleges' },
+        { id: 3, lable: 'At Anganwadi Kendra' },
+        { id: 4, lable: 'At Village Panchayat' },
+        { id: 5, lable: 'At Bus Stands/ Railway Stations' },
+        { id: 6, lable: 'At Public Events/ Mela, etc.' },
+        { id: 7, lable: 'At Market Places' },
+    ]
+
+    const Informationrelating = [
+        { id: 1, lable: 'Savings/Deposit' },
+        { id: 2, lable: 'Remittances/ Fund Transfer' },
+        { id: 3, lable: 'Credit (Loans)' },
+        { id: 4, lable: 'Investments (MF, etc.)' },
+        { id: 5, lable: 'Insurance (Life & Non-Life)' },
+        { id: 6, lable: 'Pension' },
+        { id: 7, lable: 'Grievance Redressal' },
+    ]
+
+    const financialtransactions = [
+        { id: 1, lable: 'Misuse of Documents (ID, Address, etc.)' },
+        { id: 2, lable: 'Breach of PIN, OTP, or Passwords' },
+        { id: 3, lable: 'Unauthorized withdrawals from the Account ' },
+        { id: 4, lable: 'Inability to distinguish between phone calls made by bank officials and fraudsters' },
+        { id: 5, lable: 'Charges levied by banks/BCs' },
+        { id: 6, lable: 'Trust on Business Correspondents' },
+        { id: 7, lable: 'Failure of banks' },
+    ]
+
+    const financialchallengingdifficult = [
+        { id: 1, lable: 'Lodge complaints against financial service providers – banks/NBFCs/Insurance Co, etc' },
+        { id: 2, lable: 'Follow up on the time-bound disposal of complaints' },
+        { id: 3, lable: ' Queues/wait time at financial service providers' },
+        { id: 4, lable: 'Clash of branch’s working timings with my work/business timings' },
+        { id: 5, lable: 'Arranging the documentation requirements' },
+        { id: 6, lable: 'Language barrier in digital transactions' },
+        { id: 7, lable: 'Complex Interface for online services' },
+        { id: 8, lable: 'Dependence on smartphone and internet connection' },
+    ]
+
+    const transactionsdigitally = [
+        { id: 1, lable: 'Poor connectivity' },
+        { id: 2, lable: 'Language barrier' },
+        { id: 3, lable: 'Complex interface' },
+        { id: 4, lable: 'No trust in Digital Platforms' },
+    ]
+
+    const digitalChannel = [
+        { id: 1, lable: 'Money transfer' },
+        { id: 2, lable: 'Bill Payment' },
+        { id: 3, lable: 'Balance Enquiry/Statement' },
+        { id: 4, lable: 'Merchant Payment' },
+        { id: 5, lable: 'None' },
+    ]
+
+    const Digitalpreferred = [
+        { id: 1, lable: 'UPI through Mobile App' },
+        { id: 2, lable: 'Debit Card' },
+        { id: 3, lable: 'Pre-paid Card' },
+        { id: 4, lable: 'Mobile Wallets' },
+    ]
+
+    const lodgedcomplaintreasons = [
+        { id: 1, lable: 'Not Resolved' },
+        { id: 2, lable: 'Delayed Response ' },
+        { id: 3, lable: 'Complaint not taken' },
+        { id: 4, lable: 'Any other' },
+    ]
+
+    const bankingtransactionsresponse = [
+        { id: 1, lable: 'Don’t trust' },
+        { id: 2, lable: 'Fear of data breaches' },
+        { id: 3, lable: 'Extra charges' },
+        { id: 4, lable: 'Long Queues' },
+        { id: 5, lable: 'Bad behaviour' },
+    ]
+
+    const addressedtimely = [
+        { id: 1, lable: 'BC did not know what to do' },
+        { id: 2, lable: 'Still pending with bank officials' },
+        { id: 3, lable: 'Unaware of the progress in the case' },
+        { id: 4, lable: 'Complaint was dismissed by bank official due to lack of information' },
+        { id: 5, lable: 'Received response after one month' },
+    ]
 
     const adults = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
 
@@ -414,7 +531,7 @@ const BlockFSurveyScreen = () => {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#F8F8FF' }}>
             {renderCustomHeader()}
-            <Modal isVisible={isInstruction}>
+            <Modal isVisible={false}>
                 <View style={{ height: 200, width: Dimensions.get('screen').width - 50, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 5, padding: 20 }}>
                     <View style={{ alignItems: 'center' }}>
                         <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Survey Instructions</Text>
@@ -436,32 +553,147 @@ const BlockFSurveyScreen = () => {
                 <ScrollView>
                     <View style={{ padding: 10 }}>
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>1. Name</Text>
-                            <TextInput onChangeText={(e) => setSurveyName(e)} style={{ backgroundColor: '#fff', paddingLeft: 15 }} placeholder='Enter Name' />
-                        </View>
-                        <View style={{ padding: 10, }} />
-                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>2. Gender</Text>
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>32. Do you require specific information and better awareness about your savings, remittances, credit, investments, insurance, pension, digital banking, etc.?</Text>
                             <RadioButtonRN
                                 data={data}
-                                selectedBtn={(e) => setGender(e)}
+                                selectedBtn={(e) => setSpecificInformation(e)}
                             />
                         </View>
                         <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>3. Age</Text>
-                            <TextInput onChangeText={(e) => setAgeNumber(e)} style={{ backgroundColor: '#fff', paddingLeft: 15 }} placeholder='Age' keyboardType={'number-pad'} maxLength={2} />
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>33. If no, do you possess all the necessary information for your financial well-being?</Text>
+                            <Dropdown
+                                style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                                placeholderStyle={styles.placeholderStyle}
+                                selectedTextStyle={styles.selectedTextStyle}
+                                inputSearchStyle={styles.inputSearchStyle}
+                                // iconStyle={styles.iconStyle}
+                                data={possessnecessary}
+                                // search
+                                maxHeight={300}
+                                labelField="lable"
+                                valueField="id"
+                                placeholder={!isFocus ? 'Select State' : value}
+                                // searchPlaceholder="Search..."
+                                value={value}
+                                onFocus={() => setIsFocus(true)}
+                                onBlur={() => setIsFocus(false)}
+                                onChange={item => {
+                                    console.log('______>', JSON.stringify(item))
+                                    setValue(item?.id);
+                                    setIsFocus(false);
+                                }}
+                            />
                         </View>
                         <View style={{ padding: 10, }} />
+                        {SpecificInformation?.label === 'Yes' ?
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>34 (a). In which language do you need the information?</Text>
+                                <Dropdown
+                                    style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                                    placeholderStyle={styles.placeholderStyle}
+                                    selectedTextStyle={styles.selectedTextStyle}
+                                    inputSearchStyle={styles.inputSearchStyle}
+                                    // iconStyle={styles.iconStyle}
+                                    data={languagewhich}
+                                    // search
+                                    maxHeight={300}
+                                    labelField="lable"
+                                    valueField="id"
+                                    placeholder={!isFocus ? 'Select Language information' : value}
+                                    // searchPlaceholder="Search..."
+                                    value={value}
+                                    onFocus={() => setIsFocus(true)}
+                                    onBlur={() => setIsFocus(false)}
+                                    onChange={item => {
+                                        console.log('______>', JSON.stringify(item))
+                                        setValue(item?.id);
+                                        setIsFocus(false);
+                                    }}
+                                />
+                                <View style={{ padding: 10, }} />
+                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>34 (b). Which medium of information sharing do you prefer?</Text>
+                                <Dropdown
+                                    style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                                    placeholderStyle={styles.placeholderStyle}
+                                    selectedTextStyle={styles.selectedTextStyle}
+                                    inputSearchStyle={styles.inputSearchStyle}
+                                    // iconStyle={styles.iconStyle}
+                                    data={informationsharing}
+                                    // search
+                                    maxHeight={300}
+                                    labelField="lable"
+                                    valueField="id"
+                                    placeholder={!isFocus ? 'Select information sharing' : value}
+                                    // searchPlaceholder="Search..."
+                                    value={value}
+                                    onFocus={() => setIsFocus(true)}
+                                    onBlur={() => setIsFocus(false)}
+                                    onChange={item => {
+                                        console.log('______>', JSON.stringify(item))
+                                        setValue(item?.id);
+                                        setIsFocus(false);
+                                    }}
+                                />
+                                <View style={{ padding: 10, }} />
+                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>34 (c). Where do you want such financial literacy information to be disseminated?</Text>
+                                <Dropdown
+                                    style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                                    placeholderStyle={styles.placeholderStyle}
+                                    selectedTextStyle={styles.selectedTextStyle}
+                                    inputSearchStyle={styles.inputSearchStyle}
+                                    // iconStyle={styles.iconStyle}
+                                    data={financialliteracy}
+                                    // search
+                                    maxHeight={300}
+                                    labelField="lable"
+                                    valueField="id"
+                                    placeholder={!isFocus ? 'Select Financial Literacy' : value}
+                                    // searchPlaceholder="Search..."
+                                    value={value}
+                                    onFocus={() => setIsFocus(true)}
+                                    onBlur={() => setIsFocus(false)}
+                                    onChange={item => {
+                                        console.log('______>', JSON.stringify(item))
+                                        setValue(item?.id);
+                                        setIsFocus(false);
+                                    }}
+                                />
+                                <View style={{ padding: 10, }} />
+                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>34 (d). Information relating to which function is easy to obtain and understand?</Text>
+                                <Dropdown
+                                    style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                                    placeholderStyle={styles.placeholderStyle}
+                                    selectedTextStyle={styles.selectedTextStyle}
+                                    inputSearchStyle={styles.inputSearchStyle}
+                                    // iconStyle={styles.iconStyle}
+                                    data={Informationrelating}
+                                    // search
+                                    maxHeight={300}
+                                    labelField="lable"
+                                    valueField="id"
+                                    placeholder={!isFocus ? 'Select Financial Literacy' : value}
+                                    // searchPlaceholder="Search..."
+                                    value={value}
+                                    onFocus={() => setIsFocus(true)}
+                                    onBlur={() => setIsFocus(false)}
+                                    onChange={item => {
+                                        console.log('______>', JSON.stringify(item))
+                                        setValue(item?.id);
+                                        setIsFocus(false);
+                                    }}
+                                />
+                                <View style={{ padding: 10, }} />
+                            </View> : null}
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>4. Occupation (In case of Overlap, report primary occupation)</Text>
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>35. Regarding your financial transactions, select the top three aspects which make you worry.</Text>
                             <MultiSelect
                                 hideTags
                                 items={occupations}
                                 uniqueKey="id"
                                 // ref={(component) => { this.multiSelect = component }}
                                 onSelectedItemsChange={(items) => onSelectedOccupationsChange(items)}
-                                selectedItems={selectedOccupations}
+                                selectedItems={financialtransactions}
                                 selectText="Occupation"
                                 // searchInputPlaceholderText="Search Items..."
                                 // onChangeInput={(text) => console.log(text)}
@@ -472,7 +704,7 @@ const BlockFSurveyScreen = () => {
                                 selectedItemTextColor="#CCC"
                                 selectedItemIconColor="#CCC"
                                 itemTextColor="#000"
-                                displayKey="occupation_name"
+                                displayKey="lable"
                                 searchInputStyle={{ color: '#CCC', paddingLeft: 10 }}
                                 submitButtonColor="#CCC"
                                 submitButtonText="Submit"
@@ -480,7 +712,7 @@ const BlockFSurveyScreen = () => {
                         </View>
                         <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>5. Education</Text>
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>36. In relation to your financial transactions, which of the following is challenging/difficult for you to handle?</Text>
                             <MultiSelect
                                 hideTags
                                 items={educations}
@@ -498,7 +730,7 @@ const BlockFSurveyScreen = () => {
                                 selectedItemTextColor="#CCC"
                                 selectedItemIconColor="#CCC"
                                 itemTextColor="#000"
-                                displayKey="education_title"
+                                displayKey="lable"
                                 searchInputStyle={{ color: '#CCC', paddingLeft: 10 }}
                                 submitButtonColor="#CCC"
                                 submitButtonText="Submit"
@@ -506,93 +738,38 @@ const BlockFSurveyScreen = () => {
                         </View>
                         <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>6. Annual Income (For non-earning respondents, the income of parents or spouse can be reported)</Text>
-                            <MultiSelect
-                                hideTags
-                                items={incomes}
-                                uniqueKey="id"
-                                // ref={(component) => { this.multiSelect = component }}
-                                onSelectedItemsChange={(items) => onSelectedIncomesChange(items)}
-                                selectedItems={selectedIncomes}
-                                selectText="Annual Income"
-                                // searchInputPlaceholderText="Search Items..."
-                                // onChangeInput={(text) => console.log(text)}
-                                altFontFamily="ProximaNova-Light"
-                                tagRemoveIconColor="#CCC"
-                                tagBorderColor="#CCC"
-                                tagTextColor="#CCC"
-                                selectedItemTextColor="#CCC"
-                                selectedItemIconColor="#CCC"
-                                itemTextColor="#000"
-                                displayKey="icomes_title"
-                                searchInputStyle={{ color: '#CCC', paddingLeft: 10 }}
-                                submitButtonColor="#CCC"
-                                submitButtonText="Submit"
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>37. Digital Transaction</Text>
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>37 (a). Do you feel confident and comfortable doing digital transactions on your own?</Text>
+                            <RadioButtonRN
+                                data={data}
+                                selectedBtn={(e) => setSpecificInformation(e)}
                             />
                         </View>
                         <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>7. Location</Text>
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>37 (b). do you carry out digital transactions on your own? transactions with someone’s help?</Text>
+                            <RadioButtonRN
+                                data={data}
+                                selectedBtn={(e) => setSpecificInformation(e)}
+                            />
+                            <View style={{ padding: 10, }} />
                             <View>
-                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>State</Text>
-                                <Dropdown
-                                    style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-                                    placeholderStyle={styles.placeholderStyle}
-                                    selectedTextStyle={styles.selectedTextStyle}
-                                    inputSearchStyle={styles.inputSearchStyle}
-                                    // iconStyle={styles.iconStyle}
-                                    data={state}
-                                    // search
-                                    maxHeight={300}
-                                    labelField="name"
-                                    valueField="id"
-                                    placeholder={!isFocus ? 'Select State' : value}
-                                    // searchPlaceholder="Search..."
-                                    value={value}
-                                    onFocus={() => setIsFocus(true)}
-                                    onBlur={() => setIsFocus(false)}
-                                    onChange={item => {
-                                        console.log('______>', JSON.stringify(item))
-                                        setValue(item?.name);
-                                        loadDistrict(item?.id);
-                                        setIsFocus(false);
-                                    }}
-                                />
-                            </View>
-                            <View>
-                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>District</Text>
-                                <Dropdown
-                                    style={[styles.dropdown, isDistrictFocus && { borderColor: 'blue' }]}
-                                    placeholderStyle={styles.placeholderStyle}
-                                    selectedTextStyle={styles.selectedTextStyle}
-                                    inputSearchStyle={styles.inputSearchStyle}
-                                    // iconStyle={styles.iconStyle}
-                                    data={DistrictData}
-                                    // search
-                                    maxHeight={300}
-                                    labelField="name"
-                                    valueField="distic_code"
-                                    placeholder={!isDistrictFocus ? 'Select District' : valueDistrict}
-                                    // searchPlaceholder="Search..."
-                                    value={valueDistrict}
-                                    onFocus={() => setIsDistrictFocus(true)}
-                                    onBlur={() => setIsDistrictFocus(false)}
-                                    onChange={item => {
-                                        console.log(JSON.stringify(item))
-                                        setDistrictValue(item.name);
-                                        setIsDistrictFocus(false);
-                                    }}
+                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>37 (c).Do you face any hinderance in carrying out transactions digitally?</Text>
+                                <RadioButtonRN
+                                    data={data}
+                                    selectedBtn={(e) => setSpecificInformation(e)}
                                 />
                             </View>
                             <View>
                                 <View style={{ padding: 10, }} />
+                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>37 (d). If yes, please indicate top two reasons?</Text>
                                 <MultiSelect
                                     hideTags
                                     items={areas}
                                     uniqueKey="id"
                                     // ref={(component) => { this.multiSelect = component }}
                                     onSelectedItemsChange={(items) => onSelectedItemsChange(items)}
-                                    selectedItems={areasSelected}
+                                    selectedItems={transactionsdigitally}
                                     selectText="Select Areas"
                                     // searchInputPlaceholderText="Search Items..."
                                     // onChangeInput={(text) => console.log(text)}
@@ -609,10 +786,18 @@ const BlockFSurveyScreen = () => {
                                     submitButtonText="Submit"
                                 />
                             </View>
+                            <View style={{ padding: 10, }} />
+                            <View>
+                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>37 (e). Have you or anyone in your family lost money in digital payment fraud?</Text>
+                                <RadioButtonRN
+                                    data={data}
+                                    selectedBtn={(e) => setSpecificInformation(e)}
+                                />
+                            </View>
                         </View>
                         <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>8. Are you differently abled?</Text>
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>37 (f). After the incident, do you continue to use digital banking services?</Text>
                             <RadioButtonRN
                                 data={differently}
                                 selectedBtn={(e) => setDifferently(e)}
@@ -620,68 +805,208 @@ const BlockFSurveyScreen = () => {
                         </View>
                         <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={{ marginBottom: 5, fontWeight: 'bold', flex: 1 }}>9. Size of Household</Text>
-                                <Text style={{ marginBottom: 5, fontWeight: 'bold', marginRight: 10 }}>Total : {Number(adult) + Number(children)}</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <View style={{ flex: 1 }}>
-                                    <Text style={{ fontWeight: 'bold' }}>Adults</Text>
-                                    <SelectDropdown
-                                        data={adults}
-                                        onSelect={(selectedItem, index) => {
-                                            console.log(selectedItem, index)
-                                            setAdults(selectedItem);
-                                        }}
-                                        buttonTextAfterSelection={(selectedItem, index) => {
-                                            // text represented after item is selected
-                                            // if data array is an array of objects then return selectedItem.property to render after item is selected
-                                            return selectedItem
-                                        }}
-                                        rowTextForSelection={(item, index) => {
-                                            // text represented for each item in dropdown
-                                            // if data array is an array of objects then return item.property to represent item in dropdown
-                                            return item
-                                        }}
-                                    />
-                                </View>
-                                <View style={{ flex: 1, marginLeft: 5 }}>
-                                    <Text style={{ fontWeight: 'bold' }}>Children's</Text>
-                                    <SelectDropdown
-                                        data={childern}
-                                        onSelect={(selectedItem, index) => {
-                                            console.log(selectedItem, index);
-                                            setChildren(selectedItem)
-                                        }}
-                                        buttonTextAfterSelection={(selectedItem, index) => {
-                                            // text represented after item is selected
-                                            // if data array is an array of objects then return selectedItem.property to render after item is selected
-                                            return selectedItem
-                                        }}
-                                        rowTextForSelection={(item, index) => {
-                                            // text represented for each item in dropdown
-                                            // if data array is an array of objects then return item.property to represent item in dropdown
-                                            return item
-                                        }}
-                                    />
-                                </View>
-                            </View>
-                        </View>
-                        <View style={{ padding: 10, }} />
-                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>10. Are you part of any group (SHG/JLG or formal group) ?</Text>
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold', flex: 1 }}>37 (g). Were you or your family member could recover the money lost in digital payment fraud?</Text>
                             <RadioButtonRN
-                                data={dataGroup}
-                                selectedBtn={(e) => setAnyGroup(e)}
+                                data={differently}
+                                selectedBtn={(e) => setDifferently(e)}
+                            />
+                            <View style={{ padding: 10, }} />
+                            <Text style={{ fontWeight: 'bold' }}>37 (h). Do you know about various precautions while using digital banking?</Text>
+                            <RadioButtonRN
+                                data={differently}
+                                selectedBtn={(e) => setDifferently(e)}
+                            />
+                            <View style={{ padding: 10, }} />
+                            <Text style={{ fontWeight: 'bold' }}>38. Usage of Digital Medium for Transaction</Text>
+                            <View style={{ padding: 10, }} />
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold', flex: 1, marginBottom: 5 }}>38 (a). Do you use any of the following services via a digital channel (app/internet) linked with this account?</Text>
+                            <MultiSelect
+                                hideTags
+                                items={areas}
+                                uniqueKey="id"
+                                // ref={(component) => { this.multiSelect = component }}
+                                onSelectedItemsChange={(items) => onSelectedItemsChange(items)}
+                                selectedItems={digitalChannel}
+                                selectText="Select Digital Channel"
+                                // searchInputPlaceholderText="Search Items..."
+                                // onChangeInput={(text) => console.log(text)}
+                                altFontFamily="ProximaNova-Light"
+                                tagRemoveIconColor="#CCC"
+                                tagBorderColor="#CCC"
+                                tagTextColor="#CCC"
+                                selectedItemTextColor="#CCC"
+                                selectedItemIconColor="#CCC"
+                                itemTextColor="#000"
+                                displayKey="lable"
+                                searchInputStyle={{ color: '#CCC', paddingLeft: 10 }}
+                                submitButtonColor="#CCC"
+                                submitButtonText="Submit"
                             />
                         </View>
                         <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>11. Do you own a smartphone ?</Text>
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>38 (b). If Digital is your preferred mode of transaction, rate them in your order of preference?</Text>
+                            <MultiSelect
+                                hideTags
+                                items={areas}
+                                uniqueKey="id"
+                                // ref={(component) => { this.multiSelect = component }}
+                                onSelectedItemsChange={(items) => onSelectedItemsChange(items)}
+                                selectedItems={Digitalpreferred}
+                                selectText="Select Digital Preferred"
+                                // searchInputPlaceholderText="Search Items..."
+                                // onChangeInput={(text) => console.log(text)}
+                                altFontFamily="ProximaNova-Light"
+                                tagRemoveIconColor="#CCC"
+                                tagBorderColor="#CCC"
+                                tagTextColor="#CCC"
+                                selectedItemTextColor="#CCC"
+                                selectedItemIconColor="#CCC"
+                                itemTextColor="#000"
+                                displayKey="lable"
+                                searchInputStyle={{ color: '#CCC', paddingLeft: 10 }}
+                                submitButtonColor="#CCC"
+                                submitButtonText="Submit"
+                            />
+                        </View>
+                        <View style={{ padding: 10, }} />
+                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>39. Customer Service and Complaints</Text>
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>39 (a). As a bank customer, are you satisfied with the services?</Text>
                             <RadioButtonRN
                                 data={smartphone}
                                 selectedBtn={(e) => setSmartphone(e)}
                             />
+                            <View style={{ padding: 10, }} />
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>39 (b). Do bank staff remain attentive and sensitive to your problems?</Text>
+                            <RadioButtonRN
+                                data={smartphone}
+                                selectedBtn={(e) => setSmartphone(e)}
+                            />
+                            <View style={{ padding: 10, }} />
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>39 (c). If you have any complaints, do you know how to lodge a complaint?</Text>
+                            <RadioButtonRN
+                                data={smartphone}
+                                selectedBtn={(e) => setSmartphone(e)}
+                            />
+                            <View style={{ padding: 10, }} />
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>39 (d). If you have ever lodged a complaint, are you satisfied with its resolution?</Text>
+                            <RadioButtonRN
+                                data={smartphone}
+                                selectedBtn={(e) => setSmartphone(e)}
+                            />
+                            <View style={{ padding: 10, }} />
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>39 (e). If no, what could be the reasons?</Text>
+                            <RadioButtonRN
+                                data={smartphone}
+                                selectedBtn={(e) => setSmartphone(e)}
+                            />
+                            <View style={{ padding: 10, }} />
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>39 (f). Do you know about the RBI Integrated Banking Ombudsman Scheme?</Text>
+                            <RadioButtonRN
+                                data={smartphone}
+                                selectedBtn={(e) => setSmartphone(e)}
+                            />
+                            <View style={{ padding: 10, }} />
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>39 (g). Do you know about the complaint process regarding others such as Insurance, Pension, etc.?</Text>
+                            <RadioButtonRN
+                                data={smartphone}
+                                selectedBtn={(e) => setSmartphone(e)}
+                            />
+                            <View style={{ padding: 10, }} />
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>40. Customer Service Quality at BC point</Text>
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>40 (a). Do you feel comfortable conducting banking transactions at an agent point (BC/BC Outlet) ?</Text>
+                            <RadioButtonRN
+                                data={smartphone}
+                                selectedBtn={(e) => setComfortableConducting(e)}
+                            />
+                            <View style={{ padding: 10, }} />
+                            {comfortableConducting?.label === 'No' ? <><Text style={{ marginBottom: 5, fontWeight: 'bold' }}>40 (b). Please indicate the reasons?</Text>
+                                <Dropdown
+                                    style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                                    placeholderStyle={styles.placeholderStyle}
+                                    selectedTextStyle={styles.selectedTextStyle}
+                                    inputSearchStyle={styles.inputSearchStyle}
+                                    // iconStyle={styles.iconStyle}
+                                    data={bankingtransactionsresponse}
+                                    // search
+                                    maxHeight={300}
+                                    labelField="lable"
+                                    valueField="id"
+                                    placeholder={!isFocus ? 'Select Indicate the reasons' : value}
+                                    // searchPlaceholder="Search..."
+                                    value={value}
+                                    onFocus={() => setIsFocus(true)}
+                                    onBlur={() => setIsFocus(false)}
+                                    onChange={item => {
+                                        console.log('______>', JSON.stringify(item))
+                                        setValue(item?.id);
+                                        setIsFocus(false);
+                                    }}
+                                /></> : null}
+                            <View style={{ padding: 10, }} />
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>40 (c). Is the BC agent able to offer the product or service that you require?</Text>
+                            <RadioButtonRN
+                                data={differently}
+                                selectedBtn={(e) => setSmartphone(e)}
+                            />
+                            <View style={{ padding: 10, }} />
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>40 (d). Does the BC agent satisfactorily respond to your queries?</Text>
+                            <RadioButtonRN
+                                data={differently}
+                                selectedBtn={(e) => setSmartphone(e)}
+                            />
+                            <View style={{ padding: 10, }} />
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>40 (e). Does your BC indicate the charges for the services offered upfront?</Text>
+                            <RadioButtonRN
+                                data={differently}
+                                selectedBtn={(e) => setSmartphone(e)}
+                            />
+                            <View style={{ padding: 10, }} />
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>40 (f). Do you know, how to lodge a complaint at the BC point?</Text>
+                            <RadioButtonRN
+                                data={differently}
+                                selectedBtn={(e) => setSmartphone(e)}
+                            />
+                            <View style={{ padding: 10, }} />
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>40 (g). Whether you raised any grievance related to service with BC?</Text>
+                            <RadioButtonRN
+                                data={differently}
+                                selectedBtn={(e) => setGrievanceRelated(e)}
+                            />
+                            {grievanceRelated?.label === 'Yes' ? <>
+                                <View style={{ padding: 10, }} />
+                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>40 (h). If response to Q40(g) is Yes, whether your grievance was addressed timely (within one month)?</Text>
+                                <RadioButtonRN
+                                    data={smartphone}
+                                    selectedBtn={(e) => setSmartphone(e)}
+                                />
+                            </> : <>
+                                <View style={{ padding: 10, }} />
+                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>40 (i). If response to Q40(g) is No, what were reasons provided by BC Agent?</Text>
+                                <Dropdown
+                                    style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                                    placeholderStyle={styles.placeholderStyle}
+                                    selectedTextStyle={styles.selectedTextStyle}
+                                    inputSearchStyle={styles.inputSearchStyle}
+                                    // iconStyle={styles.iconStyle}
+                                    data={addressedtimely}
+                                    // search
+                                    maxHeight={300}
+                                    labelField="lable"
+                                    valueField="id"
+                                    placeholder={!isFocus ? 'Select Reasons provided by BC' : value}
+                                    // searchPlaceholder="Search..."
+                                    value={value}
+                                    onFocus={() => setIsFocus(true)}
+                                    onBlur={() => setIsFocus(false)}
+                                    onChange={item => {
+                                        console.log('______>', JSON.stringify(item))
+                                        setValue(item?.id);
+                                        setIsFocus(false);
+                                    }}
+                                /></>}
+                            <View style={{ padding: 10, }} />
                         </View>
                         <View style={{ padding: 10, }} />
                         <TouchableOpacity onPress={() => navigation.replace('DashboardScreen')} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
