@@ -279,6 +279,7 @@ const AddSurveyScreen = () => {
         const pattern = /^[a-zA-Z]{2,40}( [a-zA-Z]{2,40})+$/;
         const AgeRegex = /^(?:1[01][0-9]|120|1[7-9]|[2-9][0-9])$/
         console.log('validationCheck', AgeRegex.test(age))
+        navigation.navigate("BlockBSurveyScreen")
         if (pattern.test(surveryName)) {
             if (gender !== '') {
                 if (AgeRegex.test(age)) {

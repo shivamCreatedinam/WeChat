@@ -55,28 +55,28 @@ const BlockCSurveyScreen = () => {
     const [differentlyAble, setDifferently] = React.useState('');
     const [smartPhone, setSmartphone] = React.useState('');
     const [anyGroup, setAnyGroup] = React.useState('');
-    const [loan, setLoan] = React.useState('');
+    const [loan, setLoan] = React.useState(null);
     const [selectedLoantype, setSelectedLoanType] = React.useState([]);
-    const [loanEnroll, setLoanEnroll] = React.useState(false);
+    const [loanEnroll, setLoanEnroll] = React.useState(null);
     const [loanEnrollFocus, setLoanEnrollFocus] = React.useState(false);
-    const [amount, setAmount] = React.useState(false);
+    const [amount, setAmount] = React.useState(null);
     const [amountFocus, setAmountFocus] = React.useState(false);
-    const [credFacility, setCredFacility] = React.useState(false);
-    const [repay, setRepay] = React.useState(false);
+    const [credFacility, setCredFacility] = React.useState(null);
+    const [repay, setRepay] = React.useState(null);
     const [repayFocus, setRepayFocus] = React.useState(false);
     const [selectedReason, setSelectedReason] = React.useState([]);
-    const [overDraft, setOverDraft] = React.useState(false);
-    const [ReceivedOverDraft, setReceivedOverDraft] = React.useState(false);
-    const [bank, setbank] = React.useState(false);
-    const [refuse, setRefuse] = React.useState(false);
+    const [overDraft, setOverDraft] = React.useState(null);
+    const [ReceivedOverDraft, setReceivedOverDraft] = React.useState(null);
+    const [bank, setbank] = React.useState(null);
+    const [refuse, setRefuse] = React.useState(null);
     const [selectedRefuseReason, setSelectedRefuseReason] = React.useState([]);
-    const [freeLoan, setFreeLoan] = React.useState(false);
-    const [freeLoanReceived, setFreeLoanReceived] = React.useState(false);
-    const [loanRefuseByYou, setLoanrefuseByYou] = React.useState(false);
+    const [freeLoan, setFreeLoan] = React.useState(null);
+    const [freeLoanReceived, setFreeLoanReceived] = React.useState(null);
+    const [loanRefuseByYou, setLoanrefuseByYou] = React.useState(null);
     const [selectedFreeLoanRefuseReason, setSelectedFreeLoanRefuseReason] = React.useState([]);
-    const [privateLend, setPrivateLend] = React.useState(false);
-    const [privateBorrowing, setprivateBorrowing] = React.useState(false);
-    const [privateBorrowingFocus, setPrivateBorrowingFocus] = React.useState(false);
+    const [privateLend, setPrivateLend] = React.useState(null);
+    const [privateBorrowing, setprivateBorrowing] = React.useState(null);
+    const [privateBorrowingFocus, setPrivateBorrowingFocus] = React.useState(null);
     const multiSelectRef = useRef(null);
 
     // gender setDifferently
@@ -355,120 +355,144 @@ const BlockCSurveyScreen = () => {
         submitSurvey(audioFile);
     };
 
+    console.log("loan***", loan)
     const validationCheck = () => {
         const pattern = /^[a-zA-Z]{2,40}( [a-zA-Z]{2,40})+$/;
         const AgeRegex = /^(?:1[01][0-9]|120|1[7-9]|[2-9][0-9])$/
-        if (pattern.test(surveryName)) {
-            if (gender !== '') {
-                if (AgeRegex.test(age)) {
-                    if (selectedOccupations.length !== 0) {
-                        if (selectedEducation.length !== 0) {
-                            if (selectedIncomes.length !== 0) {
-                                if (value !== null) {
-                                    if (valueDistrict !== null) {
-                                        if (areasSelected.length !== 0) {
-                                            if (differentlyAble !== '') {
-                                                if (adult !== '') {
-                                                    if (children !== '') {
-                                                        if (anyGroup !== '') {
-                                                            if (smartPhone !== '') {
-                                                                console.log('validationCheck', AgeRegex.test(age))
-                                                                stopRecording();
+        if (loan !== null) {
+            if (credFacility !== null) {
+                if (SelectedLoanTypeLabels?.length !== 0) {
+                    if (loanEnroll !== null) {
+                        if (amount !== null) {
+                            if (repay !== null) {
+                                if (overDraft !== null) {
+                                    if (ReceivedOverDraft !== null) {
+                                        if (bank !== null) {
+                                            if (refuse !== null) {
+                                                if (selectedRefuseReason?.length !== 0) {
+                                                    if (freeLoan !== null) {
+                                                        if (freeLoanReceived !== null) {
+                                                            if (loanRefuseByYou !== null) {
+                                                                if (selectedFreeLoanRefuseReason?.length !== 0) {
+                                                                    if (privateLend !== null) {
+                                                                        if (privateBorrowing !== null) {
+
+                                                                        } else {
+                                                                            showMessage({
+                                                                                message: "Please Select Borrowings Amount",
+                                                                                description: "Please Select Borrowings Amount!",
+                                                                                type: "danger",
+                                                                            });
+                                                                        }
+                                                                    } else {
+                                                                        showMessage({
+                                                                            message: "Please Select Borrowings",
+                                                                            description: "Please Select Borrowings!",
+                                                                            type: "danger",
+                                                                        });
+                                                                    }
+                                                                } else {
+                                                                    showMessage({
+                                                                        message: "Please Select Free Loan Refusal Reason",
+                                                                        description: "Please Select Free Loan Refusal Reason!",
+                                                                        type: "danger",
+                                                                    });
+                                                                }
                                                             } else {
                                                                 showMessage({
-                                                                    message: "Please Select SmartPhone Own!",
-                                                                    description: "Please Select SmartPhone Own!",
+                                                                    message: "Please Select Refusal Reason",
+                                                                    description: "Please Select Refusal Reason!",
                                                                     type: "danger",
                                                                 });
                                                             }
                                                         } else {
                                                             showMessage({
-                                                                message: "Please Select Any Group Part!",
-                                                                description: "Please Select Any Group Part SHG/JLG!",
+                                                                message: "Please Select Refusal Reason",
+                                                                description: "Please Select Refusal Reason!",
                                                                 type: "danger",
                                                             });
                                                         }
                                                     } else {
                                                         showMessage({
-                                                            message: "Please Select Children!",
-                                                            description: "Please Select Number Of Children!",
+                                                            message: "Please Select Collateral-free Loan",
+                                                            description: "Please Select Collateral-free Loan!",
                                                             type: "danger",
                                                         });
                                                     }
                                                 } else {
                                                     showMessage({
-                                                        message: "Please Select Adults!",
-                                                        description: "Please Select Number Of Adults!",
+                                                        message: "Please Select Refusal Reason!",
+                                                        description: "Please Select Refusal Reason!",
                                                         type: "danger",
                                                     });
                                                 }
                                             } else {
                                                 showMessage({
-                                                    message: "Please Select Differently!",
-                                                    description: "Please Select Differently abled!",
+                                                    message: "Please Select Refusal Reason",
+                                                    description: "Please Select Refusal Reason!",
                                                     type: "danger",
                                                 });
                                             }
                                         } else {
                                             showMessage({
-                                                message: "Please Select Area",
-                                                description: "Please Select Area!",
+                                                message: "Please Select bank",
+                                                description: "Please Select bank!",
                                                 type: "danger",
                                             });
                                         }
                                     } else {
                                         showMessage({
-                                            message: "Please Select District",
-                                            description: "Please Select District!",
+                                            message: "Please Select OverDraft Limit",
+                                            description: "Please Select OverDraft Limit!",
                                             type: "danger",
                                         });
                                     }
                                 } else {
                                     showMessage({
-                                        message: "Please Select State",
-                                        description: "Please Select State!",
+                                        message: "Please Select overDraft Facility",
+                                        description: "Please Select overDraft Facility!",
                                         type: "danger",
                                     });
                                 }
                             } else {
                                 showMessage({
-                                    message: "Please Select Incomes",
-                                    description: "Please Select Incomes!",
+                                    message: "Please Select Repayment Mode",
+                                    description: "Please Select Repayment Mode!",
                                     type: "danger",
                                 });
                             }
                         } else {
                             showMessage({
-                                message: "Please Select Education",
-                                description: "Please Select Education!",
+                                message: "Please Select amount",
+                                description: "Please Select amount!",
                                 type: "danger",
                             });
                         }
                     } else {
                         showMessage({
-                            message: "Please Select Occupation",
-                            description: "Please Select Occupation!",
+                            message: "Please Select Loan Enrol",
+                            description: "Please Select Loan Enrol!",
                             type: "danger",
                         });
                     }
                 } else {
                     showMessage({
-                        message: "Please Enter Valid Age",
-                        description: "Please Enter Valid Age!",
+                        message: "Please Select Loan Type",
+                        description: "Please Select Loan Type!",
                         type: "danger",
                     });
                 }
             } else {
                 showMessage({
-                    message: "Please Select Gender",
-                    description: "Please Select Valid Gender!",
+                    message: "Please Select credFacility",
+                    description: "Please Select credFacility!",
                     type: "danger",
                 });
             }
         } else {
             showMessage({
-                message: "Please Enter Name",
-                description: "Please Enter Valid Name!",
+                message: "Please Select  Need For Loan",
+                description: "Please Select  Need For Loan!",
                 type: "danger",
             });
         }
@@ -961,9 +985,12 @@ const BlockCSurveyScreen = () => {
                                 />
                             </View>
                         </View>
-                    
+
                         <View style={{ padding: 10, }} />
-                        <TouchableOpacity onPress={() => navigation.replace('BlockDSurveyScreen')} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
+                        <TouchableOpacity onPress={() => {
+                            validationCheck();
+                            navigation.replace('BlockDSurveyScreen')
+                        }} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
                             <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Next Block D</Text>
                         </TouchableOpacity>
                     </View>
