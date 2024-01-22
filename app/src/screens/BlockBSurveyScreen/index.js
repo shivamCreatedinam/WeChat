@@ -22,6 +22,7 @@ const BlockBSurveyScreen = () => {
     const OsVer = Platform.constants['Release'];
     const navigation = useNavigation();
     const [name, setName] = React.useState('');
+    const [gender, setGender] = React.useState('');
     const [userName, setUserName] = React.useState('');
     const [isRecording, setIsRecording] = React.useState(false);
     const [isInstruction, setSurveyInstruction] = React.useState(true);
@@ -48,7 +49,7 @@ const BlockBSurveyScreen = () => {
 
     // lable fields. 
     const [surveryName, setSurveyName] = React.useState('');
-    const [gender, setGender] = React.useState('');
+    const [bank, setBank] = React.useState(null);
     const [age, setAgeNumber] = React.useState(0);
     const [adult, setAdults] = React.useState(0);
     const [children, setChildren] = React.useState(0);
@@ -216,6 +217,90 @@ const BlockBSurveyScreen = () => {
         }
     }
 
+    const getLoadingData = async () => {
+        setLoading(true);
+        const UserToken = await AsyncStorage.getItem(AsyncStorageContaints.UserId);
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${UserToken}`
+        }
+        Axios.get(`https://createdinam.in/RBI-CBCD/public/api/get-demographic-details`, {
+            headers: headers
+        })
+            .then((response) => {
+                console.log('getLoadingData', JSON.stringify(response.data))
+                if (response.data.status === true) {
+                    setAreas(response.data?.areas);
+                    setEducations(response.data?.educations);
+                    setIncomes(response.data?.incomes);
+                    setOccupations(response.data?.occupations);
+                    // getState(UserToken);
+                } else {
+                    setLoading(false);
+                    showMessage({
+                        message: "Something went wrong!",
+                        description: "Something went wrong. Try again!",
+                        type: "danger",
+                    });
+                }
+            });
+    }
+
+    const getState = (token) => {
+        let url = `https://createdinam.in/RBI-CBCD/public/api/get-states`;
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+        Axios.get(url, {
+            headers: headers
+        })
+            .then((response) => {
+                console.log('getState', JSON.stringify(response?.data?.data))
+                if (response.data.status === true) {
+                    setLoading(false);
+                    setStateData(response?.data?.data);
+                } else {
+                    setLoading(false);
+                    showMessage({
+                        message: "Something went wrong!",
+                        description: "Something went wrong. Try again!",
+                        type: "danger",
+                    });
+                }
+            });
+    }
+
+    const loadDistrict = async (state) => {
+        console.log('loadDistrict______', JSON.stringify(state))
+        const UserToken = await AsyncStorage.getItem(AsyncStorageContaints.UserId);
+        let url = `https://createdinam.in/RBI-CBCD/public/api/get-city/${Number(state)}`;
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${UserToken}`
+        }
+        Axios.get(url, {
+            headers: headers,
+        })
+            .then((response) => {
+                if (response.data.status === true) {
+                    setDistrictData(response?.data?.data);
+                } else {
+                    setLoading(false);
+                    showMessage({
+                        message: "Something went wrong!",
+                        description: "Something went wrong. Try again!",
+                        type: "danger",
+                    });
+                }
+            });
+    }
+
+    // AudioRecord.on('data', data => {
+    //     // base64-encoded audio data chunks
+    //     console.log('AudioRecord_>', JSON.stringify(data));
+    // });
+
     const askToCloseApp = () => {
         Alert.alert(
             "Close Survey",
@@ -261,7 +346,7 @@ const BlockBSurveyScreen = () => {
     const startRecording = async () => {
         setSurveyInstruction(false);
         setIsRecording(true);
-        // AudioRecord.start();
+        AudioRecord.start();
     };
 
     const stopRecording = async () => {
@@ -273,6 +358,124 @@ const BlockBSurveyScreen = () => {
         submitSurvey(audioFile);
     };
 
+    const validationCheck = () => {
+        const pattern = /^[a-zA-Z]{2,40}( [a-zA-Z]{2,40})+$/;
+        const AgeRegex = /^(?:1[01][0-9]|120|1[7-9]|[2-9][0-9])$/
+        if (pattern.test(surveryName)) {
+            if (gender !== '') {
+                if (AgeRegex.test(age)) {
+                    if (selectedOccupations.length !== 0) {
+                        if (selectedEducation.length !== 0) {
+                            if (selectedIncomes.length !== 0) {
+                                if (value !== null) {
+                                    if (valueDistrict !== null) {
+                                        if (areasSelected.length !== 0) {
+                                            if (differentlyAble !== '') {
+                                                if (adult !== '') {
+                                                    if (children !== '') {
+                                                        if (anyGroup !== '') {
+                                                            if (smartPhone !== '') {
+                                                                console.log('validationCheck', AgeRegex.test(age))
+                                                                stopRecording();
+                                                            } else {
+                                                                showMessage({
+                                                                    message: "Please Select SmartPhone Own!",
+                                                                    description: "Please Select SmartPhone Own!",
+                                                                    type: "danger",
+                                                                });
+                                                            }
+                                                        } else {
+                                                            showMessage({
+                                                                message: "Please Select Any Group Part!",
+                                                                description: "Please Select Any Group Part SHG/JLG!",
+                                                                type: "danger",
+                                                            });
+                                                        }
+                                                    } else {
+                                                        showMessage({
+                                                            message: "Please Select Children!",
+                                                            description: "Please Select Number Of Children!",
+                                                            type: "danger",
+                                                        });
+                                                    }
+                                                } else {
+                                                    showMessage({
+                                                        message: "Please Select Adults!",
+                                                        description: "Please Select Number Of Adults!",
+                                                        type: "danger",
+                                                    });
+                                                }
+                                            } else {
+                                                showMessage({
+                                                    message: "Please Select Differently!",
+                                                    description: "Please Select Differently abled!",
+                                                    type: "danger",
+                                                });
+                                            }
+                                        } else {
+                                            showMessage({
+                                                message: "Please Select Area",
+                                                description: "Please Select Area!",
+                                                type: "danger",
+                                            });
+                                        }
+                                    } else {
+                                        showMessage({
+                                            message: "Please Select District",
+                                            description: "Please Select District!",
+                                            type: "danger",
+                                        });
+                                    }
+                                } else {
+                                    showMessage({
+                                        message: "Please Select State",
+                                        description: "Please Select State!",
+                                        type: "danger",
+                                    });
+                                }
+                            } else {
+                                showMessage({
+                                    message: "Please Select Incomes",
+                                    description: "Please Select Incomes!",
+                                    type: "danger",
+                                });
+                            }
+                        } else {
+                            showMessage({
+                                message: "Please Select Education",
+                                description: "Please Select Education!",
+                                type: "danger",
+                            });
+                        }
+                    } else {
+                        showMessage({
+                            message: "Please Select Occupation",
+                            description: "Please Select Occupation!",
+                            type: "danger",
+                        });
+                    }
+                } else {
+                    showMessage({
+                        message: "Please Enter Valid Age",
+                        description: "Please Enter Valid Age!",
+                        type: "danger",
+                    });
+                }
+            } else {
+                showMessage({
+                    message: "Please Select Gender",
+                    description: "Please Select Valid Gender!",
+                    type: "danger",
+                });
+            }
+        } else {
+            showMessage({
+                message: "Please Enter Name",
+                description: "Please Enter Valid Name!",
+                type: "danger",
+            });
+        }
+    }
 
     const submitSurvey = async (file_urls) => {
         // https://createdinam.in/RBI-CBCD/public/api/create-survey-demographics
@@ -367,7 +570,6 @@ const BlockBSurveyScreen = () => {
     }
 
     const onSelectedSaveMoney = (selectedItems) => {
-        console.log("selectedItems", selectedItems)
         setSelectSaveMoney(selectedItems);
     }
 
@@ -380,7 +582,7 @@ const BlockBSurveyScreen = () => {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#F8F8FF' }}>
             {renderCustomHeader()}
-            <Modal isVisible={false}>
+            <Modal isVisible={isInstruction}>
                 <View style={{ height: 200, width: Dimensions.get('screen').width - 50, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 5, padding: 20 }}>
                     <View style={{ alignItems: 'center' }}>
                         <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Survey Instructions</Text>
@@ -405,7 +607,7 @@ const BlockBSurveyScreen = () => {
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>1. Do you have a bank account? </Text>
                             <RadioButtonRN
                                 data={data}
-                                selectedBtn={(e) => setGender(e)}
+                                selectedBtn={(e) => setBank(e)}
                             />
                         </View>
                         <View style={{ padding: 10, }} />
@@ -698,6 +900,8 @@ const BlockBSurveyScreen = () => {
 
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>13. If you are not using your bank account, please indicate reasons?</Text>
+
+
                             <MultiSelect
                                 hideTags
                                 items={reasons}
@@ -791,6 +995,8 @@ const BlockBSurveyScreen = () => {
                         <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>16. If you are not using your bank account, please indicate reasons?</Text>
+
+
                             <MultiSelect
                                 hideTags
                                 items={Incomedata}
@@ -863,9 +1069,12 @@ const BlockBSurveyScreen = () => {
                                 ))}
                             </View>
                         </View>
+
                         <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>18. How do you save money?</Text>
+
+
                             <MultiSelect
                                 hideTags
                                 items={saveMoney}
@@ -899,6 +1108,15 @@ const BlockBSurveyScreen = () => {
                                 ))}
                             </View>
                         </View>
+
+                        {/* <View style={{ padding: 10, }} />
+                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>11. Do you own a smartphone ?</Text>
+                            <RadioButtonRN
+                                data={smartphone}
+                                selectedBtn={(e) => setSmartphone(e)}
+                            />
+                        </View> */}
                         <View style={{ padding: 10, }} />
                         <TouchableOpacity onPress={() => navigation.replace('BlockCSurveyScreen')} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
                             <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Next Block C</Text>
