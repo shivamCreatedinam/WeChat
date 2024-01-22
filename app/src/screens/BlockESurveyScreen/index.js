@@ -60,6 +60,16 @@ const BlockESurveyScreen = () => {
     const [anyGroup, setAnyGroup] = React.useState('');
 
     const [selectedReason, setSelectedReason] = React.useState([]);
+    // start  Schemes
+    const [PensionAwareness, setPensionAwareness] = React.useState(null);
+    const [PensionEnrolled, setPensionEnrolled] = React.useState(null);
+    const [PensionSubscription, setPensionSubscription] = React.useState(null);
+    const [PensionAccount, setPensionAccount] = React.useState(null);
+
+    const [SchemesAwareness, setSchemesAwareness] = React.useState(null);
+    const [SchemesEnrolled, setSchemesEnrolled] = React.useState(null);
+    const [SchemesSubscription, setSchemesSubscription] = React.useState(null);
+    const [SchemesAccount, setSchemesAccount] = React.useState(null);
 
     // gender setDifferently
     const data = [
@@ -121,10 +131,6 @@ const BlockESurveyScreen = () => {
     const onSelectedReason = (selectedItems) => {
         setSelectedReason(selectedItems);
     }
-
-    const adults = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
-
-    const childern = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
 
     useFocusEffect(
         React.useCallback(() => {
@@ -221,119 +227,76 @@ const BlockESurveyScreen = () => {
     };
 
     const validationCheck = () => {
-        const pattern = /^[a-zA-Z]{2,40}( [a-zA-Z]{2,40})+$/;
-        const AgeRegex = /^(?:1[01][0-9]|120|1[7-9]|[2-9][0-9])$/
-        if (pattern.test(surveryName)) {
-            if (gender !== '') {
-                if (AgeRegex.test(age)) {
-                    if (selectedOccupations.length !== 0) {
-                        if (selectedEducation.length !== 0) {
-                            if (selectedIncomes.length !== 0) {
-                                if (value !== null) {
-                                    if (valueDistrict !== null) {
-                                        if (areasSelected.length !== 0) {
-                                            if (differentlyAble !== '') {
-                                                if (adult !== '') {
-                                                    if (children !== '') {
-                                                        if (anyGroup !== '') {
-                                                            if (smartPhone !== '') {
-                                                                console.log('validationCheck', AgeRegex.test(age))
-                                                                stopRecording();
-                                                            } else {
-                                                                showMessage({
-                                                                    message: "Please Select SmartPhone Own!",
-                                                                    description: "Please Select SmartPhone Own!",
-                                                                    type: "danger",
-                                                                });
-                                                            }
-                                                        } else {
-                                                            showMessage({
-                                                                message: "Please Select Any Group Part!",
-                                                                description: "Please Select Any Group Part SHG/JLG!",
-                                                                type: "danger",
-                                                            });
-                                                        }
-                                                    } else {
-                                                        showMessage({
-                                                            message: "Please Select Children!",
-                                                            description: "Please Select Number Of Children!",
-                                                            type: "danger",
-                                                        });
-                                                    }
-                                                } else {
-                                                    showMessage({
-                                                        message: "Please Select Adults!",
-                                                        description: "Please Select Number Of Adults!",
-                                                        type: "danger",
-                                                    });
-                                                }
-                                            } else {
-                                                showMessage({
-                                                    message: "Please Select Differently!",
-                                                    description: "Please Select Differently abled!",
-                                                    type: "danger",
-                                                });
-                                            }
+        if (PensionAwareness !== null) {
+            if (PensionEnrolled !== null) {
+                if (PensionSubscription !== null) {
+                    if (PensionAccount !== null) {
+                        if (SchemesAwareness !== null) {
+                            if (SchemesEnrolled !== null) {
+                                if (SchemesSubscription !== null) {
+                                    if (SchemesAccount !== null) {
+                                        if (selectedReason.length !== 0) {
+                                            navigation.replace('BlockFSurveyScreen');
                                         } else {
                                             showMessage({
-                                                message: "Please Select Area",
-                                                description: "Please Select Area!",
+                                                message: "Please Select Enrolled Pension Schemes",
+                                                description: "Please Select Enrolled Pension Schemes!",
                                                 type: "danger",
                                             });
                                         }
                                     } else {
                                         showMessage({
-                                            message: "Please Select District",
-                                            description: "Please Select District!",
+                                            message: "Please Pension Scheme Account inactive",
+                                            description: "Please select Pension Scheme Account inactive!",
                                             type: "danger",
                                         });
                                     }
                                 } else {
                                     showMessage({
-                                        message: "Please Select State",
-                                        description: "Please Select State!",
+                                        message: "Please Pension Scheme subscription payment",
+                                        description: "Please select Pension Scheme subscription payment!",
                                         type: "danger",
                                     });
                                 }
                             } else {
                                 showMessage({
-                                    message: "Please Select Incomes",
-                                    description: "Please Select Incomes!",
+                                    message: "Please Pension Scheme Enrolled",
+                                    description: "Please select Pension Scheme Enrolled!",
                                     type: "danger",
                                 });
                             }
                         } else {
                             showMessage({
-                                message: "Please Select Education",
-                                description: "Please Select Education!",
+                                message: "Please Pension Scheme Awareness",
+                                description: "Please select Pension Scheme Awareness!",
                                 type: "danger",
                             });
                         }
                     } else {
                         showMessage({
-                            message: "Please Select Occupation",
-                            description: "Please Select Occupation!",
+                            message: "Please Pension Scheme Account inactive",
+                            description: "Please select Pension Scheme Account inactive!",
                             type: "danger",
                         });
                     }
                 } else {
                     showMessage({
-                        message: "Please Enter Valid Age",
-                        description: "Please Enter Valid Age!",
+                        message: "Please Pension Scheme subscription payment",
+                        description: "Please select Pension Scheme subscription payment!",
                         type: "danger",
                     });
                 }
             } else {
                 showMessage({
-                    message: "Please Select Gender",
-                    description: "Please Select Valid Gender!",
+                    message: "Please Pension Scheme Enrolled",
+                    description: "Please select Pension Scheme Enrolled!",
                     type: "danger",
                 });
             }
         } else {
             showMessage({
-                message: "Please Enter Name",
-                description: "Please Enter Valid Name!",
+                message: "Please Pension Scheme Awareness",
+                description: "Please select Pension Scheme Awareness!",
                 type: "danger",
             });
         }
@@ -441,25 +404,25 @@ const BlockESurveyScreen = () => {
                             <Text>30 (a) 1. Awareness</Text>
                             <RadioButtonRN
                                 data={data}
-                                selectedBtn={(e) => setGender(e)}
+                                selectedBtn={(e) => setPensionAwareness(e)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text>30 (a) 2. Enrolled</Text>
                             <RadioButtonRN
                                 data={data}
-                                selectedBtn={(e) => setGender(e)}
+                                selectedBtn={(e) => setPensionEnrolled(e)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text>30 (a) 3. Received intimation of subscription payment</Text>
                             <RadioButtonRN
                                 data={data}
-                                selectedBtn={(e) => setGender(e)}
+                                selectedBtn={(e) => setPensionSubscription(e)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text>30 (a) 4. Account is inactive due to non-payment of subscription.</Text>
                             <RadioButtonRN
                                 data={data}
-                                selectedBtn={(e) => setGender(e)}
+                                selectedBtn={(e) => setPensionAccount(e)}
                             />
                             <View style={{ padding: 10, }} />
                         </View>
@@ -469,25 +432,25 @@ const BlockESurveyScreen = () => {
                             <Text>30 (b) 1. Awareness</Text>
                             <RadioButtonRN
                                 data={data}
-                                selectedBtn={(e) => setGender(e)}
+                                selectedBtn={(e) => setSchemesAwareness(e)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text>30 (b) 2. Enrolled</Text>
                             <RadioButtonRN
                                 data={data}
-                                selectedBtn={(e) => setGender(e)}
+                                selectedBtn={(e) => setSchemesEnrolled(e)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text>30 (b) 3. Received intimation of subscription payment</Text>
                             <RadioButtonRN
                                 data={data}
-                                selectedBtn={(e) => setGender(e)}
+                                selectedBtn={(e) => setSchemesSubscription(e)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text>30 (b) 4. Account is inactive due to non-payment of subscription.</Text>
                             <RadioButtonRN
                                 data={data}
-                                selectedBtn={(e) => setGender(e)}
+                                selectedBtn={(e) => setSchemesAccount(e)}
                             />
                             <View style={{ padding: 10, }} />
                         </View>
@@ -528,7 +491,7 @@ const BlockESurveyScreen = () => {
                             </View>
                         </View>
                         <View style={{ padding: 10, }} />
-                        <TouchableOpacity onPress={() => navigation.replace('BlockFSurveyScreen')} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
+                        <TouchableOpacity onPress={() => validationCheck()} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
                             <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Next Block F</Text>
                         </TouchableOpacity>
                     </View>
