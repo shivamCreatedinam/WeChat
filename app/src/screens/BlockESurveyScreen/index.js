@@ -214,7 +214,7 @@ const BlockESurveyScreen = () => {
     const startRecording = async () => {
         setSurveyInstruction(false);
         setIsRecording(true);
-        // AudioRecord.start();
+        AudioRecord.start();
     };
 
     const stopRecording = async () => {
@@ -236,7 +236,8 @@ const BlockESurveyScreen = () => {
                                 if (SchemesSubscription !== null) {
                                     if (SchemesAccount !== null) {
                                         if (selectedReason.length !== 0) {
-                                            navigation.replace('BlockFSurveyScreen');
+                                            // navigation.replace('BlockFSurveyScreen');
+                                            stopRecording();
                                         } else {
                                             showMessage({
                                                 message: "Please Select Enrolled Pension Schemes",
@@ -303,59 +304,127 @@ const BlockESurveyScreen = () => {
     }
 
     const submitSurvey = async (file_urls) => {
-        // https://createdinam.in/RBI-CBCD/public/api/create-survey-demographics
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + userSendToken);
+
+        const response = [
+            {
+                'section_no': "B",
+                'q_no': "1",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "",
+                'response': `${PensionAwareness}`
+            },
+            {
+                'section_no': "B",
+                'q_no': "2",
+                'q_type': "CHILD",
+                'sub_q_no': "a",
+                'sub_q_title': "In case you are not able to open a bank account, please, indicate the reason(s)",
+                'sub_q_type': "MULTICHECK",
+                'response': `[2,4,5,]`
+            },
+            {
+                'section_no': "E",
+                'q_no': "30 (a) 3.",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "SINGLECHECK",
+                'response': `${PensionSubscription}`
+            },
+            {
+                'section_no': "E",
+                'q_no': "30 (a) 4.",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "SINGLECHECK",
+                'response': `${PensionAccount}`
+            }, {
+                'section_no': "E",
+                'q_no': "30 (b) 1.",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "SINGLECHECK",
+                'response': `${SchemesAwareness}`
+            },
+            {
+                'section_no': "E",
+                'q_no': "30 (b) 2.",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "SINGLECHECK",
+                'response': `${SchemesEnrolled}`
+            },
+            {
+                'section_no': "E",
+                'q_no': "30 (b) 3.",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "SINGLECHECK",
+                'response': `${SchemesSubscription}`
+            },
+            {
+                'section_no': "E",
+                'q_no': "30 (b) 4.",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "SINGLECHECK",
+                'response': `${SchemesAccount}`
+            },
+            {
+                'section_no': "E",
+                'q_no': "31",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "MULTICHECK",
+                'response': `${selectedReason}`
+            }
+        ];
+
+        console.log(JSON.stringify(response))
+
         const FormData = require('form-data');
         let data = new FormData();
-        data.append('user_name', surveryName);
-        data.append('survey_token', user.name);
-        data.append('gender', gender);
-        data.append('age_of_repons', age);
-        data.append('city', value);
-        data.append('state', valueDistrict);
-        data.append('occupation_id', selectedOccupations);
-        data.append('education_id', selectedEducation);
-        data.append('income_id', selectedIncomes);
-        data.append('area_id', areasSelected);
-        data.append('diff_abled', differentlyAble);
-        data.append('adults', adult);
-        data.append('children', children);
-        data.append('total', Number(adult) + Number(children));
-        data.append('part_of_group', anyGroup);
-        data.append('own_smartphone', smartPhone);
+        data.append('data', response);
+        data.append('survey_token', name);
         data.append('latitude', '27.98878');
         data.append('longitude', '28.00000');
-        data.append('other_occupation', '1');
-        data.append('audio_file', file_urls);
+        data.append("audio_file", file_urls, "recording_block_a.wav");
 
-        let config = {
-            method: 'post',
-            maxBodyLength: Infinity,
-            url: 'https://createdinam.in/RBI-CBCD/public/api/create-survey-demographics',
-            headers: {
-                'Authorization': 'Bearer ' + userSendToken,
-                "Content-Type": "multipart/form-data",
-            },
-            data: data
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: data,
+            redirect: 'follow'
         };
 
-        Axios.request(config)
-            .then((response) => {
-                console.warn('startRecording', JSON.stringify(response.data))
-                if (response.data.status === true) {
-                    showMessage({
-                        message: response.data.message + ', Submit By ' + response.data?.name,
-                        description: response.data.message,
-                        type: "success",
-                    });
-                } else {
-                    showMessage({
-                        message: "Something went wrong!",
-                        description: "Someting went wrong, Please check Form Details!",
-                        type: "danger",
-                    });
-                }
-            });
+        console.log(JSON.stringify(requestOptions))
 
+        fetch("https://createdinam.in/RBI-CBCD/public/api/create-survey-section-b", requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                console.log(result?.status)
+                if (result?.status === true) {
+                    navigation.replace('BlockBSurveyScreen');
+                } else {
+                    navigation.replace('BlockBSurveyScreen');
+                    // showMessage({
+                    //     message: "Something went wrong!",
+                    //     description: result?.message,
+                    //     type: "danger",
+                    // });
+                }
+            })
+            .catch(error => console.log('error', error));
     }
 
     const onSelectedItemsChange = (selectedItems) => {
@@ -377,7 +446,7 @@ const BlockESurveyScreen = () => {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#F8F8FF' }}>
             {renderCustomHeader()}
-            <Modal isVisible={false}>
+            <Modal isVisible={isInstruction}>
                 <View style={{ height: 200, width: Dimensions.get('screen').width - 50, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 5, padding: 20 }}>
                     <View style={{ alignItems: 'center' }}>
                         <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Survey Instructions</Text>

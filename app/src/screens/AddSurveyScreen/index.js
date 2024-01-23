@@ -493,7 +493,7 @@ const AddSurveyScreen = () => {
             redirect: 'follow'
         };
 
-        fetch("https://createdinam.in/RBI-CBCD/public/api/create-survey-demographics", requestOptions)
+        fetch("https://createdinam.in/RBI-CBCD/public/api/create-survey-section-b", requestOptions)
             .then(response => response.json())
             .then(result => {
                 console.log(result?.status)

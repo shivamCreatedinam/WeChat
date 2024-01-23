@@ -56,12 +56,6 @@ const BlockFSurveyScreen = () => {
     const [smartPhone, setSmartphone] = React.useState('');
     const [anyGroup, setAnyGroup] = React.useState('');
 
-
-    // 
-    const [SpecificInformation, setSpecificInformation] = React.useState(null);
-    const [comfortableConducting, setComfortableConducting] = React.useState(null);
-    const [grievanceRelated, setGrievanceRelated] = React.useState(null);
-
     // gender setDifferently
     const data = [
         {
@@ -214,9 +208,59 @@ const BlockFSurveyScreen = () => {
         { id: 5, lable: 'Received response after one month' },
     ]
 
+    const Selectedfinancialtransactions = [
+        { id: 1, lable: 'Lodge complaints against financial service providers – banks/NBFCs/Insurance Co, etc.' },
+        { id: 2, lable: 'Follow up on the time-bound disposal of complaints' },
+        { id: 3, lable: 'Queues/wait time at financial service providers' },
+        { id: 4, lable: 'Clash of branch’s working timings with my work/business timings' },
+        { id: 5, lable: 'Arranging the documentation requirements' },
+        { id: 6, lable: 'Language barrier in digital transactions' },
+        { id: 7, lable: 'Complex Interface for online services' },
+        { id: 8, lable: 'Dependence on smartphone and internet connection' },
+    ]
+
     const adults = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
 
     const childern = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+
+    const multiSelectRef = React.useRef(null);
+    const multifinancialSelectRef = React.useRef(null);
+    const [informationValue, setinformationValue] = React.useState('');
+    const [WhichLanguageValue, setWhichLanguageValue] = React.useState('');
+    const [InformationSharingValue, setInformationSharingValue] = React.useState('');
+    const [financialLiteracyValue, setfinancialLiteracyValue] = React.useState('');
+    const [InformationRelatingValue, setInformationRelatingValue] = React.useState('');
+    const [selectedFreeRefuseReason, selectedFreeLoanRefuseReason] = React.useState([]);
+    const [hinderanceValue, sethinderanceValue] = React.useState('');
+    const [hinderanceFocus, sethinderanceFocus] = React.useState(false);
+
+    // financial
+    const [SpecificInformation, setSpecificInformation] = React.useState(null);
+    const [comfortableConducting, setComfortableConducting] = React.useState(null);
+    const [grievanceRelated, setGrievanceRelated] = React.useState(null);
+    const [selectedfinancial, setSelectedFinancial] = React.useState([]);
+    const [digitalChannelChange, ondigitalChannelChange] = React.useState([]);
+    const [DigitalpreferredChange, onDigitalpreferredChange] = React.useState([]);
+
+    const SelectedLoanTypeLabels = selectedOccupations.map((selectedId) => {
+        const selectedReason = financialtransactions.find((reason) => reason.id === selectedId);
+        return selectedReason ? selectedReason.lable : '';
+    });
+
+    const SelectedfinancialLabels = selectedfinancial.map((selectedId) => {
+        const selectedReason = Selectedfinancialtransactions.find((reason) => reason.id === selectedId);
+        return selectedReason ? selectedReason.lable : '';
+    });
+
+    const SelecteddigitalChannelLabels = digitalChannelChange.map((selectedId) => {
+        const selectedReason = digitalChannel.find((reason) => reason.id === selectedId);
+        return selectedReason ? selectedReason.lable : '';
+    });
+
+    const SelectedDigitalpreferredLabels = DigitalpreferredChange.map((selectedId) => {
+        const selectedReason = Digitalpreferred.find((reason) => reason.id === selectedId);
+        return selectedReason ? selectedReason.lable : '';
+    });
 
     useFocusEffect(
         React.useCallback(() => {
@@ -247,32 +291,6 @@ const BlockFSurveyScreen = () => {
         } catch (error) {
             console.log("error_", error)
         }
-    }
-
-
-    const loadDistrict = async (state) => {
-        console.log('loadDistrict______', JSON.stringify(state))
-        const UserToken = await AsyncStorage.getItem(AsyncStorageContaints.UserId);
-        let url = `https://createdinam.in/RBI-CBCD/public/api/get-city/${Number(state)}`;
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${UserToken}`
-        }
-        Axios.get(url, {
-            headers: headers,
-        })
-            .then((response) => {
-                if (response.data.status === true) {
-                    setDistrictData(response?.data?.data);
-                } else {
-                    setLoading(false);
-                    showMessage({
-                        message: "Something went wrong!",
-                        description: "Something went wrong. Try again!",
-                        type: "danger",
-                    });
-                }
-            });
     }
 
     // AudioRecord.on('data', data => {
@@ -524,6 +542,10 @@ const BlockFSurveyScreen = () => {
         setSelectedOccupations(selectedItems);
     }
 
+    const onSelectedfinancialChange = (selectedItems) => {
+        setSelectedFinancial(selectedItems);
+    }
+
     const onSelectedIncomesChange = (selectedItems) => {
         setSelectedIncomes(selectedItems);
     }
@@ -573,14 +595,14 @@ const BlockFSurveyScreen = () => {
                                 maxHeight={300}
                                 labelField="lable"
                                 valueField="id"
-                                placeholder={!isFocus ? 'Select State' : value}
+                                placeholder={!isFocus ? 'Select Necessary information' : informationValue}
                                 // searchPlaceholder="Search..."
-                                value={value}
+                                value={informationValue}
                                 onFocus={() => setIsFocus(true)}
                                 onBlur={() => setIsFocus(false)}
                                 onChange={item => {
                                     console.log('______>', JSON.stringify(item))
-                                    setValue(item?.id);
+                                    setinformationValue(item?.id);
                                     setIsFocus(false);
                                 }}
                             />
@@ -600,14 +622,14 @@ const BlockFSurveyScreen = () => {
                                     maxHeight={300}
                                     labelField="lable"
                                     valueField="id"
-                                    placeholder={!isFocus ? 'Select Language information' : value}
+                                    placeholder={!isFocus ? 'Select Language information' : WhichLanguageValue}
                                     // searchPlaceholder="Search..."
-                                    value={value}
+                                    value={WhichLanguageValue}
                                     onFocus={() => setIsFocus(true)}
                                     onBlur={() => setIsFocus(false)}
                                     onChange={item => {
                                         console.log('______>', JSON.stringify(item))
-                                        setValue(item?.id);
+                                        setWhichLanguageValue(item?.id);
                                         setIsFocus(false);
                                     }}
                                 />
@@ -624,14 +646,14 @@ const BlockFSurveyScreen = () => {
                                     maxHeight={300}
                                     labelField="lable"
                                     valueField="id"
-                                    placeholder={!isFocus ? 'Select information sharing' : value}
+                                    placeholder={!isFocus ? 'Select information sharing' : InformationSharingValue}
                                     // searchPlaceholder="Search..."
-                                    value={value}
+                                    value={InformationSharingValue}
                                     onFocus={() => setIsFocus(true)}
                                     onBlur={() => setIsFocus(false)}
                                     onChange={item => {
                                         console.log('______>', JSON.stringify(item))
-                                        setValue(item?.id);
+                                        setInformationSharingValue(item?.id);
                                         setIsFocus(false);
                                     }}
                                 />
@@ -648,14 +670,14 @@ const BlockFSurveyScreen = () => {
                                     maxHeight={300}
                                     labelField="lable"
                                     valueField="id"
-                                    placeholder={!isFocus ? 'Select Financial Literacy' : value}
+                                    placeholder={!isFocus ? 'Select Financial Literacy' : financialLiteracyValue}
                                     // searchPlaceholder="Search..."
-                                    value={value}
+                                    value={financialLiteracyValue}
                                     onFocus={() => setIsFocus(true)}
                                     onBlur={() => setIsFocus(false)}
                                     onChange={item => {
                                         console.log('______>', JSON.stringify(item))
-                                        setValue(item?.id);
+                                        setfinancialLiteracyValue(item?.id);
                                         setIsFocus(false);
                                     }}
                                 />
@@ -672,14 +694,14 @@ const BlockFSurveyScreen = () => {
                                     maxHeight={300}
                                     labelField="lable"
                                     valueField="id"
-                                    placeholder={!isFocus ? 'Select Financial Literacy' : value}
+                                    placeholder={!isFocus ? 'Select Financial Literacy' : InformationRelatingValue}
                                     // searchPlaceholder="Search..."
-                                    value={value}
+                                    value={InformationRelatingValue}
                                     onFocus={() => setIsFocus(true)}
                                     onBlur={() => setIsFocus(false)}
                                     onChange={item => {
                                         console.log('______>', JSON.stringify(item))
-                                        setValue(item?.id);
+                                        setInformationRelatingValue(item?.id);
                                         setIsFocus(false);
                                     }}
                                 />
@@ -689,52 +711,72 @@ const BlockFSurveyScreen = () => {
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>35. Regarding your financial transactions, select the top three aspects which make you worry.</Text>
                             <MultiSelect
                                 hideTags
-                                items={occupations}
+                                items={financialtransactions}
                                 uniqueKey="id"
-                                // ref={(component) => { this.multiSelect = component }}
-                                onSelectedItemsChange={(items) => onSelectedOccupationsChange(items)}
-                                selectedItems={financialtransactions}
-                                selectText="Occupation"
-                                // searchInputPlaceholderText="Search Items..."
-                                // onChangeInput={(text) => console.log(text)}
+                                ref={multiSelectRef}
+                                onSelectedItemsChange={(items) =>
+                                    onSelectedOccupationsChange(items)
+                                }
+                                selectedItems={selectedOccupations}
+                                selectText="Select financial transactions"
+                                onChangeInput={(text) => console.log(text)}
                                 altFontFamily="ProximaNova-Light"
-                                tagRemoveIconColor="#CCC"
-                                tagBorderColor="#CCC"
-                                tagTextColor="#CCC"
-                                selectedItemTextColor="#CCC"
-                                selectedItemIconColor="#CCC"
+                                tagRemoveIconColor="#000"
+                                tagBorderColor="#000"
+                                tagTextColor="#000"
+                                selectedItemTextColor="#000"
+                                selectedItemIconColor="#000"
                                 itemTextColor="#000"
                                 displayKey="lable"
-                                searchInputStyle={{ color: '#CCC', paddingLeft: 10 }}
-                                submitButtonColor="#CCC"
+                                searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                submitButtonColor="#000"
                                 submitButtonText="Submit"
+                                itemBackground="#000"
+                                styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
                             />
+                            <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                {SelectedLoanTypeLabels.map((label, index) => (
+                                    <View style={{ margin: 5 }}>
+                                        <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                    </View>
+                                ))}
+                            </View>
                         </View>
                         <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>36. In relation to your financial transactions, which of the following is challenging/difficult for you to handle?</Text>
                             <MultiSelect
                                 hideTags
-                                items={educations}
+                                items={Selectedfinancialtransactions}
                                 uniqueKey="id"
-                                // ref={(component) => { this.multiSelect = component }}
-                                onSelectedItemsChange={(items) => onSelectedEducationChange(items)}
-                                selectedItems={selectedEducation}
-                                selectText="Education"
-                                // searchInputPlaceholderText="Search Items..."
-                                // onChangeInput={(text) => console.log(text)}
+                                ref={multifinancialSelectRef}
+                                onSelectedItemsChange={(items) =>
+                                    onSelectedfinancialChange(items)
+                                }
+                                selectedItems={selectedfinancial}
+                                selectText="Select financial transactions"
+                                onChangeInput={(text) => console.log(text)}
                                 altFontFamily="ProximaNova-Light"
-                                tagRemoveIconColor="#CCC"
-                                tagBorderColor="#CCC"
-                                tagTextColor="#CCC"
-                                selectedItemTextColor="#CCC"
-                                selectedItemIconColor="#CCC"
+                                tagRemoveIconColor="#000"
+                                tagBorderColor="#000"
+                                tagTextColor="#000"
+                                selectedItemTextColor="#000"
+                                selectedItemIconColor="#000"
                                 itemTextColor="#000"
                                 displayKey="lable"
-                                searchInputStyle={{ color: '#CCC', paddingLeft: 10 }}
-                                submitButtonColor="#CCC"
+                                searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                submitButtonColor="#000"
                                 submitButtonText="Submit"
+                                itemBackground="#000"
+                                styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
                             />
+                            <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                {SelectedfinancialLabels.map((label, index) => (
+                                    <View style={{ margin: 5 }}>
+                                        <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                    </View>
+                                ))}
+                            </View>
                         </View>
                         <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
@@ -763,27 +805,28 @@ const BlockFSurveyScreen = () => {
                             <View>
                                 <View style={{ padding: 10, }} />
                                 <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>37 (d). If yes, please indicate top two reasons?</Text>
-                                <MultiSelect
-                                    hideTags
-                                    items={areas}
-                                    uniqueKey="id"
-                                    // ref={(component) => { this.multiSelect = component }}
-                                    onSelectedItemsChange={(items) => onSelectedItemsChange(items)}
-                                    selectedItems={transactionsdigitally}
-                                    selectText="Select Areas"
-                                    // searchInputPlaceholderText="Search Items..."
-                                    // onChangeInput={(text) => console.log(text)}
-                                    altFontFamily="ProximaNova-Light"
-                                    tagRemoveIconColor="#CCC"
-                                    tagBorderColor="#CCC"
-                                    tagTextColor="#CCC"
-                                    selectedItemTextColor="#CCC"
-                                    selectedItemIconColor="#CCC"
-                                    itemTextColor="#000"
-                                    displayKey="area_title"
-                                    searchInputStyle={{ color: '#CCC', paddingLeft: 10 }}
-                                    submitButtonColor="#CCC"
-                                    submitButtonText="Submit"
+                                <Dropdown
+                                    style={[styles.dropdown, hinderanceFocus && { borderColor: 'blue' }]}
+                                    placeholderStyle={styles.placeholderStyle}
+                                    selectedTextStyle={styles.selectedTextStyle}
+                                    inputSearchStyle={styles.inputSearchStyle}
+                                    // iconStyle={styles.iconStyle}
+                                    // data={AccountType}
+                                    data={transactionsdigitally}
+                                    // search
+                                    maxHeight={300}
+                                    labelField="lable"
+                                    valueField="id"
+                                    placeholder={!hinderanceFocus ? 'Select Type of account' : hinderanceValue}
+                                    // searchPlaceholder="Search..."
+                                    value={hinderanceValue}
+                                    onFocus={() => sethinderanceFocus(true)}
+                                    onBlur={() => sethinderanceFocus(false)}
+                                    onChange={item => {
+                                        console.log(JSON.stringify(item))
+                                        sethinderanceValue(item.id);
+                                        sethinderanceFocus(false);
+                                    }}
                                 />
                             </View>
                             <View style={{ padding: 10, }} />
@@ -822,52 +865,72 @@ const BlockFSurveyScreen = () => {
                             <Text style={{ marginBottom: 5, fontWeight: 'bold', flex: 1, marginBottom: 5 }}>38 (a). Do you use any of the following services via a digital channel (app/internet) linked with this account?</Text>
                             <MultiSelect
                                 hideTags
-                                items={areas}
+                                items={digitalChannel}
                                 uniqueKey="id"
-                                // ref={(component) => { this.multiSelect = component }}
-                                onSelectedItemsChange={(items) => onSelectedItemsChange(items)}
-                                selectedItems={digitalChannel}
-                                selectText="Select Digital Channel"
-                                // searchInputPlaceholderText="Search Items..."
-                                // onChangeInput={(text) => console.log(text)}
+                                ref={multiSelectRef}
+                                onSelectedItemsChange={(items) =>
+                                    ondigitalChannelChange(items)
+                                }
+                                selectedItems={digitalChannelChange}
+                                selectText="Select digital channel"
+                                onChangeInput={(text) => console.log(text)}
                                 altFontFamily="ProximaNova-Light"
-                                tagRemoveIconColor="#CCC"
-                                tagBorderColor="#CCC"
-                                tagTextColor="#CCC"
-                                selectedItemTextColor="#CCC"
-                                selectedItemIconColor="#CCC"
+                                tagRemoveIconColor="#000"
+                                tagBorderColor="#000"
+                                tagTextColor="#000"
+                                selectedItemTextColor="#000"
+                                selectedItemIconColor="#000"
                                 itemTextColor="#000"
                                 displayKey="lable"
-                                searchInputStyle={{ color: '#CCC', paddingLeft: 10 }}
-                                submitButtonColor="#CCC"
+                                searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                submitButtonColor="#000"
                                 submitButtonText="Submit"
+                                itemBackground="#000"
+                                styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
                             />
+                            <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                {SelecteddigitalChannelLabels.map((label, index) => (
+                                    <View style={{ margin: 5 }}>
+                                        <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                    </View>
+                                ))}
+                            </View>
                         </View>
                         <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>38 (b). If Digital is your preferred mode of transaction, rate them in your order of preference?</Text>
                             <MultiSelect
                                 hideTags
-                                items={areas}
+                                items={Digitalpreferred}
                                 uniqueKey="id"
-                                // ref={(component) => { this.multiSelect = component }}
-                                onSelectedItemsChange={(items) => onSelectedItemsChange(items)}
-                                selectedItems={Digitalpreferred}
-                                selectText="Select Digital Preferred"
-                                // searchInputPlaceholderText="Search Items..."
-                                // onChangeInput={(text) => console.log(text)}
+                                ref={multiSelectRef}
+                                onSelectedItemsChange={(items) =>
+                                    onDigitalpreferredChange(items)
+                                }
+                                selectedItems={DigitalpreferredChange}
+                                selectText="Select Digital preferred"
+                                onChangeInput={(text) => console.log(text)}
                                 altFontFamily="ProximaNova-Light"
-                                tagRemoveIconColor="#CCC"
-                                tagBorderColor="#CCC"
-                                tagTextColor="#CCC"
-                                selectedItemTextColor="#CCC"
-                                selectedItemIconColor="#CCC"
+                                tagRemoveIconColor="#000"
+                                tagBorderColor="#000"
+                                tagTextColor="#000"
+                                selectedItemTextColor="#000"
+                                selectedItemIconColor="#000"
                                 itemTextColor="#000"
                                 displayKey="lable"
-                                searchInputStyle={{ color: '#CCC', paddingLeft: 10 }}
-                                submitButtonColor="#CCC"
+                                searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                submitButtonColor="#000"
                                 submitButtonText="Submit"
+                                itemBackground="#000"
+                                styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
                             />
+                            <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                {SelectedDigitalpreferredLabels.map((label, index) => (
+                                    <View style={{ margin: 5 }}>
+                                        <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                    </View>
+                                ))}
+                            </View>
                         </View>
                         <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
