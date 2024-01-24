@@ -643,7 +643,7 @@ const BlockBSurveyScreen = () => {
                 'sub_q_type': "",
                 'account_no': '',
                 'response': `${AccountTypeValue}`
-            },{
+            }, {
                 'section_no': "B",
                 'q_no': "13",
                 'q_type': "SELF",
@@ -652,7 +652,7 @@ const BlockBSurveyScreen = () => {
                 'sub_q_type': "",
                 'account_no': '',
                 'response': `${selectedOccupations}`
-            },{
+            }, {
                 'section_no': "B",
                 'q_no': "14",
                 'q_type': "SELF",
@@ -661,7 +661,7 @@ const BlockBSurveyScreen = () => {
                 'sub_q_type': "",
                 'account_no': '',
                 'response': `${transaction}`
-            },{
+            }, {
                 'section_no': "B",
                 'q_no': "15",
                 'q_type': "SELF",
@@ -670,9 +670,39 @@ const BlockBSurveyScreen = () => {
                 'sub_q_type': "",
                 'account_no': '',
                 'response': `${subsidy}`
+            }, {
+                'section_no': "B",
+                'q_no': "16",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "",
+                'account_no': '',
+                'response': `${selectedIncomes}`
+            }, {
+                'section_no': "B",
+                'q_no': "17",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "",
+                'account_no': '',
+                'response': `${selectCashReceipt}`
+            }, {
+                'section_no': "B",
+                'q_no': "18",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "",
+                'account_no': '',
+                'response': `${SelectedSaveMoney}`
             },
         ];
-        
+
+
+        console.log('response________>', JSON.stringify(response));
+
         const FormData = require('form-data');
         let data = new FormData();
         data.append('data', response);
@@ -684,13 +714,15 @@ const BlockBSurveyScreen = () => {
         let config = {
             method: 'post',
             maxBodyLength: Infinity,
-            url: 'https://createdinam.in/RBI-CBCD/public/api/create-survey-demographics',
+            url: 'https://createdinam.in/RBI-CBCD/public/api/create-survey-section-b',
             headers: {
                 'Authorization': 'Bearer ' + userSendToken,
                 "Content-Type": "multipart/form-data",
             },
             data: data
         };
+
+        console.log('config________>', JSON.stringify(config));
 
         Axios.request(config)
             .then((response) => {
@@ -1325,7 +1357,7 @@ const BlockBSurveyScreen = () => {
                             />
                         </View> */}
                         <View style={{ padding: 10, }} />
-                        <TouchableOpacity onPress={() => navigation.replace('BlockCSurveyScreen')} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
+                        <TouchableOpacity onPress={() => submitSurvey()} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
                             <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Next Block C</Text>
                         </TouchableOpacity>
                     </View>

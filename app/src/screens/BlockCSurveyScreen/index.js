@@ -355,146 +355,291 @@ const BlockCSurveyScreen = () => {
         submitSurvey(audioFile);
     };
 
-    console.log("loan***", loan)
-    const validationCheck = () => {
-        const pattern = /^[a-zA-Z]{2,40}( [a-zA-Z]{2,40})+$/;
-        const AgeRegex = /^(?:1[01][0-9]|120|1[7-9]|[2-9][0-9])$/
-        if (loan !== null) {
-            if (credFacility !== null) {
-                if (SelectedLoanTypeLabels?.length !== 0) {
-                    if (loanEnroll !== null) {
-                        if (amount !== null) {
-                            if (repay !== null) {
-                                if (overDraft !== null) {
-                                    if (ReceivedOverDraft !== null) {
-                                        if (bank !== null) {
-                                            if (refuse !== null) {
-                                                if (selectedRefuseReason?.length !== 0) {
-                                                    if (freeLoan !== null) {
-                                                        if (freeLoanReceived !== null) {
-                                                            if (loanRefuseByYou !== null) {
-                                                                if (selectedFreeLoanRefuseReason?.length !== 0) {
-                                                                    if (privateLend !== null) {
-                                                                        if (privateBorrowing !== null) {
+    console.log("loan***", loan, "credFacility", credFacility)
+    // const validationCheck = () => {
+    //     const pattern = /^[a-zA-Z]{2,40}( [a-zA-Z]{2,40})+$/;
+    //     const AgeRegex = /^(?:1[01][0-9]|120|1[7-9]|[2-9][0-9])$/
+    //     if (loan !== null) {
+    //         if (credFacility !== null) {
+    //             if (SelectedLoanTypeLabels?.length !== 0) {
+    //                 if (loanEnroll !== null) {
+    //                     if (amount !== null) {
+    //                         if (repay !== null) {
+    //                             if (overDraft !== null) {
+    //                                 if (ReceivedOverDraft !== null) {
+    //                                     if (bank !== null) {
+    //                                         if (refuse !== null) {
+    //                                             if (selectedRefuseReason?.length !== 0) {
+    //                                                 if (freeLoan !== null) {
+    //                                                     if (freeLoanReceived !== null) {
+    //                                                         if (loanRefuseByYou !== null) {
+    //                                                             if (selectedFreeLoanRefuseReason?.length !== 0) {
+    //                                                                 if (privateLend !== null) {
+    //                                                                     if (privateBorrowing !== null) {
 
-                                                                        } else {
-                                                                            showMessage({
-                                                                                message: "Please Select Borrowings Amount",
-                                                                                description: "Please Select Borrowings Amount!",
-                                                                                type: "danger",
-                                                                            });
-                                                                        }
-                                                                    } else {
-                                                                        showMessage({
-                                                                            message: "Please Select Borrowings",
-                                                                            description: "Please Select Borrowings!",
-                                                                            type: "danger",
-                                                                        });
-                                                                    }
-                                                                } else {
-                                                                    showMessage({
-                                                                        message: "Please Select Free Loan Refusal Reason",
-                                                                        description: "Please Select Free Loan Refusal Reason!",
-                                                                        type: "danger",
-                                                                    });
-                                                                }
-                                                            } else {
-                                                                showMessage({
-                                                                    message: "Please Select Refusal Reason",
-                                                                    description: "Please Select Refusal Reason!",
-                                                                    type: "danger",
-                                                                });
-                                                            }
-                                                        } else {
-                                                            showMessage({
-                                                                message: "Please Select Refusal Reason",
-                                                                description: "Please Select Refusal Reason!",
-                                                                type: "danger",
-                                                            });
-                                                        }
-                                                    } else {
-                                                        showMessage({
-                                                            message: "Please Select Collateral-free Loan",
-                                                            description: "Please Select Collateral-free Loan!",
-                                                            type: "danger",
-                                                        });
-                                                    }
-                                                } else {
-                                                    showMessage({
-                                                        message: "Please Select Refusal Reason!",
-                                                        description: "Please Select Refusal Reason!",
-                                                        type: "danger",
-                                                    });
-                                                }
-                                            } else {
-                                                showMessage({
-                                                    message: "Please Select Refusal Reason",
-                                                    description: "Please Select Refusal Reason!",
-                                                    type: "danger",
-                                                });
-                                            }
-                                        } else {
-                                            showMessage({
-                                                message: "Please Select bank",
-                                                description: "Please Select bank!",
-                                                type: "danger",
-                                            });
-                                        }
-                                    } else {
-                                        showMessage({
-                                            message: "Please Select OverDraft Limit",
-                                            description: "Please Select OverDraft Limit!",
-                                            type: "danger",
-                                        });
-                                    }
-                                } else {
-                                    showMessage({
-                                        message: "Please Select overDraft Facility",
-                                        description: "Please Select overDraft Facility!",
-                                        type: "danger",
-                                    });
-                                }
-                            } else {
-                                showMessage({
-                                    message: "Please Select Repayment Mode",
-                                    description: "Please Select Repayment Mode!",
-                                    type: "danger",
-                                });
-                            }
-                        } else {
-                            showMessage({
-                                message: "Please Select amount",
-                                description: "Please Select amount!",
-                                type: "danger",
-                            });
-                        }
-                    } else {
-                        showMessage({
-                            message: "Please Select Loan Enrol",
-                            description: "Please Select Loan Enrol!",
-                            type: "danger",
-                        });
-                    }
-                } else {
-                    showMessage({
-                        message: "Please Select Loan Type",
-                        description: "Please Select Loan Type!",
-                        type: "danger",
-                    });
-                }
-            } else {
-                showMessage({
-                    message: "Please Select credFacility",
-                    description: "Please Select credFacility!",
-                    type: "danger",
-                });
-            }
-        } else {
+    //                                                                     } else {
+    //                                                                         showMessage({
+    //                                                                             message: "Please Select Borrowings Amount",
+    //                                                                             description: "Please Select Borrowings Amount!",
+    //                                                                             type: "danger",
+    //                                                                         });
+    //                                                                     }
+    //                                                                 } else {
+    //                                                                     showMessage({
+    //                                                                         message: "Please Select Borrowings",
+    //                                                                         description: "Please Select Borrowings!",
+    //                                                                         type: "danger",
+    //                                                                     });
+    //                                                                 }
+    //                                                             } else {
+    //                                                                 showMessage({
+    //                                                                     message: "Please Select Free Loan Refusal Reason",
+    //                                                                     description: "Please Select Free Loan Refusal Reason!",
+    //                                                                     type: "danger",
+    //                                                                 });
+    //                                                             }
+    //                                                         } else {
+    //                                                             showMessage({
+    //                                                                 message: "Please Select Refusal Reason",
+    //                                                                 description: "Please Select Refusal Reason!",
+    //                                                                 type: "danger",
+    //                                                             });
+    //                                                         }
+    //                                                     } else {
+    //                                                         showMessage({
+    //                                                             message: "Please Select Refusal Reason",
+    //                                                             description: "Please Select Refusal Reason!",
+    //                                                             type: "danger",
+    //                                                         });
+    //                                                     }
+    //                                                 } else {
+    //                                                     showMessage({
+    //                                                         message: "Please Select Collateral-free Loan",
+    //                                                         description: "Please Select Collateral-free Loan!",
+    //                                                         type: "danger",
+    //                                                     });
+    //                                                 }
+    //                                             } else {
+    //                                                 showMessage({
+    //                                                     message: "Please Select Refusal Reason!",
+    //                                                     description: "Please Select Refusal Reason!",
+    //                                                     type: "danger",
+    //                                                 });
+    //                                             }
+    //                                         } else {
+    //                                             showMessage({
+    //                                                 message: "Please Select Refusal Reason",
+    //                                                 description: "Please Select Refusal Reason!",
+    //                                                 type: "danger",
+    //                                             });
+    //                                         }
+    //                                     } else {
+    //                                         showMessage({
+    //                                             message: "Please Select bank",
+    //                                             description: "Please Select bank!",
+    //                                             type: "danger",
+    //                                         });
+    //                                     }
+    //                                 } else {
+    //                                     showMessage({
+    //                                         message: "Please Select OverDraft Limit",
+    //                                         description: "Please Select OverDraft Limit!",
+    //                                         type: "danger",
+    //                                     });
+    //                                 }
+    //                             } else {
+    //                                 showMessage({
+    //                                     message: "Please Select overDraft Facility",
+    //                                     description: "Please Select overDraft Facility!",
+    //                                     type: "danger",
+    //                                 });
+    //                             }
+    //                         } else {
+    //                             showMessage({
+    //                                 message: "Please Select Repayment Mode",
+    //                                 description: "Please Select Repayment Mode!",
+    //                                 type: "danger",
+    //                             });
+    //                         }
+    //                     } else {
+    //                         showMessage({
+    //                             message: "Please Select amount",
+    //                             description: "Please Select amount!",
+    //                             type: "danger",
+    //                         });
+    //                     }
+    //                 } else {
+    //                     showMessage({
+    //                         message: "Please Select Loan Enrol",
+    //                         description: "Please Select Loan Enrol!",
+    //                         type: "danger",
+    //                     });
+    //                 }
+    //             } else {
+    //                 showMessage({
+    //                     message: "Please Select Loan Type",
+    //                     description: "Please Select Loan Type!",
+    //                     type: "danger",
+    //                 });
+    //             }
+    //         } else {
+    //             showMessage({
+    //                 message: "Please Select credFacility",
+    //                 description: "Please Select credFacility!",
+    //                 type: "danger",
+    //             });
+    //         }
+    //     } else {
+    //         showMessage({
+    //             message: "Please Select  Need For Loan",
+    //             description: "Please Select  Need For Loan!",
+    //             type: "danger",
+    //         });
+    //     }
+    // }
+    const valiadte = () => {
+        if (loan === null) {
             showMessage({
-                message: "Please Select  Need For Loan",
-                description: "Please Select  Need For Loan!",
+                message: "Please Specify Need For Loan",
+                description: "Please Specify Need For Loan!",
                 type: "danger",
             });
+        }
+        else if (loan?.label === "Yes" && credFacility === null) {
+            showMessage({
+                message: "Please Select Credit Facility",
+                description: "Please Select Credit Facility!",
+                type: "danger",
+            });
+        }
+        else if (loan?.label === "Yes" && selectedLoantype?.length === 0) {
+            showMessage({
+                message: "Please Select Loan Type",
+                description: "Please Select Loan Type!",
+                type: "danger",
+            });
+        }
+        else if (loan?.label === "Yes" && loanEnroll === null) {
+            showMessage({
+                message: "Please Select Place For Loan Enroll",
+                description: "Please Select Place For Loan Enroll!",
+                type: "danger",
+            });
+        }
+        else if (loan?.label === "Yes" && amount === null) {
+            showMessage({
+                message: "Please Select Total Borrowings",
+                description: "Please Select Total Borrowings!",
+                type: "danger",
+            });
+        }
+        else if (loan?.label === "Yes" && repay === null) {
+            showMessage({
+                message: "Please Select Repayment Mode",
+                description: "Please Select Repayment Mode!",
+                type: "danger",
+            });
+        }
+        else if (loan?.label === "No" && selectedReason?.length === 0) {
+            showMessage({
+                message: "Please Select Repayment Mode",
+                description: "Please Select Repayment Mode!",
+                type: "danger",
+            });
+        }
+        else if (overDraft === null) {
+            showMessage({
+                message: "Please Select OverDraft in PMJDY",
+                description: "Please Select OverDraft in PMJDY!",
+                type: "danger",
+            });
+        }
+        else if (ReceivedOverDraft === null) {
+            showMessage({
+                message: "Please Select OverDraft Received",
+                description: "Please Select OverDraft Received!",
+                type: "danger",
+            });
+        }
+        else if (bank === null) {
+            showMessage({
+                message: "Please Select Bank Approach",
+                description: "Please Select Bank Approach!",
+                type: "danger",
+            });
+        }
+        else if (bank === null) {
+            showMessage({
+                message: "Please Select Bank Approach",
+                description: "Please Select Bank Approach!",
+                type: "danger",
+            });
+        }
+        else if (refuse === null) {
+            showMessage({
+                message: "Please Select Refusal Reason",
+                description: "Please Select Refusal Reason!",
+                type: "danger",
+            });
+        }
+        else if (selectedRefuseReason?.length === 0) {
+            showMessage({
+                message: "Please Select Refusal Reason Cited",
+                description: "Please Select Refusal Reason Cited!",
+                type: "danger",
+            });
+        }
+        else if (freeLoan === null) {
+            showMessage({
+                message: "Please Select Awareness under Free Loans",
+                description: "Please Select Awareness under Free Loans!",
+                type: "danger",
+            });
+        }
+        else if (freeLoanReceived === null) {
+            showMessage({
+                message: "Please Select Loan Received By You",
+                description: "Please Select Loan Received By You!",
+                type: "danger",
+            });
+        }
+        else if (loanRefuseByYou === null) {
+            showMessage({
+                message: "Please Select Reason For Loan Refused By You",
+                description: "Please Select Reason For Loan Refused By You!",
+                type: "danger",
+            });
+        }
+        else if (loanRefuseByYou === null) {
+            showMessage({
+                message: "Please Select Reason For Loan Refused By You",
+                description: "Please Select Reason For Loan Refused By You!",
+                type: "danger",
+            });
+        }
+        else if (loanRefuseByYou?.label === "Yes" && selectedFreeLoanRefuseReason?.length === 0) {
+            showMessage({
+                message: "Please Select Reason",
+                description: "Please Select Reason!",
+                type: "danger",
+            });
+        }
+        else if (privateLend === null) {
+            showMessage({
+                message: "Please Select Your Private Borrowings",
+                description: "Please Select Your Private Borrowings!",
+                type: "danger",
+            });
+        }
+        else if (privateBorrowing === null) {
+            showMessage({
+                message: "Please Select Your Amount",
+                description: "Please Select Your Private Amount!",
+                type: "danger",
+            });
+        }
+        else {
+            navigation.replace('BlockDSurveyScreen')
         }
     }
 
@@ -988,8 +1133,8 @@ const BlockCSurveyScreen = () => {
 
                         <View style={{ padding: 10, }} />
                         <TouchableOpacity onPress={() => {
-                            validationCheck();
-                            navigation.replace('BlockDSurveyScreen')
+                            valiadte();
+
                         }} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
                             <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Next Block D</Text>
                         </TouchableOpacity>
