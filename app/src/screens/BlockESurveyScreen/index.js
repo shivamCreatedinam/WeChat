@@ -60,6 +60,16 @@ const BlockESurveyScreen = () => {
     const [anyGroup, setAnyGroup] = React.useState('');
 
     const [selectedReason, setSelectedReason] = React.useState([]);
+    // start  Schemes
+    const [PensionAwareness, setPensionAwareness] = React.useState(null);
+    const [PensionEnrolled, setPensionEnrolled] = React.useState(null);
+    const [PensionSubscription, setPensionSubscription] = React.useState(null);
+    const [PensionAccount, setPensionAccount] = React.useState(null);
+
+    const [SchemesAwareness, setSchemesAwareness] = React.useState(null);
+    const [SchemesEnrolled, setSchemesEnrolled] = React.useState(null);
+    const [SchemesSubscription, setSchemesSubscription] = React.useState(null);
+    const [SchemesAccount, setSchemesAccount] = React.useState(null);
 
     // gender setDifferently
     const data = [
@@ -121,10 +131,6 @@ const BlockESurveyScreen = () => {
     const onSelectedReason = (selectedItems) => {
         setSelectedReason(selectedItems);
     }
-
-    const adults = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
-
-    const childern = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
 
     useFocusEffect(
         React.useCallback(() => {
@@ -208,7 +214,7 @@ const BlockESurveyScreen = () => {
     const startRecording = async () => {
         setSurveyInstruction(false);
         setIsRecording(true);
-        // AudioRecord.start();
+        AudioRecord.start();
     };
 
     const stopRecording = async () => {
@@ -220,179 +226,277 @@ const BlockESurveyScreen = () => {
         submitSurvey(audioFile);
     };
 
-    const validationCheck = () => {
-        const pattern = /^[a-zA-Z]{2,40}( [a-zA-Z]{2,40})+$/;
-        const AgeRegex = /^(?:1[01][0-9]|120|1[7-9]|[2-9][0-9])$/
-        if (pattern.test(surveryName)) {
-            if (gender !== '') {
-                if (AgeRegex.test(age)) {
-                    if (selectedOccupations.length !== 0) {
-                        if (selectedEducation.length !== 0) {
-                            if (selectedIncomes.length !== 0) {
-                                if (value !== null) {
-                                    if (valueDistrict !== null) {
-                                        if (areasSelected.length !== 0) {
-                                            if (differentlyAble !== '') {
-                                                if (adult !== '') {
-                                                    if (children !== '') {
-                                                        if (anyGroup !== '') {
-                                                            if (smartPhone !== '') {
-                                                                console.log('validationCheck', AgeRegex.test(age))
-                                                                stopRecording();
-                                                            } else {
-                                                                showMessage({
-                                                                    message: "Please Select SmartPhone Own!",
-                                                                    description: "Please Select SmartPhone Own!",
-                                                                    type: "danger",
-                                                                });
-                                                            }
-                                                        } else {
-                                                            showMessage({
-                                                                message: "Please Select Any Group Part!",
-                                                                description: "Please Select Any Group Part SHG/JLG!",
-                                                                type: "danger",
-                                                            });
-                                                        }
-                                                    } else {
-                                                        showMessage({
-                                                            message: "Please Select Children!",
-                                                            description: "Please Select Number Of Children!",
-                                                            type: "danger",
-                                                        });
-                                                    }
-                                                } else {
-                                                    showMessage({
-                                                        message: "Please Select Adults!",
-                                                        description: "Please Select Number Of Adults!",
-                                                        type: "danger",
-                                                    });
-                                                }
-                                            } else {
-                                                showMessage({
-                                                    message: "Please Select Differently!",
-                                                    description: "Please Select Differently abled!",
-                                                    type: "danger",
-                                                });
-                                            }
-                                        } else {
-                                            showMessage({
-                                                message: "Please Select Area",
-                                                description: "Please Select Area!",
-                                                type: "danger",
-                                            });
-                                        }
-                                    } else {
-                                        showMessage({
-                                            message: "Please Select District",
-                                            description: "Please Select District!",
-                                            type: "danger",
-                                        });
-                                    }
-                                } else {
-                                    showMessage({
-                                        message: "Please Select State",
-                                        description: "Please Select State!",
-                                        type: "danger",
-                                    });
-                                }
-                            } else {
-                                showMessage({
-                                    message: "Please Select Incomes",
-                                    description: "Please Select Incomes!",
-                                    type: "danger",
-                                });
-                            }
-                        } else {
-                            showMessage({
-                                message: "Please Select Education",
-                                description: "Please Select Education!",
-                                type: "danger",
-                            });
-                        }
-                    } else {
-                        showMessage({
-                            message: "Please Select Occupation",
-                            description: "Please Select Occupation!",
-                            type: "danger",
-                        });
-                    }
-                } else {
-                    showMessage({
-                        message: "Please Enter Valid Age",
-                        description: "Please Enter Valid Age!",
-                        type: "danger",
-                    });
-                }
-            } else {
-                showMessage({
-                    message: "Please Select Gender",
-                    description: "Please Select Valid Gender!",
-                    type: "danger",
-                });
-            }
-        } else {
+    // const validationCheck = () => {
+    //     if (PensionAwareness !== null) {
+    //         if (PensionEnrolled !== null) {
+    //             if (PensionSubscription !== null) {
+    //                 if (PensionAccount !== null) {
+    //                     if (SchemesAwareness !== null) {
+    //                         if (SchemesEnrolled !== null) {
+    //                             if (SchemesSubscription !== null) {
+    //                                 if (SchemesAccount !== null) {
+    //                                     if (selectedReason.length !== 0) {
+    //                                         // navigation.replace('BlockFSurveyScreen');
+    //                                         stopRecording();
+    //                                     } else {
+    //                                         showMessage({
+    //                                             message: "Please Select Enrolled Pension Schemes",
+    //                                             description: "Please Select Enrolled Pension Schemes!",
+    //                                             type: "danger",
+    //                                         });
+    //                                     }
+    //                                 } else {
+    //                                     showMessage({
+    //                                         message: "Please Pension Scheme Account inactive",
+    //                                         description: "Please select Pension Scheme Account inactive!",
+    //                                         type: "danger",
+    //                                     });
+    //                                 }
+    //                             } else {
+    //                                 showMessage({
+    //                                     message: "Please Pension Scheme subscription payment",
+    //                                     description: "Please select Pension Scheme subscription payment!",
+    //                                     type: "danger",
+    //                                 });
+    //                             }
+    //                         } else {
+    //                             showMessage({
+    //                                 message: "Please Pension Scheme Enrolled",
+    //                                 description: "Please select Pension Scheme Enrolled!",
+    //                                 type: "danger",
+    //                             });
+    //                         }
+    //                     } else {
+    //                         showMessage({
+    //                             message: "Please Pension Scheme Awareness",
+    //                             description: "Please select Pension Scheme Awareness!",
+    //                             type: "danger",
+    //                         });
+    //                     }
+    //                 } else {
+    //                     showMessage({
+    //                         message: "Please Pension Scheme Account inactive",
+    //                         description: "Please select Pension Scheme Account inactive!",
+    //                         type: "danger",
+    //                     });
+    //                 }
+    //             } else {
+    //                 showMessage({
+    //                     message: "Please Pension Scheme subscription payment",
+    //                     description: "Please select Pension Scheme subscription payment!",
+    //                     type: "danger",
+    //                 });
+    //             }
+    //         } else {
+    //             showMessage({
+    //                 message: "Please Pension Scheme Enrolled",
+    //                 description: "Please select Pension Scheme Enrolled!",
+    //                 type: "danger",
+    //             });
+    //         }
+    //     } else {
+    //         showMessage({
+    //             message: "Please Pension Scheme Awareness",
+    //             description: "Please select Pension Scheme Awareness!",
+    //             type: "danger",
+    //         });
+    //     }
+
+    // }
+
+    const Validate = () => {
+        if (PensionAwareness === null) {
             showMessage({
-                message: "Please Enter Name",
-                description: "Please Enter Valid Name!",
+                message: "Please Select APY Awareness",
+                description: "Please Select APY Awareness!",
                 type: "danger",
             });
         }
+        else if (PensionEnrolled === null) {
+            showMessage({
+                message: "Please Select APY Enerolled!",
+                description: "Please Select APY Enerolled!",
+                type: "danger",
+            });
+        }
+        else if (PensionSubscription === null) {
+            showMessage({
+                message: "Please Select APY Subscription Payment!",
+                description: "Please Select APY Subscription Payment!",
+                type: "danger",
+            });
+        }
+        else if (PensionAccount === null) {
+            showMessage({
+                message: "Please Select Inactive Reason",
+                description: "Please Select Inactive Reason!",
+                type: "danger",
+            });
+        }
+        else if (SchemesAwareness === null) {
+            showMessage({
+                message: "Please Select Any Other Scheme",
+                description: "Please Select Any Other Scheme!",
+                type: "danger",
+            });
+        }
+        else if (SchemesEnrolled === null) {
+            showMessage({
+                message: "Please Select Scheme Enrolled",
+                description: "Please Select Scheme Enrolled!",
+                type: "danger",
+            });
+        }
+        else if (SchemesSubscription === null) {
+            showMessage({
+                message: "Please Select Payment Intimation",
+                description: "Please Select Payment Intimation!",
+                type: "danger",
+            });
+        }
+        else if (SchemesAccount === null) {
+            showMessage({
+                message: "Please Select A/C Inactive Subs",
+                description: "Please Select A/C Inactive Subs!",
+                type: "danger",
+            });
+        }
+        else if (selectedReason?.length === 0) {
+            showMessage({
+                message: "Please Select Reason",
+                description: "Please Select Reason!",
+                type: "danger",
+            });
+        }
+        else {
+            navigation.replace('BlockFSurveyScreen')
+        }
     }
 
+
+
     const submitSurvey = async (file_urls) => {
-        // https://createdinam.in/RBI-CBCD/public/api/create-survey-demographics
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + userSendToken);
+
+        const response = [
+            {
+                'section_no': "B",
+                'q_no': "1",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "",
+                'response': `${PensionAwareness}`
+            },
+            {
+                'section_no': "B",
+                'q_no': "2",
+                'q_type': "CHILD",
+                'sub_q_no': "a",
+                'sub_q_title': "In case you are not able to open a bank account, please, indicate the reason(s)",
+                'sub_q_type': "MULTICHECK",
+                'response': `[2,4,5,]`
+            },
+            {
+                'section_no': "E",
+                'q_no': "30 (a) 3.",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "SINGLECHECK",
+                'response': `${PensionSubscription}`
+            },
+            {
+                'section_no': "E",
+                'q_no': "30 (a) 4.",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "SINGLECHECK",
+                'response': `${PensionAccount}`
+            }, {
+                'section_no': "E",
+                'q_no': "30 (b) 1.",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "SINGLECHECK",
+                'response': `${SchemesAwareness}`
+            },
+            {
+                'section_no': "E",
+                'q_no': "30 (b) 2.",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "SINGLECHECK",
+                'response': `${SchemesEnrolled}`
+            },
+            {
+                'section_no': "E",
+                'q_no': "30 (b) 3.",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "SINGLECHECK",
+                'response': `${SchemesSubscription}`
+            },
+            {
+                'section_no': "E",
+                'q_no': "30 (b) 4.",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "SINGLECHECK",
+                'response': `${SchemesAccount}`
+            },
+            {
+                'section_no': "E",
+                'q_no': "31",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "MULTICHECK",
+                'response': `${selectedReason}`
+            }
+        ];
+
+        console.log(JSON.stringify(response))
+
         const FormData = require('form-data');
         let data = new FormData();
-        data.append('user_name', surveryName);
-        data.append('survey_token', user.name);
-        data.append('gender', gender);
-        data.append('age_of_repons', age);
-        data.append('city', value);
-        data.append('state', valueDistrict);
-        data.append('occupation_id', selectedOccupations);
-        data.append('education_id', selectedEducation);
-        data.append('income_id', selectedIncomes);
-        data.append('area_id', areasSelected);
-        data.append('diff_abled', differentlyAble);
-        data.append('adults', adult);
-        data.append('children', children);
-        data.append('total', Number(adult) + Number(children));
-        data.append('part_of_group', anyGroup);
-        data.append('own_smartphone', smartPhone);
+        data.append('data', response);
+        data.append('survey_token', name);
         data.append('latitude', '27.98878');
         data.append('longitude', '28.00000');
-        data.append('other_occupation', '1');
-        data.append('audio_file', file_urls);
+        data.append("audio_file", file_urls, "recording_block_a.wav");
 
-        let config = {
-            method: 'post',
-            maxBodyLength: Infinity,
-            url: 'https://createdinam.in/RBI-CBCD/public/api/create-survey-demographics',
-            headers: {
-                'Authorization': 'Bearer ' + userSendToken,
-                "Content-Type": "multipart/form-data",
-            },
-            data: data
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: data,
+            redirect: 'follow'
         };
 
-        Axios.request(config)
-            .then((response) => {
-                console.warn('startRecording', JSON.stringify(response.data))
-                if (response.data.status === true) {
-                    showMessage({
-                        message: response.data.message + ', Submit By ' + response.data?.name,
-                        description: response.data.message,
-                        type: "success",
-                    });
-                } else {
-                    showMessage({
-                        message: "Something went wrong!",
-                        description: "Someting went wrong, Please check Form Details!",
-                        type: "danger",
-                    });
-                }
-            });
+        console.log(JSON.stringify(requestOptions))
 
+        fetch("https://createdinam.in/RBI-CBCD/public/api/create-survey-section-b", requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                console.log(result?.status)
+                if (result?.status === true) {
+                    navigation.replace('BlockBSurveyScreen');
+                } else {
+                    navigation.replace('BlockBSurveyScreen');
+                    // showMessage({
+                    //     message: "Something went wrong!",
+                    //     description: result?.message,
+                    //     type: "danger",
+                    // });
+                }
+            })
+            .catch(error => console.log('error', error));
     }
 
     const onSelectedItemsChange = (selectedItems) => {
@@ -414,7 +518,7 @@ const BlockESurveyScreen = () => {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#F8F8FF' }}>
             {renderCustomHeader()}
-            <Modal isVisible={false}>
+            {/* <Modal isVisible={isInstruction}>
                 <View style={{ height: 200, width: Dimensions.get('screen').width - 50, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 5, padding: 20 }}>
                     <View style={{ alignItems: 'center' }}>
                         <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Survey Instructions</Text>
@@ -424,13 +528,7 @@ const BlockESurveyScreen = () => {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </Modal>
-            {/* <TouchableOpacity onPress={() => startRecording()}>
-                <Text>Start Recording</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => stopRecording()}>
-                <Text>Stop Recording</Text>
-            </TouchableOpacity> */}
+            </Modal>  */}
             <Text style={{ fontWeight: 'bold', paddingLeft: 20, paddingTop: 10 }}>E. ACCESS and USAGE OF FINANCIAL SERVICES – PENSION FACILITIES</Text>
             {isLoading === false ?
                 <ScrollView>
@@ -441,25 +539,25 @@ const BlockESurveyScreen = () => {
                             <Text>30 (a) 1. Awareness</Text>
                             <RadioButtonRN
                                 data={data}
-                                selectedBtn={(e) => setGender(e)}
+                                selectedBtn={(e) => setPensionAwareness(e)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text>30 (a) 2. Enrolled</Text>
                             <RadioButtonRN
                                 data={data}
-                                selectedBtn={(e) => setGender(e)}
+                                selectedBtn={(e) => setPensionEnrolled(e)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text>30 (a) 3. Received intimation of subscription payment</Text>
                             <RadioButtonRN
                                 data={data}
-                                selectedBtn={(e) => setGender(e)}
+                                selectedBtn={(e) => setPensionSubscription(e)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text>30 (a) 4. Account is inactive due to non-payment of subscription.</Text>
                             <RadioButtonRN
                                 data={data}
-                                selectedBtn={(e) => setGender(e)}
+                                selectedBtn={(e) => setPensionAccount(e)}
                             />
                             <View style={{ padding: 10, }} />
                         </View>
@@ -469,25 +567,25 @@ const BlockESurveyScreen = () => {
                             <Text>30 (b) 1. Awareness</Text>
                             <RadioButtonRN
                                 data={data}
-                                selectedBtn={(e) => setGender(e)}
+                                selectedBtn={(e) => setSchemesAwareness(e)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text>30 (b) 2. Enrolled</Text>
                             <RadioButtonRN
                                 data={data}
-                                selectedBtn={(e) => setGender(e)}
+                                selectedBtn={(e) => setSchemesEnrolled(e)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text>30 (b) 3. Received intimation of subscription payment</Text>
                             <RadioButtonRN
                                 data={data}
-                                selectedBtn={(e) => setGender(e)}
+                                selectedBtn={(e) => setSchemesSubscription(e)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text>30 (b) 4. Account is inactive due to non-payment of subscription.</Text>
                             <RadioButtonRN
                                 data={data}
-                                selectedBtn={(e) => setGender(e)}
+                                selectedBtn={(e) => setSchemesAccount(e)}
                             />
                             <View style={{ padding: 10, }} />
                         </View>
@@ -528,7 +626,7 @@ const BlockESurveyScreen = () => {
                             </View>
                         </View>
                         <View style={{ padding: 10, }} />
-                        <TouchableOpacity onPress={() => navigation.replace('BlockFSurveyScreen')} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
+                        <TouchableOpacity onPress={() => Validate()} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
                             <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Next Block F</Text>
                         </TouchableOpacity>
                     </View>

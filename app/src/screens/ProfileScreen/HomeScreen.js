@@ -141,8 +141,8 @@ class HomeScreen extends Component {
             type: "success",
           });
           this.setState({ loading: false });
-          this.props.navigation.navigate('AddSurveyScreen');
-          // this.props.navigation.navigate('BlockESurveyScreen');
+          this.CheckCurrentActiveSurvey();
+          // this.props.navigation.navigate('BlockFSurveyScreen');
         } else {
           console.log('navigateToSurvey', JSON.stringify(response.data))
           showMessage({
@@ -162,6 +162,12 @@ class HomeScreen extends Component {
         });
         this.setState({ loading: false });
       })
+  }
+
+  CheckCurrentActiveSurvey = () => {
+
+    this.props.navigation.navigate('BlockBSurveyScreen');
+
   }
 
   render() {

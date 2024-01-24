@@ -62,8 +62,7 @@ const BlockBSurveyScreen = () => {
     const [smartPhone, setSmartphone] = React.useState('');
     const [anyGroup, setAnyGroup] = React.useState('');
 
-    // blockB
-    const [visitBranch, setVisitBranch] = React.useState('');
+    // blockB    
     const [isAccountTypeFocus, setAccountTypeFocus] = React.useState(false);
     const [AccountTypeValue, setAccountTypeValue] = React.useState(null);
     const [transaction, sTransaction] = React.useState(null);
@@ -71,6 +70,107 @@ const BlockBSurveyScreen = () => {
     const [subsidy, setSubsidy] = React.useState(null);
     const [subsidyFocus, setSubsidyFocus] = React.useState(false);
     const multiSelectRef = useRef(null);
+
+
+
+    // anyGroup
+
+    const Nodata = [
+        { id: 1, lable: 'No nearby bank branch or BC' },
+        { id: 2, lable: 'Bank timings are not suitable' },
+        { id: 3, lable: 'Don’t have documents' },
+        { id: 4, lable: 'Don’t know the process' },
+    ]
+
+    // multi select 
+    const [selectedDigitalpreferred, setSelectedDigitalpreferred] = React.useState([]);
+
+    const onSelectedDigitalpreferredChange = (selectedItems) => {
+        setSelectedDigitalpreferred(selectedItems);
+    }
+
+    const SelectedDigitalpreferredLabels = selectedDigitalpreferred.map((selectedId) => {
+        const selectedReason = Nodata.find((reason) => reason.id === selectedId);
+        return selectedReason ? selectedReason.lable : '';
+    });
+
+    const lackdocumentsdata = [
+        { id: 1, lable: 'Lack of ID proof' },
+        { id: 2, lable: 'Lack of Address Proof' },
+        { id: 3, lable: 'Both' },
+        { id: 4, lable: 'Any other' },
+    ]
+
+    // multi select 
+    const [selectedlackdocuments, setSelectedlackdocuments] = React.useState([]);
+
+    const onSelectedlackdocumentsChange = (selectedItems) => {
+        setSelectedlackdocuments(selectedItems);
+    }
+
+    const SelectedlackdocumentsLabels = selectedlackdocuments.map((selectedId) => {
+        const selectedReason = lackdocumentsdata.find((reason) => reason.id === selectedId);
+        return selectedReason ? selectedReason.lable : '';
+    });
+
+    const bankAccountsdata = [
+        { id: 1, lable: 'No source of deposit to bank account' },
+        { id: 2, lable: 'Prefer Cash' },
+        { id: 3, lable: 'No knowledge' },
+        { id: 4, lable: 'No trust – happy to keep money with myself' },
+        { id: 5, lable: 'Fee and Charges' },
+        { id: 6, lable: 'Family Members have an account' },
+        { id: 7, lable: 'My acquaintances have had bad experience with bank account' },
+    ]
+
+    // multi select 
+    const [selectedbankAccounts, setSelectedbankAccounts] = React.useState([]);
+
+    const onSelectedbankAccountsChange = (selectedItems) => {
+        setSelectedbankAccounts(selectedItems);
+    }
+
+    const SelectedbankAccountsLabels = selectedbankAccounts.map((selectedId) => {
+        const selectedReason = bankAccountsdata.find((reason) => reason.id === selectedId);
+        return selectedReason ? selectedReason.lable : '';
+    });
+
+    const [DepositInsurance, setSetDepositInsurance] = React.useState([]);
+    const [ZeroBalance, setZeroBalance] = React.useState([]);
+    const [DirectBenefit, setDirectBenefit] = React.useState([]);
+    const [visitBranch, setVisitBranch] = React.useState('');
+    const [EnvironmentBranch, setEnvironmentBranch] = React.useState('');
+    const [EnvironmentOutlet, setEnvironmentOutlet] = React.useState('');
+    const [SupportiveBranch, setSupportiveBranch] = React.useState('');
+    const [SupportiveOutlet, setSupportiveOutlet] = React.useState('');
+    const [AmenitiesBranch, setAmenitiesBranch] = React.useState('');
+    const [AmenitiesOutlet, setAmenitiesOutlet] = React.useState('');
+    const [LongBranch, setLongBranch] = React.useState('');
+    const [LongOutlet, setLongOutlet] = React.useState('');
+    const [WithoutVisiting, setWithoutVisiting] = React.useState('');
+    const [AccountOpened, setAccountOpened] = React.useState('');
+    const [AccountNumber, setAccountNumber] = React.useState('');
+
+    const whatPurposesdata = [
+        { id: 1, lable: 'Receive Salary/ Money' },
+        { id: 2, lable: 'Pay Money/ Make Purchases' },
+        { id: 3, lable: 'Save / Invest Money' },
+        { id: 4, lable: 'For Business' },
+        { id: 5, lable: 'Transfer/Remittance' },
+        { id: 6, lable: 'Do not use' },
+    ]
+
+    // multi select 
+    const [selectedwhatPurposes, setSelectedwhatPurposes] = React.useState([]);
+
+    const onSelectedwhatPurposesChange = (selectedItems) => {
+        setSelectedwhatPurposes(selectedItems);
+    }
+
+    const SelectedwhatPurposesLabels = selectedwhatPurposes.map((selectedId) => {
+        const selectedReason = whatPurposesdata.find((reason) => reason.id === selectedId);
+        return selectedReason ? selectedReason.lable : '';
+    });
 
     const AccountType = [
         { id: 1, lable: 'Savings Account' },
@@ -153,38 +253,6 @@ const BlockBSurveyScreen = () => {
         }
     ];
 
-    // anyGroup
-    const dataGroup = [
-        {
-            label: 'Yes'
-        },
-        {
-            label: 'No'
-        }
-    ];
-
-    const smartphone = [
-        {
-            label: 'Yes'
-        },
-        {
-            label: 'No'
-        }
-    ];
-
-    const differently = [
-        {
-            label: 'Yes'
-        },
-        {
-            label: 'No'
-        }
-    ];
-
-    const adults = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
-
-    const childern = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
-
     useFocusEffect(
         React.useCallback(() => {
             // getLoadingData();
@@ -215,85 +283,6 @@ const BlockBSurveyScreen = () => {
         } catch (error) {
             console.log("error_", error)
         }
-    }
-
-    const getLoadingData = async () => {
-        setLoading(true);
-        const UserToken = await AsyncStorage.getItem(AsyncStorageContaints.UserId);
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${UserToken}`
-        }
-        Axios.get(`https://createdinam.in/RBI-CBCD/public/api/get-demographic-details`, {
-            headers: headers
-        })
-            .then((response) => {
-                console.log('getLoadingData', JSON.stringify(response.data))
-                if (response.data.status === true) {
-                    setAreas(response.data?.areas);
-                    setEducations(response.data?.educations);
-                    setIncomes(response.data?.incomes);
-                    setOccupations(response.data?.occupations);
-                    // getState(UserToken);
-                } else {
-                    setLoading(false);
-                    showMessage({
-                        message: "Something went wrong!",
-                        description: "Something went wrong. Try again!",
-                        type: "danger",
-                    });
-                }
-            });
-    }
-
-    const getState = (token) => {
-        let url = `https://createdinam.in/RBI-CBCD/public/api/get-states`;
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        }
-        Axios.get(url, {
-            headers: headers
-        })
-            .then((response) => {
-                console.log('getState', JSON.stringify(response?.data?.data))
-                if (response.data.status === true) {
-                    setLoading(false);
-                    setStateData(response?.data?.data);
-                } else {
-                    setLoading(false);
-                    showMessage({
-                        message: "Something went wrong!",
-                        description: "Something went wrong. Try again!",
-                        type: "danger",
-                    });
-                }
-            });
-    }
-
-    const loadDistrict = async (state) => {
-        console.log('loadDistrict______', JSON.stringify(state))
-        const UserToken = await AsyncStorage.getItem(AsyncStorageContaints.UserId);
-        let url = `https://createdinam.in/RBI-CBCD/public/api/get-city/${Number(state)}`;
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${UserToken}`
-        }
-        Axios.get(url, {
-            headers: headers,
-        })
-            .then((response) => {
-                if (response.data.status === true) {
-                    setDistrictData(response?.data?.data);
-                } else {
-                    setLoading(false);
-                    showMessage({
-                        message: "Something went wrong!",
-                        description: "Something went wrong. Try again!",
-                        type: "danger",
-                    });
-                }
-            });
     }
 
     // AudioRecord.on('data', data => {
@@ -346,13 +335,13 @@ const BlockBSurveyScreen = () => {
     const startRecording = async () => {
         setSurveyInstruction(false);
         setIsRecording(true);
-        AudioRecord.start();
+        // AudioRecord.start();
     };
 
     const stopRecording = async () => {
         // or to get the wav file path
         console.warn('startRecording')
-        const audioFile = await AudioRecord.stop();
+        // const audioFile = await AudioRecord.stop();
         console.warn(audioFile)
         setAudioPath(audioFile);
         submitSurvey(audioFile);
@@ -479,39 +468,261 @@ const BlockBSurveyScreen = () => {
 
     const submitSurvey = async (file_urls) => {
         // https://createdinam.in/RBI-CBCD/public/api/create-survey-demographics
+
+        const response = [
+            {
+                'section_no': "B",
+                'q_no': "1",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "",
+                'account_no': '',
+                'response': `${bank?.label}`
+            },
+            {
+                'section_no': "B",
+                'q_no': "2",
+                'q_type': "CHILD",
+                'sub_q_no': "a",
+                'sub_q_title': "In case you are not able to open a bank account, please, indicate the reason(s)",
+                'sub_q_type': "MULTICHECK",
+                'account_no': '',
+                'response': `${selectedDigitalpreferred}`
+            },
+            {
+                'section_no': "B",
+                'q_no': "2",
+                'q_type': "CHILD",
+                'sub_q_no': "b",
+                'sub_q_title': "If it is due to a lack of documents, what is it?",
+                'sub_q_type': "MULTICHECK",
+                'account_no': '',
+                'response': `${selectedDigitalpreferred}`
+            },
+            {
+                'section_no': "B",
+                'q_no': "2",
+                'q_type': "CHILD",
+                'sub_q_no': "c",
+                'sub_q_title': "If you don’t want a bank account, what could be the reasons?",
+                'sub_q_type': "MULTICHECK",
+                'account_no': '',
+                'response': `${selectedDigitalpreferred}`
+            },
+            {
+                'section_no': "B",
+                'q_no': "3",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "",
+                'account_no': '',
+                'response': `${DepositInsurance?.label}`
+            },
+            {
+                'section_no': "B",
+                'q_no': "4",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "",
+                'account_no': '',
+                'response': `${ZeroBalance?.label}`
+            },
+            {
+                'section_no': "B",
+                'q_no': "5",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "",
+                'account_no': '',
+                'response': `${DirectBenefit?.label}`
+            }, {
+                'section_no': "B",
+                'q_no': "6",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "",
+                'account_no': '',
+                'response': `${visitBranch?.label}`
+            }, {
+                'section_no': "B",
+                'q_no': "7",
+                'q_type': "CHILD",
+                'sub_q_no': "a",
+                'sub_q_title': "Helpful and Easy-to-Understand Processes",
+                'sub_q_type': "SINGLECHECK",
+                'account_no': '',
+                'response2': `${EnvironmentOutlet?.label}`,
+                'response': `${EnvironmentBranch?.label}`
+            }, {
+                'section_no': "B",
+                'q_no': "7",
+                'q_type': "CHILD",
+                'sub_q_no': "b",
+                'sub_q_title': "Supportive and Welcome Attitude of Staff",
+                'sub_q_type': "SINGLECHECK",
+                'account_no': '',
+                'response2': `${SupportiveOutlet?.label}`,
+                'response': `${SupportiveBranch?.label}`
+            }, {
+                'section_no': "B",
+                'q_no': "7",
+                'q_type': "CHILD",
+                'sub_q_no': "c",
+                'sub_q_title': "Basic Amenities (seating/water/ washroom/ information)",
+                'sub_q_type': "SINGLECHECK",
+                'account_no': '',
+                'response2': `${AmenitiesOutlet?.label}`,
+                'response': `${AmenitiesBranch?.label}`
+            }, {
+                'section_no': "B",
+                'q_no': "7",
+                'q_type': "CHILD",
+                'sub_q_no': "d",
+                'sub_q_title': "Long Wait Time (more than one hour)/ Long Queues",
+                'sub_q_type': "SINGLECHECK",
+                'account_no': '',
+                'response2': `${LongOutlet?.label}`,
+                'response': `${LongBranch?.label}`
+            }, {
+                'section_no': "B",
+                'q_no': "7",
+                'q_type': "CHILD",
+                'sub_q_no': "d",
+                'sub_q_title': "Long Wait Time (more than one hour)/ Long Queues",
+                'sub_q_type': "SINGLECHECK",
+                'account_no': '',
+                'response2': `${LongOutlet?.label}`,
+                'response': `${LongBranch?.label}`
+            }, {
+                'section_no': "B",
+                'q_no': "8",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "",
+                'account_no': '',
+                'response': `${WithoutVisiting?.label}`
+            }, {
+                'section_no': "B",
+                'q_no': "9",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "",
+                'account_no': '',
+                'response': `${AccountOpened?.label}`
+            }, {
+                'section_no': "B",
+                'q_no': "10",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "",
+                'account_no': `${AccountNumber}`,
+                'response': `${AccountTypeValue}`
+            }, {
+                'section_no': "B",
+                'q_no': "11",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "",
+                'account_no': '',
+                'response': `${selectedwhatPurposes}`
+            }, {
+                'section_no': "B",
+                'q_no': "12",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "",
+                'account_no': '',
+                'response': `${AccountTypeValue}`
+            }, {
+                'section_no': "B",
+                'q_no': "13",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "",
+                'account_no': '',
+                'response': `${selectedOccupations}`
+            }, {
+                'section_no': "B",
+                'q_no': "14",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "",
+                'account_no': '',
+                'response': `${transaction}`
+            }, {
+                'section_no': "B",
+                'q_no': "15",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "",
+                'account_no': '',
+                'response': `${subsidy}`
+            }, {
+                'section_no': "B",
+                'q_no': "16",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "",
+                'account_no': '',
+                'response': `${selectedIncomes}`
+            }, {
+                'section_no': "B",
+                'q_no': "17",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "",
+                'account_no': '',
+                'response': `${selectCashReceipt}`
+            }, {
+                'section_no': "B",
+                'q_no': "18",
+                'q_type': "SELF",
+                'sub_q_no': "",
+                'sub_q_title': "",
+                'sub_q_type': "",
+                'account_no': '',
+                'response': `${SelectedSaveMoney}`
+            },
+        ];
+
+
+        console.log('response________>', JSON.stringify(response));
+
         const FormData = require('form-data');
         let data = new FormData();
-        data.append('user_name', surveryName);
-        data.append('survey_token', user.name);
-        data.append('gender', gender);
-        data.append('age_of_repons', age);
-        data.append('city', value);
-        data.append('state', valueDistrict);
-        data.append('occupation_id', selectedOccupations);
-        data.append('education_id', selectedEducation);
-        data.append('income_id', selectedIncomes);
-        data.append('area_id', areasSelected);
-        data.append('diff_abled', differentlyAble);
-        data.append('adults', adult);
-        data.append('children', children);
-        data.append('total', Number(adult) + Number(children));
-        data.append('part_of_group', anyGroup);
-        data.append('own_smartphone', smartPhone);
+        data.append('data', response);
+        data.append('survey_token', name);
         data.append('latitude', '27.98878');
         data.append('longitude', '28.00000');
-        data.append('other_occupation', '1');
-        data.append('audio_file', file_urls);
+        data.append("audio_file", file_urls, "recording_block_a.wav");
 
         let config = {
             method: 'post',
             maxBodyLength: Infinity,
-            url: 'https://createdinam.in/RBI-CBCD/public/api/create-survey-demographics',
+            url: 'https://createdinam.in/RBI-CBCD/public/api/create-survey-section-b',
             headers: {
                 'Authorization': 'Bearer ' + userSendToken,
                 "Content-Type": "multipart/form-data",
             },
             data: data
         };
+
+        console.log('config________>', JSON.stringify(config));
 
         Axios.request(config)
             .then((response) => {
@@ -578,7 +789,6 @@ const BlockBSurveyScreen = () => {
     }
 
 
-
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#F8F8FF' }}>
             {renderCustomHeader()}
@@ -611,87 +821,114 @@ const BlockBSurveyScreen = () => {
                             />
                         </View>
                         <View style={{ padding: 10, }} />
-                        {gender?.label === 'No' ?
+                        {bank?.label === 'No' ?
                             <View style={{ flex: 1 }}>
                                 <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
                                     <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>2 (a). In case you are not able to open a bank account, please, indicate the reason(s)</Text>
-                                    <Dropdown
-                                        style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-                                        placeholderStyle={styles.placeholderStyle}
-                                        selectedTextStyle={styles.selectedTextStyle}
-                                        inputSearchStyle={styles.inputSearchStyle}
-                                        // iconStyle={styles.iconStyle}
-                                        data={state}
-                                        // search
-                                        maxHeight={300}
-                                        labelField="name"
-                                        valueField="id"
-                                        placeholder={!isFocus ? 'Select State' : value}
-                                        // searchPlaceholder="Search..."
-                                        value={value}
-                                        onFocus={() => setIsFocus(true)}
-                                        onBlur={() => setIsFocus(false)}
-                                        onChange={item => {
-                                            console.log('______>', JSON.stringify(item))
-                                            setValue(item?.name);
-                                            loadDistrict(item?.id);
-                                            setIsFocus(false);
-                                        }}
+                                    <MultiSelect
+                                        hideTags
+                                        items={Nodata}
+                                        uniqueKey="id"
+                                        ref={multiSelectRef}
+                                        onSelectedItemsChange={(items) =>
+                                            onSelectedDigitalpreferredChange(items)
+                                        }
+                                        selectedItems={selectedDigitalpreferred}
+                                        selectText="Select open a bank account"
+                                        onChangeInput={(text) => console.log(text)}
+                                        altFontFamily="ProximaNova-Light"
+                                        tagRemoveIconColor="#000"
+                                        tagBorderColor="#000"
+                                        tagTextColor="#000"
+                                        selectedItemTextColor="#000"
+                                        selectedItemIconColor="#000"
+                                        itemTextColor="#000"
+                                        displayKey="lable"
+                                        searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                        submitButtonColor="#000"
+                                        submitButtonText="Submit"
+                                        itemBackground="#000"
+                                        styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
                                     />
+                                    <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                        {SelectedDigitalpreferredLabels.map((label, index) => (
+                                            <View style={{ margin: 5 }}>
+                                                <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                            </View>
+                                        ))}
+                                    </View>
                                 </View>
                                 <View style={{ padding: 10, }} />
                                 <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
                                     <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>2 (b). If it is due to a lack of documents, what is it?</Text>
-                                    <Dropdown
-                                        style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-                                        placeholderStyle={styles.placeholderStyle}
-                                        selectedTextStyle={styles.selectedTextStyle}
-                                        inputSearchStyle={styles.inputSearchStyle}
-                                        // iconStyle={styles.iconStyle}
-                                        data={state}
-                                        // search
-                                        maxHeight={300}
-                                        labelField="name"
-                                        valueField="id"
-                                        placeholder={!isFocus ? 'Select State' : value}
-                                        // searchPlaceholder="Search..."
-                                        value={value}
-                                        onFocus={() => setIsFocus(true)}
-                                        onBlur={() => setIsFocus(false)}
-                                        onChange={item => {
-                                            console.log('______>', JSON.stringify(item))
-                                            setValue(item?.name);
-                                            loadDistrict(item?.id);
-                                            setIsFocus(false);
-                                        }}
+                                    <MultiSelect
+                                        hideTags
+                                        items={lackdocumentsdata}
+                                        uniqueKey="id"
+                                        ref={multiSelectRef}
+                                        onSelectedItemsChange={(items) =>
+                                            onSelectedlackdocumentsChange(items)
+                                        }
+                                        selectedItems={selectedlackdocuments}
+                                        selectText="Select lack of documents"
+                                        onChangeInput={(text) => console.log(text)}
+                                        altFontFamily="ProximaNova-Light"
+                                        tagRemoveIconColor="#000"
+                                        tagBorderColor="#000"
+                                        tagTextColor="#000"
+                                        selectedItemTextColor="#000"
+                                        selectedItemIconColor="#000"
+                                        itemTextColor="#000"
+                                        displayKey="lable"
+                                        searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                        submitButtonColor="#000"
+                                        submitButtonText="Submit"
+                                        itemBackground="#000"
+                                        styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
                                     />
+                                    <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                        {SelectedlackdocumentsLabels.map((label, index) => (
+                                            <View style={{ margin: 5 }}>
+                                                <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                            </View>
+                                        ))}
+                                    </View>
                                 </View>
                                 <View style={{ padding: 10, }} />
                                 <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
                                     <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>2 (C). If you don’t want a bank account, what could be the reasons?</Text>
-                                    <Dropdown
-                                        style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-                                        placeholderStyle={styles.placeholderStyle}
-                                        selectedTextStyle={styles.selectedTextStyle}
-                                        inputSearchStyle={styles.inputSearchStyle}
-                                        // iconStyle={styles.iconStyle}
-                                        data={state}
-                                        // search
-                                        maxHeight={300}
-                                        labelField="name"
-                                        valueField="id"
-                                        placeholder={!isFocus ? 'Select State' : value}
-                                        // searchPlaceholder="Search..."
-                                        value={value}
-                                        onFocus={() => setIsFocus(true)}
-                                        onBlur={() => setIsFocus(false)}
-                                        onChange={item => {
-                                            console.log('______>', JSON.stringify(item))
-                                            setValue(item?.name);
-                                            loadDistrict(item?.id);
-                                            setIsFocus(false);
-                                        }}
+                                    <MultiSelect
+                                        hideTags
+                                        items={bankAccountsdata}
+                                        uniqueKey="id"
+                                        ref={multiSelectRef}
+                                        onSelectedItemsChange={(items) =>
+                                            onSelectedbankAccountsChange(items)
+                                        }
+                                        selectedItems={selectedbankAccounts}
+                                        selectText="Select bank account reasons"
+                                        onChangeInput={(text) => console.log(text)}
+                                        altFontFamily="ProximaNova-Light"
+                                        tagRemoveIconColor="#000"
+                                        tagBorderColor="#000"
+                                        tagTextColor="#000"
+                                        selectedItemTextColor="#000"
+                                        selectedItemIconColor="#000"
+                                        itemTextColor="#000"
+                                        displayKey="lable"
+                                        searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                        submitButtonColor="#000"
+                                        submitButtonText="Submit"
+                                        itemBackground="#000"
+                                        styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
                                     />
+                                    <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                        {SelectedbankAccountsLabels.map((label, index) => (
+                                            <View style={{ margin: 5 }}>
+                                                <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                            </View>
+                                        ))}
+                                    </View>
                                 </View>
                             </View>
                             :
@@ -702,7 +939,7 @@ const BlockBSurveyScreen = () => {
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>3. Do you know about deposit insurance up to Rs 5 lakh?</Text>
                             <RadioButtonRN
                                 data={data}
-                                selectedBtn={(e) => setGender(e)}
+                                selectedBtn={(e) => setSetDepositInsurance(e)}
                             />
                         </View>
                         <View style={{ padding: 10, }} />
@@ -710,7 +947,7 @@ const BlockBSurveyScreen = () => {
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>4. Do you know that a zero-balance bank account can be opened (PM Jan-Dhan Account or BSBDA) without any charges?</Text>
                             <RadioButtonRN
                                 data={data}
-                                selectedBtn={(e) => setGender(e)}
+                                selectedBtn={(e) => setZeroBalance(e)}
                             />
                         </View>
                         <View style={{ padding: 10, }} />
@@ -718,7 +955,7 @@ const BlockBSurveyScreen = () => {
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>5. Do you know that subsidies/benefits (Direct Benefit Transfer) under different Government schemes can be received by respective eligible beneficiaries in their Jan-Dhan accounts?</Text>
                             <RadioButtonRN
                                 data={data}
-                                selectedBtn={(e) => setGender(e)}
+                                selectedBtn={(e) => setDirectBenefit(e)}
                             />
                         </View>
                         <View style={{ padding: 10, }} />
@@ -740,13 +977,13 @@ const BlockBSurveyScreen = () => {
                                         <Text>Branch</Text>
                                         <RadioButtonRN
                                             data={data}
-                                            selectedBtn={(e) => setGender(e)}
+                                            selectedBtn={(e) => setEnvironmentBranch(e)}
                                         />
                                         <View style={{ padding: 10, }} />
                                         <Text>BC Outlet</Text>
                                         <RadioButtonRN
                                             data={data}
-                                            selectedBtn={(e) => setGender(e)}
+                                            selectedBtn={(e) => setEnvironmentOutlet(e)}
                                         />
                                     </View>
                                     <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
@@ -754,13 +991,13 @@ const BlockBSurveyScreen = () => {
                                         <Text>Branch</Text>
                                         <RadioButtonRN
                                             data={data}
-                                            selectedBtn={(e) => setGender(e)}
+                                            selectedBtn={(e) => setSupportiveBranch(e)}
                                         />
                                         <View style={{ padding: 10, }} />
                                         <Text>BC Outlet</Text>
                                         <RadioButtonRN
                                             data={data}
-                                            selectedBtn={(e) => setGender(e)}
+                                            selectedBtn={(e) => setSupportiveOutlet(e)}
                                         />
                                     </View>
                                     <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
@@ -768,13 +1005,13 @@ const BlockBSurveyScreen = () => {
                                         <Text>Branch</Text>
                                         <RadioButtonRN
                                             data={data}
-                                            selectedBtn={(e) => setGender(e)}
+                                            selectedBtn={(e) => setAmenitiesBranch(e)}
                                         />
                                         <View style={{ padding: 10, }} />
                                         <Text>BC Outlet</Text>
                                         <RadioButtonRN
                                             data={data}
-                                            selectedBtn={(e) => setGender(e)}
+                                            selectedBtn={(e) => setAmenitiesOutlet(e)}
                                         />
                                     </View>
                                     <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
@@ -782,13 +1019,13 @@ const BlockBSurveyScreen = () => {
                                         <Text>Branch</Text>
                                         <RadioButtonRN
                                             data={data}
-                                            selectedBtn={(e) => setGender(e)}
+                                            selectedBtn={(e) => setLongBranch(e)}
                                         />
                                         <View style={{ padding: 10, }} />
                                         <Text>BC Outlet</Text>
                                         <RadioButtonRN
                                             data={data}
-                                            selectedBtn={(e) => setGender(e)}
+                                            selectedBtn={(e) => setLongOutlet(e)}
                                         />
                                     </View>
                                 </View>
@@ -799,7 +1036,7 @@ const BlockBSurveyScreen = () => {
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>8. Do you know that a bank account can be opened without visiting a branch or BC Outlet?</Text>
                             <RadioButtonRN
                                 data={data}
-                                selectedBtn={(e) => setGender(e)}
+                                selectedBtn={(e) => setWithoutVisiting(e)}
                             />
                         </View>
                         <View style={{ padding: 10, }} />
@@ -808,7 +1045,7 @@ const BlockBSurveyScreen = () => {
                             <View>
                                 <RadioButtonRN
                                     data={data}
-                                    selectedBtn={(e) => setGender(e)}
+                                    selectedBtn={(e) => setAccountOpened(e)}
                                 />
                             </View>
                             <View style={{ padding: 10, }} />
@@ -838,35 +1075,46 @@ const BlockBSurveyScreen = () => {
                                     }}
                                 />
                                 <View style={{ padding: 10, }} />
-                                {AccountTypeValue !== null ? <TextInput onChangeText={(e) => setSurveyName(e)} maxLength={2} style={{ backgroundColor: '#fff', paddingLeft: 15, elevation: 5, borderRadius: 5 }} keyboardType={'number-pad'} placeholder='Numbers' /> : null}
+                                {AccountTypeValue !== null ? <TextInput onChangeText={(e) => setAccountNumber(e)} maxLength={2} style={{ backgroundColor: '#fff', paddingLeft: 15, elevation: 5, borderRadius: 5 }} keyboardType={'number-pad'} placeholder='Numbers' /> : null}
                             </View>
                         </View>
                         <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>11. For what purpose, do you use the bank account.</Text>
                             <View>
-                                <Dropdown
-                                    style={[styles.dropdown, isAccountTypeFocus && { borderColor: 'blue' }]}
-                                    placeholderStyle={styles.placeholderStyle}
-                                    selectedTextStyle={styles.selectedTextStyle}
-                                    inputSearchStyle={styles.inputSearchStyle}
-                                    // iconStyle={styles.iconStyle}
-                                    data={frequentlyBank}
-                                    // search
-                                    maxHeight={300}
-                                    labelField="lable"
-                                    valueField="id"
-                                    placeholder={!isAccountTypeFocus ? 'Select Frequently Bank' : AccountTypeValue}
-                                    // searchPlaceholder="Search..."
-                                    value={AccountTypeValue}
-                                    onFocus={() => setAccountTypeFocus(true)}
-                                    onBlur={() => setAccountTypeFocus(false)}
-                                    onChange={item => {
-                                        console.log(JSON.stringify(item))
-                                        setAccountTypeValue(item.id);
-                                        setAccountTypeFocus(false);
-                                    }}
+                                <MultiSelect
+                                    hideTags
+                                    items={whatPurposesdata}
+                                    uniqueKey="id"
+                                    ref={multiSelectRef}
+                                    onSelectedItemsChange={(items) =>
+                                        onSelectedwhatPurposesChange(items)
+                                    }
+                                    hideSubmitButton={true}
+                                    selectedItems={selectedwhatPurposes}
+                                    selectText="Select open a bank account"
+                                    onChangeInput={(text) => console.log(text)}
+                                    altFontFamily="ProximaNova-Light"
+                                    tagRemoveIconColor="#000"
+                                    tagBorderColor="#000"
+                                    tagTextColor="#000"
+                                    selectedItemTextColor="#000"
+                                    selectedItemIconColor="#000"
+                                    itemTextColor="#000"
+                                    displayKey="lable"
+                                    searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                    submitButtonColor="#000"
+                                    submitButtonText="Submit"
+                                    itemBackground="#000"
+                                    styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
                                 />
+                                <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                    {SelectedwhatPurposesLabels.map((label, index) => (
+                                        <View style={{ margin: 5 }}>
+                                            <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                        </View>
+                                    ))}
+                                </View>
                             </View>
                         </View>
                         <View style={{ padding: 10, }} />
@@ -897,11 +1145,8 @@ const BlockBSurveyScreen = () => {
                             />
                         </View>
                         <View style={{ padding: 10, }} />
-
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>13. If you are not using your bank account, please indicate reasons?</Text>
-
-
                             <MultiSelect
                                 hideTags
                                 items={reasons}
@@ -1118,7 +1363,10 @@ const BlockBSurveyScreen = () => {
                             />
                         </View> */}
                         <View style={{ padding: 10, }} />
-                        <TouchableOpacity onPress={() => navigation.replace('BlockCSurveyScreen')} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
+                        <TouchableOpacity onPress={() => 
+                            // submitSurvey()
+                            navigation.replace('BlockCSurveyScreen')
+                            } style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
                             <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Next Block C</Text>
                         </TouchableOpacity>
                     </View>
