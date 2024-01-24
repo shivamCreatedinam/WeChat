@@ -721,13 +721,7 @@ const BlockFSurveyScreen = () => {
                 type: "danger",
             });
         }
-        else if (grievanceRelated === null) {
-            showMessage({
-                message: "Please Select Grievance Raised",
-                description: "Please Select Grievance Raised!",
-                type: "danger",
-            });
-        }
+     
 
         else if (grievanceRelated?.label === 'Yes' && isgrievanceAddressed === null) {
             showMessage({
@@ -738,8 +732,8 @@ const BlockFSurveyScreen = () => {
         }
         else if (grievanceRelated?.label === 'No' && reasonprovidedBC === null) {
             showMessage({
-                message: "Please Select Grievance Raised",
-                description: "Please Select Grievance Raised!",
+                message: "Please Select Reason By BC Agent",
+                description: "Please Select Reason By BC Agent!",
                 type: "danger",
             });
         }
