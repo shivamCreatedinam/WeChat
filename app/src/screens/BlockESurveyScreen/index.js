@@ -456,13 +456,7 @@ const BlockESurveyScreen = () => {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </Modal>
-            {/* <TouchableOpacity onPress={() => startRecording()}>
-                <Text>Start Recording</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => stopRecording()}>
-                <Text>Stop Recording</Text>
-            </TouchableOpacity> */}
+            </Modal> 
             <Text style={{ fontWeight: 'bold', paddingLeft: 20, paddingTop: 10 }}>E. ACCESS and USAGE OF FINANCIAL SERVICES – PENSION FACILITIES</Text>
             {isLoading === false ?
                 <ScrollView>
