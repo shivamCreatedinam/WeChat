@@ -582,7 +582,7 @@ const BlockBSurveyScreen = () => {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#F8F8FF' }}>
             {renderCustomHeader()}
-            <Modal isVisible={isInstruction}>
+            {/* <Modal isVisible={isInstruction}>
                 <View style={{ height: 200, width: Dimensions.get('screen').width - 50, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 5, padding: 20 }}>
                     <View style={{ alignItems: 'center' }}>
                         <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Survey Instructions</Text>
@@ -592,7 +592,7 @@ const BlockBSurveyScreen = () => {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </Modal>
+            </Modal> */}
             {/* <TouchableOpacity onPress={() => startRecording()}>
                 <Text>Start Recording</Text>
             </TouchableOpacity>
