@@ -103,7 +103,7 @@ const AddSurveyScreen = () => {
 
     useFocusEffect(
         React.useCallback(() => {
-            getLoadingData();
+            // getLoadingData();
             readMessages();
             return () => {
                 // Useful for cleanup functions

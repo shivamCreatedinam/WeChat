@@ -1101,7 +1101,7 @@ const BlockBSurveyScreen = () => {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#F8F8FF' }}>
             {renderCustomHeader()}
-            <Modal isVisible={isInstruction}>
+            {/* <Modal isVisible={isInstruction}>
                 <View style={{ height: 200, width: Dimensions.get('screen').width - 50, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 5, padding: 20 }}>
                     <View style={{ alignItems: 'center' }}>
                         <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Survey Instructions</Text>
@@ -1111,7 +1111,13 @@ const BlockBSurveyScreen = () => {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </Modal>
+            </Modal> */}
+            {/* <TouchableOpacity onPress={() => startRecording()}>
+                <Text>Start Recording</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => stopRecording()}>
+                <Text>Stop Recording</Text>
+            </TouchableOpacity> */}
             <Text style={{ fontWeight: 'bold', paddingLeft: 20, paddingTop: 10 }}>B. ACCESS and USAGE OF FINANCIAL SERVICES – BANK ACCOUNT {gender?.label}</Text>
             {isLoading === false ?
                 <ScrollView>
@@ -1666,7 +1672,10 @@ const BlockBSurveyScreen = () => {
                             />
                         </View> */}
                         <View style={{ padding: 10, }} />
-                        <TouchableOpacity onPress={() => stopRecording()} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
+                        <TouchableOpacity onPress={() =>
+                            // submitSurvey()
+                            navigation.replace('BlockCSurveyScreen')
+                        } style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
                             <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Next Block C</Text>
                         </TouchableOpacity>
                     </View>

@@ -226,82 +226,154 @@ const BlockESurveyScreen = () => {
         submitSurvey(audioFile);
     };
 
-    const validationCheck = () => {
-        if (PensionAwareness !== null) {
-            if (PensionEnrolled !== null) {
-                if (PensionSubscription !== null) {
-                    if (PensionAccount !== null) {
-                        if (SchemesAwareness !== null) {
-                            if (SchemesEnrolled !== null) {
-                                if (SchemesSubscription !== null) {
-                                    if (SchemesAccount !== null) {
-                                        if (selectedReason.length !== 0) {
-                                            // navigation.replace('BlockFSurveyScreen');
-                                            stopRecording();
-                                        } else {
-                                            showMessage({
-                                                message: "Please Select Enrolled Pension Schemes",
-                                                description: "Please Select Enrolled Pension Schemes!",
-                                                type: "danger",
-                                            });
-                                        }
-                                    } else {
-                                        showMessage({
-                                            message: "Please Pension Scheme Account inactive",
-                                            description: "Please select Pension Scheme Account inactive!",
-                                            type: "danger",
-                                        });
-                                    }
-                                } else {
-                                    showMessage({
-                                        message: "Please Pension Scheme subscription payment",
-                                        description: "Please select Pension Scheme subscription payment!",
-                                        type: "danger",
-                                    });
-                                }
-                            } else {
-                                showMessage({
-                                    message: "Please Pension Scheme Enrolled",
-                                    description: "Please select Pension Scheme Enrolled!",
-                                    type: "danger",
-                                });
-                            }
-                        } else {
-                            showMessage({
-                                message: "Please Pension Scheme Awareness",
-                                description: "Please select Pension Scheme Awareness!",
-                                type: "danger",
-                            });
-                        }
-                    } else {
-                        showMessage({
-                            message: "Please Pension Scheme Account inactive",
-                            description: "Please select Pension Scheme Account inactive!",
-                            type: "danger",
-                        });
-                    }
-                } else {
-                    showMessage({
-                        message: "Please Pension Scheme subscription payment",
-                        description: "Please select Pension Scheme subscription payment!",
-                        type: "danger",
-                    });
-                }
-            } else {
-                showMessage({
-                    message: "Please Pension Scheme Enrolled",
-                    description: "Please select Pension Scheme Enrolled!",
-                    type: "danger",
-                });
-            }
-        } else {
+    // const validationCheck = () => {
+    //     if (PensionAwareness !== null) {
+    //         if (PensionEnrolled !== null) {
+    //             if (PensionSubscription !== null) {
+    //                 if (PensionAccount !== null) {
+    //                     if (SchemesAwareness !== null) {
+    //                         if (SchemesEnrolled !== null) {
+    //                             if (SchemesSubscription !== null) {
+    //                                 if (SchemesAccount !== null) {
+    //                                     if (selectedReason.length !== 0) {
+    //                                         // navigation.replace('BlockFSurveyScreen');
+    //                                         stopRecording();
+    //                                     } else {
+    //                                         showMessage({
+    //                                             message: "Please Select Enrolled Pension Schemes",
+    //                                             description: "Please Select Enrolled Pension Schemes!",
+    //                                             type: "danger",
+    //                                         });
+    //                                     }
+    //                                 } else {
+    //                                     showMessage({
+    //                                         message: "Please Pension Scheme Account inactive",
+    //                                         description: "Please select Pension Scheme Account inactive!",
+    //                                         type: "danger",
+    //                                     });
+    //                                 }
+    //                             } else {
+    //                                 showMessage({
+    //                                     message: "Please Pension Scheme subscription payment",
+    //                                     description: "Please select Pension Scheme subscription payment!",
+    //                                     type: "danger",
+    //                                 });
+    //                             }
+    //                         } else {
+    //                             showMessage({
+    //                                 message: "Please Pension Scheme Enrolled",
+    //                                 description: "Please select Pension Scheme Enrolled!",
+    //                                 type: "danger",
+    //                             });
+    //                         }
+    //                     } else {
+    //                         showMessage({
+    //                             message: "Please Pension Scheme Awareness",
+    //                             description: "Please select Pension Scheme Awareness!",
+    //                             type: "danger",
+    //                         });
+    //                     }
+    //                 } else {
+    //                     showMessage({
+    //                         message: "Please Pension Scheme Account inactive",
+    //                         description: "Please select Pension Scheme Account inactive!",
+    //                         type: "danger",
+    //                     });
+    //                 }
+    //             } else {
+    //                 showMessage({
+    //                     message: "Please Pension Scheme subscription payment",
+    //                     description: "Please select Pension Scheme subscription payment!",
+    //                     type: "danger",
+    //                 });
+    //             }
+    //         } else {
+    //             showMessage({
+    //                 message: "Please Pension Scheme Enrolled",
+    //                 description: "Please select Pension Scheme Enrolled!",
+    //                 type: "danger",
+    //             });
+    //         }
+    //     } else {
+    //         showMessage({
+    //             message: "Please Pension Scheme Awareness",
+    //             description: "Please select Pension Scheme Awareness!",
+    //             type: "danger",
+    //         });
+    //     }
+
+    // }
+
+    const Validate = () => {
+        if (PensionAwareness === null) {
             showMessage({
-                message: "Please Pension Scheme Awareness",
-                description: "Please select Pension Scheme Awareness!",
+                message: "Please Select APY Awareness",
+                description: "Please Select APY Awareness!",
                 type: "danger",
             });
         }
+        else if (PensionEnrolled === null) {
+            showMessage({
+                message: "Please Select APY Enerolled!",
+                description: "Please Select APY Enerolled!",
+                type: "danger",
+            });
+        }
+        else if (PensionSubscription === null) {
+            showMessage({
+                message: "Please Select APY Subscription Payment!",
+                description: "Please Select APY Subscription Payment!",
+                type: "danger",
+            });
+        }
+        else if (PensionAccount === null) {
+            showMessage({
+                message: "Please Select Inactive Reason",
+                description: "Please Select Inactive Reason!",
+                type: "danger",
+            });
+        }
+        else if (SchemesAwareness === null) {
+            showMessage({
+                message: "Please Select Any Other Scheme",
+                description: "Please Select Any Other Scheme!",
+                type: "danger",
+            });
+        }
+        else if (SchemesEnrolled === null) {
+            showMessage({
+                message: "Please Select Scheme Enrolled",
+                description: "Please Select Scheme Enrolled!",
+                type: "danger",
+            });
+        }
+        else if (SchemesSubscription === null) {
+            showMessage({
+                message: "Please Select Payment Intimation",
+                description: "Please Select Payment Intimation!",
+                type: "danger",
+            });
+        }
+        else if (SchemesAccount === null) {
+            showMessage({
+                message: "Please Select A/C Inactive Subs",
+                description: "Please Select A/C Inactive Subs!",
+                type: "danger",
+            });
+        }
+        else if (selectedReason?.length === 0) {
+            showMessage({
+                message: "Please Select Reason",
+                description: "Please Select Reason!",
+                type: "danger",
+            });
+        }
+        else {
+            navigation.replace('BlockFSurveyScreen')
+        }
     }
+
+
 
     const submitSurvey = async (file_urls) => {
         var myHeaders = new Headers();
@@ -446,7 +518,7 @@ const BlockESurveyScreen = () => {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#F8F8FF' }}>
             {renderCustomHeader()}
-            <Modal isVisible={isInstruction}>
+            {/* <Modal isVisible={isInstruction}>
                 <View style={{ height: 200, width: Dimensions.get('screen').width - 50, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 5, padding: 20 }}>
                     <View style={{ alignItems: 'center' }}>
                         <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Survey Instructions</Text>
@@ -456,7 +528,7 @@ const BlockESurveyScreen = () => {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </Modal> 
+            </Modal>  */}
             <Text style={{ fontWeight: 'bold', paddingLeft: 20, paddingTop: 10 }}>E. ACCESS and USAGE OF FINANCIAL SERVICES – PENSION FACILITIES</Text>
             {isLoading === false ?
                 <ScrollView>
@@ -554,7 +626,7 @@ const BlockESurveyScreen = () => {
                             </View>
                         </View>
                         <View style={{ padding: 10, }} />
-                        <TouchableOpacity onPress={() => validationCheck()} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
+                        <TouchableOpacity onPress={() => Validate()} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
                             <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Next Block F</Text>
                         </TouchableOpacity>
                     </View>

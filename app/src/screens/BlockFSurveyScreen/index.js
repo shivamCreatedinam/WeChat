@@ -1,5 +1,5 @@
 import { Text, View, Image, SafeAreaView, Dimensions, TouchableOpacity, StatusBar, useWindowDimensions, ActivityIndicator, TextInput, Alert, BackHandler, ScrollView, StyleSheet } from 'react-native'
-import React, { Component, useCallback } from 'react'
+import React, { Component, useCallback, useState } from 'react'
 import AsyncStorage from '@react-native-community/async-storage';
 import AsyncStorageContaints from '../../utility/AsyncStorageConstants';
 import { showMessage, hideMessage } from "react-native-flash-message";
@@ -55,7 +55,20 @@ const BlockFSurveyScreen = () => {
     const [differentlyAble, setDifferently] = React.useState('');
     const [smartPhone, setSmartphone] = React.useState('');
     const [anyGroup, setAnyGroup] = React.useState('');
-
+    const [serviceContinue, setServiceContinue] = React.useState(null);
+    const [moneyRecover, setMoneyRecover] = React.useState(null);
+    const [preacution, setPreacution] = React.useState(null);
+    const [satisfy, setsatisfy] = React.useState(null);
+    const [attentive, sattentive] = React.useState(null);
+    const [lodgeComplaint, sLodgeComplaint] = React.useState(null);
+    const [complaintSatisfy, setComplaintSatisfy] = React.useState(null);
+    const [noReason, setNoReason] = React.useState(null);
+    const [compProcess, setCompProcess] = React.useState(null);
+    const [offerPdt, setofferPdt] = React.useState(null);
+    const [queryRespond, setQueryRespond] = React.useState(null)
+    const [compBC, sCompBC] = useState(null)
+    const [reasonprovidedBC, setReasonprovidedBC] = React.useState(null);
+    const [reasonprovidedBCFocus, setReasonprovidedBCFocus] = React.useState(null);
     // gender setDifferently
     const data = [
         {
@@ -225,13 +238,13 @@ const BlockFSurveyScreen = () => {
 
     const multiSelectRef = React.useRef(null);
     const multifinancialSelectRef = React.useRef(null);
-    const [informationValue, setinformationValue] = React.useState('');
-    const [WhichLanguageValue, setWhichLanguageValue] = React.useState('');
-    const [InformationSharingValue, setInformationSharingValue] = React.useState('');
-    const [financialLiteracyValue, setfinancialLiteracyValue] = React.useState('');
-    const [InformationRelatingValue, setInformationRelatingValue] = React.useState('');
+    const [informationValue, setinformationValue] = React.useState(null);
+    const [WhichLanguageValue, setWhichLanguageValue] = React.useState(null);
+    const [InformationSharingValue, setInformationSharingValue] = React.useState(null);
+    const [financialLiteracyValue, setfinancialLiteracyValue] = React.useState(null);
+    const [InformationRelatingValue, setInformationRelatingValue] = React.useState(null);
     const [selectedFreeRefuseReason, selectedFreeLoanRefuseReason] = React.useState([]);
-    const [hinderanceValue, sethinderanceValue] = React.useState('');
+    const [hinderanceValue, sethinderanceValue] = React.useState(null);
     const [hinderanceFocus, sethinderanceFocus] = React.useState(false);
 
     // financial
@@ -241,6 +254,14 @@ const BlockFSurveyScreen = () => {
     const [selectedfinancial, setSelectedFinancial] = React.useState([]);
     const [digitalChannelChange, ondigitalChannelChange] = React.useState([]);
     const [DigitalpreferredChange, onDigitalpreferredChange] = React.useState([]);
+
+    const [comfortTransaction, sComfortTransaction] = React.useState(null);
+    const [transactionHelp, stransactionHelp] = React.useState(null);
+    const [isHinderance, setIsHinderance] = React.useState(null);
+    const [payFraud, sPayFraud] = React.useState(null);
+    const [rbiScheme, sRbiScheme] = React.useState(null);
+    const [charges, sCharges] = React.useState(null);
+    const [isgrievanceAddressed, sIsGrievanceAddressed] = React.useState(null);
 
     const SelectedLoanTypeLabels = selectedOccupations.map((selectedId) => {
         const selectedReason = financialtransactions.find((reason) => reason.id === selectedId);
@@ -355,122 +376,369 @@ const BlockFSurveyScreen = () => {
         submitSurvey(audioFile);
     };
 
-    const validationCheck = () => {
-        const pattern = /^[a-zA-Z]{2,40}( [a-zA-Z]{2,40})+$/;
-        const AgeRegex = /^(?:1[01][0-9]|120|1[7-9]|[2-9][0-9])$/
-        if (pattern.test(surveryName)) {
-            if (gender !== '') {
-                if (AgeRegex.test(age)) {
-                    if (selectedOccupations.length !== 0) {
-                        if (selectedEducation.length !== 0) {
-                            if (selectedIncomes.length !== 0) {
-                                if (value !== null) {
-                                    if (valueDistrict !== null) {
-                                        if (areasSelected.length !== 0) {
-                                            if (differentlyAble !== '') {
-                                                if (adult !== '') {
-                                                    if (children !== '') {
-                                                        if (anyGroup !== '') {
-                                                            if (smartPhone !== '') {
-                                                                console.log('validationCheck', AgeRegex.test(age))
-                                                                stopRecording();
-                                                            } else {
-                                                                showMessage({
-                                                                    message: "Please Select SmartPhone Own!",
-                                                                    description: "Please Select SmartPhone Own!",
-                                                                    type: "danger",
-                                                                });
-                                                            }
-                                                        } else {
-                                                            showMessage({
-                                                                message: "Please Select Any Group Part!",
-                                                                description: "Please Select Any Group Part SHG/JLG!",
-                                                                type: "danger",
-                                                            });
-                                                        }
-                                                    } else {
-                                                        showMessage({
-                                                            message: "Please Select Children!",
-                                                            description: "Please Select Number Of Children!",
-                                                            type: "danger",
-                                                        });
-                                                    }
-                                                } else {
-                                                    showMessage({
-                                                        message: "Please Select Adults!",
-                                                        description: "Please Select Number Of Adults!",
-                                                        type: "danger",
-                                                    });
-                                                }
-                                            } else {
-                                                showMessage({
-                                                    message: "Please Select Differently!",
-                                                    description: "Please Select Differently abled!",
-                                                    type: "danger",
-                                                });
-                                            }
-                                        } else {
-                                            showMessage({
-                                                message: "Please Select Area",
-                                                description: "Please Select Area!",
-                                                type: "danger",
-                                            });
-                                        }
-                                    } else {
-                                        showMessage({
-                                            message: "Please Select District",
-                                            description: "Please Select District!",
-                                            type: "danger",
-                                        });
-                                    }
-                                } else {
-                                    showMessage({
-                                        message: "Please Select State",
-                                        description: "Please Select State!",
-                                        type: "danger",
-                                    });
-                                }
-                            } else {
-                                showMessage({
-                                    message: "Please Select Incomes",
-                                    description: "Please Select Incomes!",
-                                    type: "danger",
-                                });
-                            }
-                        } else {
-                            showMessage({
-                                message: "Please Select Education",
-                                description: "Please Select Education!",
-                                type: "danger",
-                            });
-                        }
-                    } else {
-                        showMessage({
-                            message: "Please Select Occupation",
-                            description: "Please Select Occupation!",
-                            type: "danger",
-                        });
-                    }
-                } else {
-                    showMessage({
-                        message: "Please Enter Valid Age",
-                        description: "Please Enter Valid Age!",
-                        type: "danger",
-                    });
-                }
-            } else {
-                showMessage({
-                    message: "Please Select Gender",
-                    description: "Please Select Valid Gender!",
-                    type: "danger",
-                });
-            }
-        } else {
+    // const validationCheck = () => {
+    //     const pattern = /^[a-zA-Z]{2,40}( [a-zA-Z]{2,40})+$/;
+    //     const AgeRegex = /^(?:1[01][0-9]|120|1[7-9]|[2-9][0-9])$/
+    //     if (pattern.test(surveryName)) {
+    //         if (gender !== '') {
+    //             if (AgeRegex.test(age)) {
+    //                 if (selectedOccupations.length !== 0) {
+    //                     if (selectedEducation.length !== 0) {
+    //                         if (selectedIncomes.length !== 0) {
+    //                             if (value !== null) {
+    //                                 if (valueDistrict !== null) {
+    //                                     if (areasSelected.length !== 0) {
+    //                                         if (differentlyAble !== '') {
+    //                                             if (adult !== '') {
+    //                                                 if (children !== '') {
+    //                                                     if (anyGroup !== '') {
+    //                                                         if (smartPhone !== '') {
+    //                                                             console.log('validationCheck', AgeRegex.test(age))
+    //                                                             stopRecording();
+    //                                                         } else {
+    //                                                             showMessage({
+    //                                                                 message: "Please Select SmartPhone Own!",
+    //                                                                 description: "Please Select SmartPhone Own!",
+    //                                                                 type: "danger",
+    //                                                             });
+    //                                                         }
+    //                                                     } else {
+    //                                                         showMessage({
+    //                                                             message: "Please Select Any Group Part!",
+    //                                                             description: "Please Select Any Group Part SHG/JLG!",
+    //                                                             type: "danger",
+    //                                                         });
+    //                                                     }
+    //                                                 } else {
+    //                                                     showMessage({
+    //                                                         message: "Please Select Children!",
+    //                                                         description: "Please Select Number Of Children!",
+    //                                                         type: "danger",
+    //                                                     });
+    //                                                 }
+    //                                             } else {
+    //                                                 showMessage({
+    //                                                     message: "Please Select Adults!",
+    //                                                     description: "Please Select Number Of Adults!",
+    //                                                     type: "danger",
+    //                                                 });
+    //                                             }
+    //                                         } else {
+    //                                             showMessage({
+    //                                                 message: "Please Select Differently!",
+    //                                                 description: "Please Select Differently abled!",
+    //                                                 type: "danger",
+    //                                             });
+    //                                         }
+    //                                     } else {
+    //                                         showMessage({
+    //                                             message: "Please Select Area",
+    //                                             description: "Please Select Area!",
+    //                                             type: "danger",
+    //                                         });
+    //                                     }
+    //                                 } else {
+    //                                     showMessage({
+    //                                         message: "Please Select District",
+    //                                         description: "Please Select District!",
+    //                                         type: "danger",
+    //                                     });
+    //                                 }
+    //                             } else {
+    //                                 showMessage({
+    //                                     message: "Please Select State",
+    //                                     description: "Please Select State!",
+    //                                     type: "danger",
+    //                                 });
+    //                             }
+    //                         } else {
+    //                             showMessage({
+    //                                 message: "Please Select Incomes",
+    //                                 description: "Please Select Incomes!",
+    //                                 type: "danger",
+    //                             });
+    //                         }
+    //                     } else {
+    //                         showMessage({
+    //                             message: "Please Select Education",
+    //                             description: "Please Select Education!",
+    //                             type: "danger",
+    //                         });
+    //                     }
+    //                 } else {
+    //                     showMessage({
+    //                         message: "Please Select Occupation",
+    //                         description: "Please Select Occupation!",
+    //                         type: "danger",
+    //                     });
+    //                 }
+    //             } else {
+    //                 showMessage({
+    //                     message: "Please Enter Valid Age",
+    //                     description: "Please Enter Valid Age!",
+    //                     type: "danger",
+    //                 });
+    //             }
+    //         } else {
+    //             showMessage({
+    //                 message: "Please Select Gender",
+    //                 description: "Please Select Valid Gender!",
+    //                 type: "danger",
+    //             });
+    //         }
+    //     } else {
+    //         showMessage({
+    //             message: "Please Enter Name",
+    //             description: "Please Enter Valid Name!",
+    //             type: "danger",
+    //         });
+    //     }
+    // }
+    console.log("comfort", comfortableConducting, "value", value)
+    const Validate = () => {
+        if (SpecificInformation === null) {
             showMessage({
-                message: "Please Enter Name",
-                description: "Please Enter Valid Name!",
+                message: "Please Select Specific Information",
+                description: "Please Select Specific Information!",
                 type: "danger",
             });
+        }
+        else if (informationValue === null) {
+            showMessage({
+                message: "Please Select Necesssary Information",
+                description: "Please Select Necesssary Information!",
+                type: "danger",
+            });
+        }
+        else if (SpecificInformation?.label === 'Yes' && WhichLanguageValue === null) {
+            showMessage({
+                message: "Please Select Language Information",
+                description: "Please Select Language Information!",
+                type: "danger",
+            });
+        }
+        else if (SpecificInformation?.label === 'Yes' && InformationSharingValue === null) {
+            showMessage({
+                message: "Please Select Information Sharing",
+                description: "Please Select Information Sharing!",
+                type: "danger",
+            });
+        }
+        else if (SpecificInformation?.label === 'Yes' && financialLiteracyValue === null) {
+            showMessage({
+                message: "Please Select Financial Literacy",
+                description: "Please Select Financial Literacy!",
+                type: "danger",
+            });
+        }
+        else if (SpecificInformation?.label === 'Yes' && Informationrelating === null) {
+            showMessage({
+                message: "Please Select Information Relating",
+                description: "Please Select Information Relating!",
+                type: "danger",
+            });
+        }
+        else if (SelectedLoanTypeLabels?.length === 0) {
+            showMessage({
+                message: "Please Select Financial Transactions",
+                description: "Please Select Financial Transactions!",
+                type: "danger",
+            });
+        }
+        else if (selectedfinancial?.length === 0) {
+            showMessage({
+                message: "Please Select Challenging  Financial Transactions",
+                description: "Please Select Challenging Financial Transactions!",
+                type: "danger",
+            });
+        }
+        else if (comfortTransaction === null) {
+            showMessage({
+                message: "Please Select Digital Transaction",
+                description: "Please Select Digital Transaction!",
+                type: "danger",
+            });
+        }
+        else if (transactionHelp === null) {
+            showMessage({
+                message: "Please Select Digital Transaction",
+                description: "Please Select Digital Transaction!",
+                type: "danger",
+            });
+        }
+        else if (isHinderance === null) {
+            showMessage({
+                message: "Please Select Hinderance",
+                description: "Please Select Hinderance!",
+                type: "danger",
+            });
+        }
+        else if (hinderanceValue === null) {
+            showMessage({
+                message: "Please Select Hinderance Reasons",
+                description: "Please Select Hinderance Reasons!",
+                type: "danger",
+            });
+        }
+        else if (payFraud === null) {
+            showMessage({
+                message: "Please Select Payment Fraud",
+                description: "Please Select Payment Fraud!",
+                type: "danger",
+            });
+        }
+        else if (serviceContinue === null) {
+            showMessage({
+                message: "Please Select Service Continuity",
+                description: "Please Select Service Continuity!",
+                type: "danger",
+            });
+        }
+        else if (moneyRecover === null) {
+            showMessage({
+                message: "Please Select Recovery Of Money",
+                description: "Please Select Recovery Of Money!",
+                type: "danger",
+            });
+        }
+        else if (preacution === null) {
+            showMessage({
+                message: "Please Select Precautions",
+                description: "Please Select Precautions!",
+                type: "danger",
+            });
+        }
+
+        else if (SelecteddigitalChannelLabels?.length === 0) {
+            showMessage({
+                message: "Please Select Digital Channel",
+                description: "Please Select Digital Channel!",
+                type: "danger",
+            });
+        }
+        else if (SelectedDigitalpreferredLabels?.length === 0) {
+            showMessage({
+                message: "Please Select Digital Preferred",
+                description: "Please Select Digital Preferred!",
+                type: "danger",
+            });
+        }
+        else if (satisfy === null) {
+            showMessage({
+                message: "Please Select Service Satisfaction",
+                description: "Please Select Service Satisfaction!",
+                type: "danger",
+            });
+        }
+        else if (attentive === null) {
+            showMessage({
+                message: "Please Select Attentive",
+                description: "Please Select Attentive!",
+                type: "danger",
+            });
+        }
+        else if (lodgeComplaint === null) {
+            showMessage({
+                message: "Please Select Complaint",
+                description: "Please Select Complaint!",
+                type: "danger",
+            });
+        }
+        else if (complaintSatisfy === null) {
+            showMessage({
+                message: "Please Select Complaint Satisfaction",
+                description: "Please Select Complaint Satisfaction!",
+                type: "danger",
+            });
+        }
+        else if (noReason === null) {
+            showMessage({
+                message: "Please Select Reason For NotSatisfactory",
+                description: "Please Select Reason For NotSatisfactory!",
+                type: "danger",
+            });
+        }
+        else if (rbiScheme === null) {
+            showMessage({
+                message: "Please Select RBI Scheme",
+                description: "Please Select RBI Scheme!",
+                type: "danger",
+            });
+        }
+        else if (compProcess === null) {
+            showMessage({
+                message: "Please Select Complaint Process",
+                description: "Please Select Complaint Process!",
+                type: "danger",
+            });
+        }
+        else if (comfortableConducting === null) {
+            showMessage({
+                message: "Please Select Customer Service Quality",
+                description: "Please Select Customer Service Quality!",
+                type: "danger",
+            });
+        }
+        else if (comfortableConducting?.label === 'No' && value === null) {
+            showMessage({
+                message: "Please Indicate Reason",
+                description: "Please Indicate Reason!",
+                type: "danger",
+            });
+        }
+        else if (offerPdt === null) {
+            showMessage({
+                message: "Please Select BC Agent Capability",
+                description: "Please Select BC Agent Capability!",
+                type: "danger",
+            });
+        }
+        else if (queryRespond === null) {
+            showMessage({
+                message: "Please Select Query Respond",
+                description: "Please Select  Query Respond!",
+                type: "danger",
+            });
+        }
+        else if (charges === null) {
+            showMessage({
+                message: "Please Select Charges",
+                description: "Please Select Charges!",
+                type: "danger",
+            });
+        }
+        else if (compBC === null) {
+            showMessage({
+                message: "Please Select Complaint Lodge",
+                description: "Please Select Complaint Lodge!",
+                type: "danger",
+            });
+        }
+        else if (grievanceRelated === null) {
+            showMessage({
+                message: "Please Select Grievance Raised",
+                description: "Please Select Grievance Raised!",
+                type: "danger",
+            });
+        }
+     
+
+        else if (grievanceRelated?.label === 'Yes' && isgrievanceAddressed === null) {
+            showMessage({
+                message: "Please Select Grievance Addressed ",
+                description: "Please Select Grievance Addressed!",
+                type: "danger",
+            });
+        }
+        else if (grievanceRelated?.label === 'No' && reasonprovidedBC === null) {
+            showMessage({
+                message: "Please Select Reason By BC Agent",
+                description: "Please Select Reason By BC Agent!",
+                type: "danger",
+            });
+        }
+        else {
+            navigation.replace('DashboardScreen')
         }
     }
 
@@ -553,7 +821,7 @@ const BlockFSurveyScreen = () => {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#F8F8FF' }}>
             {renderCustomHeader()}
-            <Modal isVisible={false}>
+            {/* <Modal isVisible={false}>
                 <View style={{ height: 200, width: Dimensions.get('screen').width - 50, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 5, padding: 20 }}>
                     <View style={{ alignItems: 'center' }}>
                         <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Survey Instructions</Text>
@@ -563,7 +831,7 @@ const BlockFSurveyScreen = () => {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </Modal>
+            </Modal> */}
             {/* <TouchableOpacity onPress={() => startRecording()}>
                 <Text>Start Recording</Text>
             </TouchableOpacity>
@@ -694,7 +962,7 @@ const BlockFSurveyScreen = () => {
                                     maxHeight={300}
                                     labelField="lable"
                                     valueField="id"
-                                    placeholder={!isFocus ? 'Select Financial Literacy' : InformationRelatingValue}
+                                    placeholder={!isFocus ? 'Select Information Relating' : InformationRelatingValue}
                                     // searchPlaceholder="Search..."
                                     value={InformationRelatingValue}
                                     onFocus={() => setIsFocus(true)}
@@ -784,7 +1052,7 @@ const BlockFSurveyScreen = () => {
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>37 (a). Do you feel confident and comfortable doing digital transactions on your own?</Text>
                             <RadioButtonRN
                                 data={data}
-                                selectedBtn={(e) => setSpecificInformation(e)}
+                                selectedBtn={(e) => sComfortTransaction(e)}
                             />
                         </View>
                         <View style={{ padding: 10, }} />
@@ -792,14 +1060,14 @@ const BlockFSurveyScreen = () => {
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>37 (b). do you carry out digital transactions on your own? transactions with someone’s help?</Text>
                             <RadioButtonRN
                                 data={data}
-                                selectedBtn={(e) => setSpecificInformation(e)}
+                                selectedBtn={(e) => stransactionHelp(e)}
                             />
                             <View style={{ padding: 10, }} />
                             <View>
                                 <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>37 (c).Do you face any hinderance in carrying out transactions digitally?</Text>
                                 <RadioButtonRN
                                     data={data}
-                                    selectedBtn={(e) => setSpecificInformation(e)}
+                                    selectedBtn={(e) => setIsHinderance(e)}
                                 />
                             </View>
                             <View>
@@ -834,7 +1102,7 @@ const BlockFSurveyScreen = () => {
                                 <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>37 (e). Have you or anyone in your family lost money in digital payment fraud?</Text>
                                 <RadioButtonRN
                                     data={data}
-                                    selectedBtn={(e) => setSpecificInformation(e)}
+                                    selectedBtn={(e) => sPayFraud(e)}
                                 />
                             </View>
                         </View>
@@ -843,7 +1111,7 @@ const BlockFSurveyScreen = () => {
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>37 (f). After the incident, do you continue to use digital banking services?</Text>
                             <RadioButtonRN
                                 data={differently}
-                                selectedBtn={(e) => setDifferently(e)}
+                                selectedBtn={(e) => setServiceContinue(e)}
                             />
                         </View>
                         <View style={{ padding: 10, }} />
@@ -851,13 +1119,13 @@ const BlockFSurveyScreen = () => {
                             <Text style={{ marginBottom: 5, fontWeight: 'bold', flex: 1 }}>37 (g). Were you or your family member could recover the money lost in digital payment fraud?</Text>
                             <RadioButtonRN
                                 data={differently}
-                                selectedBtn={(e) => setDifferently(e)}
+                                selectedBtn={(e) => setMoneyRecover(e)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text style={{ fontWeight: 'bold' }}>37 (h). Do you know about various precautions while using digital banking?</Text>
                             <RadioButtonRN
                                 data={differently}
-                                selectedBtn={(e) => setDifferently(e)}
+                                selectedBtn={(e) => setPreacution(e)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text style={{ fontWeight: 'bold' }}>38. Usage of Digital Medium for Transaction</Text>
@@ -938,43 +1206,43 @@ const BlockFSurveyScreen = () => {
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>39 (a). As a bank customer, are you satisfied with the services?</Text>
                             <RadioButtonRN
                                 data={smartphone}
-                                selectedBtn={(e) => setSmartphone(e)}
+                                selectedBtn={(e) => setsatisfy(e)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>39 (b). Do bank staff remain attentive and sensitive to your problems?</Text>
                             <RadioButtonRN
                                 data={smartphone}
-                                selectedBtn={(e) => setSmartphone(e)}
+                                selectedBtn={(e) => sattentive(e)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>39 (c). If you have any complaints, do you know how to lodge a complaint?</Text>
                             <RadioButtonRN
                                 data={smartphone}
-                                selectedBtn={(e) => setSmartphone(e)}
+                                selectedBtn={(e) => sLodgeComplaint(e)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>39 (d). If you have ever lodged a complaint, are you satisfied with its resolution?</Text>
                             <RadioButtonRN
                                 data={smartphone}
-                                selectedBtn={(e) => setSmartphone(e)}
+                                selectedBtn={(e) => setComplaintSatisfy(e)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>39 (e). If no, what could be the reasons?</Text>
                             <RadioButtonRN
                                 data={smartphone}
-                                selectedBtn={(e) => setSmartphone(e)}
+                                selectedBtn={(e) => setNoReason(e)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>39 (f). Do you know about the RBI Integrated Banking Ombudsman Scheme?</Text>
                             <RadioButtonRN
                                 data={smartphone}
-                                selectedBtn={(e) => setSmartphone(e)}
+                                selectedBtn={(e) => sRbiScheme(e)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>39 (g). Do you know about the complaint process regarding others such as Insurance, Pension, etc.?</Text>
                             <RadioButtonRN
                                 data={smartphone}
-                                selectedBtn={(e) => setSmartphone(e)}
+                                selectedBtn={(e) => setCompProcess(e)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>40. Customer Service Quality at BC point</Text>
@@ -1011,25 +1279,25 @@ const BlockFSurveyScreen = () => {
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>40 (c). Is the BC agent able to offer the product or service that you require?</Text>
                             <RadioButtonRN
                                 data={differently}
-                                selectedBtn={(e) => setSmartphone(e)}
+                                selectedBtn={(e) => setofferPdt(e)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>40 (d). Does the BC agent satisfactorily respond to your queries?</Text>
                             <RadioButtonRN
                                 data={differently}
-                                selectedBtn={(e) => setSmartphone(e)}
+                                selectedBtn={(e) => setQueryRespond(e)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>40 (e). Does your BC indicate the charges for the services offered upfront?</Text>
                             <RadioButtonRN
                                 data={differently}
-                                selectedBtn={(e) => setSmartphone(e)}
+                                selectedBtn={(e) => sCharges(e)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>40 (f). Do you know, how to lodge a complaint at the BC point?</Text>
                             <RadioButtonRN
                                 data={differently}
-                                selectedBtn={(e) => setSmartphone(e)}
+                                selectedBtn={(e) => sCompBC(e)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>40 (g). Whether you raised any grievance related to service with BC?</Text>
@@ -1042,13 +1310,13 @@ const BlockFSurveyScreen = () => {
                                 <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>40 (h). If response to Q40(g) is Yes, whether your grievance was addressed timely (within one month)?</Text>
                                 <RadioButtonRN
                                     data={smartphone}
-                                    selectedBtn={(e) => setSmartphone(e)}
+                                    selectedBtn={(e) => sIsGrievanceAddressed(e)}
                                 />
                             </> : <>
                                 <View style={{ padding: 10, }} />
                                 <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>40 (i). If response to Q40(g) is No, what were reasons provided by BC Agent?</Text>
                                 <Dropdown
-                                    style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                                    style={[styles.dropdown, reasonprovidedBCFocus && { borderColor: 'blue' }]}
                                     placeholderStyle={styles.placeholderStyle}
                                     selectedTextStyle={styles.selectedTextStyle}
                                     inputSearchStyle={styles.inputSearchStyle}
@@ -1058,21 +1326,22 @@ const BlockFSurveyScreen = () => {
                                     maxHeight={300}
                                     labelField="lable"
                                     valueField="id"
-                                    placeholder={!isFocus ? 'Select Reasons provided by BC' : value}
+                                    placeholder={!reasonprovidedBCFocus ? 'Select Reasons provided by BC' : value}
                                     // searchPlaceholder="Search..."
-                                    value={value}
-                                    onFocus={() => setIsFocus(true)}
-                                    onBlur={() => setIsFocus(false)}
+                                    value={reasonprovidedBC}
+                                    onFocus={() => setReasonprovidedBCFocus(true)}
+                                    onBlur={() => setReasonprovidedBCFocus(false)}
                                     onChange={item => {
                                         console.log('______>', JSON.stringify(item))
-                                        setValue(item?.id);
-                                        setIsFocus(false);
+                                        setReasonprovidedBC(item?.id);
+                                        setReasonprovidedBCFocus(false);
                                     }}
                                 /></>}
                             <View style={{ padding: 10, }} />
                         </View>
                         <View style={{ padding: 10, }} />
-                        <TouchableOpacity onPress={() => navigation.replace('DashboardScreen')} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
+                        <TouchableOpacity onPress={() => Validate()
+                        } style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
                             <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Complete Survey</Text>
                         </TouchableOpacity>
                     </View>
