@@ -335,16 +335,16 @@ const BlockBSurveyScreen = () => {
     const startRecording = async () => {
         setSurveyInstruction(false);
         setIsRecording(true);
-        // AudioRecord.start();
+        AudioRecord.start();
     };
 
     const stopRecording = async () => {
         // or to get the wav file path
         console.warn('startRecording')
-        // const audioFile = await AudioRecord.stop();
+        const audioFile = await AudioRecord.stop();
         console.warn(audioFile)
         setAudioPath(audioFile);
-        submitSurvey(audioFile);
+        submitSurveyXml(audioFile);
     };
 
     const validationCheck = () => {
@@ -722,6 +722,13 @@ const BlockBSurveyScreen = () => {
             data: data
         };
 
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+
         console.log('config________>', JSON.stringify(config));
 
         Axios.request(config)
@@ -742,6 +749,308 @@ const BlockBSurveyScreen = () => {
                 }
             });
 
+    }
+
+    const submitSurveyXml = async (file_urls) => {
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", 'multipart/form-data');
+        myHeaders.append("Authorization", "Bearer 33|NdofyDbXloIQg3n7MH1cnHu1yAqGi8w13uYUXVvw");
+
+        var raw = JSON.stringify({
+            "latitude": 27.98878,
+            "longitude": 28.98878,
+            "survey_token": "RBI00386004",
+            "audio_file": file_urls,
+            "section_no": "B",
+            "data": [
+                {
+                    "section_no": "B",
+                    "q_no": "1",
+                    "q_type": "SELF",
+                    "sub_q_no": "",
+                    "sub_q_title": "",
+                    "sub_q_type": "",
+                    "account_no": "",
+                    "response": "No"
+                },
+                {
+                    "section_no": "B",
+                    "q_no": "2",
+                    "q_type": "CHILD",
+                    "sub_q_no": "a",
+                    "sub_q_title": "In case you are not able to open a bank account, please, indicate the reason(s)",
+                    "sub_q_type": "MULTICHECK",
+                    "account_no": "",
+                    "response": [
+                        2,
+                        1
+                    ]
+                },
+                {
+                    "section_no": "B",
+                    "q_no": "2",
+                    "q_type": "CHILD",
+                    "sub_q_no": "b",
+                    "sub_q_title": "If it is due to a lack of documents, what is it?",
+                    "sub_q_type": "MULTICHECK",
+                    "account_no": "",
+                    "response": [
+                        2,
+                        1
+                    ]
+                },
+                {
+                    "section_no": "B",
+                    "q_no": "2",
+                    "q_type": "CHILD",
+                    "sub_q_no": "c",
+                    "sub_q_title": "If you don’t want a bank account, what could be the reasons?",
+                    "sub_q_type": "MULTICHECK",
+                    "account_no": "",
+                    "response": [
+                        2,
+                        1
+                    ]
+                },
+                {
+                    "section_no": "B",
+                    "q_no": "3",
+                    "q_type": "SELF",
+                    "sub_q_no": "",
+                    "sub_q_title": "",
+                    "sub_q_type": "",
+                    "account_no": "",
+                    "response": "Yes"
+                },
+                {
+                    "section_no": "B",
+                    "q_no": "4",
+                    "q_type": "SELF",
+                    "sub_q_no": "",
+                    "sub_q_title": "",
+                    "sub_q_type": "",
+                    "account_no": "",
+                    "response": "Yes"
+                },
+                {
+                    "section_no": "B",
+                    "q_no": "5",
+                    "q_type": "SELF",
+                    "sub_q_no": "",
+                    "sub_q_title": "",
+                    "sub_q_type": "",
+                    "account_no": "",
+                    "response": "Yes"
+                },
+                {
+                    "section_no": "B",
+                    "q_no": "6",
+                    "q_type": "SELF",
+                    "sub_q_no": "",
+                    "sub_q_title": "",
+                    "sub_q_type": "",
+                    "account_no": "",
+                    "response": "Yes"
+                },
+                {
+                    "section_no": "B",
+                    "q_no": "7",
+                    "q_type": "CHILD",
+                    "sub_q_no": "a",
+                    "sub_q_title": "Helpful and Easy-to-Understand Processes",
+                    "sub_q_type": "SINGLECHECK",
+                    "account_no": "",
+                    "response2": "Yes",
+                    "response": "Yes"
+                },
+                {
+                    "section_no": "B",
+                    "q_no": "7",
+                    "q_type": "CHILD",
+                    "sub_q_no": "b",
+                    "sub_q_title": "Supportive and Welcome Attitude of Staff",
+                    "sub_q_type": "SINGLECHECK",
+                    "account_no": "",
+                    "response2": "Yes",
+                    "response": "Yes"
+                },
+                {
+                    "section_no": "B",
+                    "q_no": "7",
+                    "q_type": "CHILD",
+                    "sub_q_no": "c",
+                    "sub_q_title": "Basic Amenities (seating/water/ washroom/ information)",
+                    "sub_q_type": "SINGLECHECK",
+                    "account_no": "",
+                    "response2": "Yes",
+                    "response": "Yes"
+                },
+                {
+                    "section_no": "B",
+                    "q_no": "7",
+                    "q_type": "CHILD",
+                    "sub_q_no": "d",
+                    "sub_q_title": "Long Wait Time (more than one hour)/ Long Queues",
+                    "sub_q_type": "SINGLECHECK",
+                    "account_no": "",
+                    "response2": "Yes",
+                    "response": "Yes"
+                },
+                {
+                    "section_no": "B",
+                    "q_no": "7",
+                    "q_type": "CHILD",
+                    "sub_q_no": "d",
+                    "sub_q_title": "Long Wait Time (more than one hour)/ Long Queues",
+                    "sub_q_type": "SINGLECHECK",
+                    "account_no": "",
+                    "response2": "Yes",
+                    "response": "Yes"
+                },
+                {
+                    "section_no": "B",
+                    "q_no": "8",
+                    "q_type": "SELF",
+                    "sub_q_no": "",
+                    "sub_q_title": "",
+                    "sub_q_type": "",
+                    "account_no": "",
+                    "response": "Yes"
+                },
+                {
+                    "section_no": "B",
+                    "q_no": "9",
+                    "q_type": "SELF",
+                    "sub_q_no": "",
+                    "sub_q_title": "",
+                    "sub_q_type": "",
+                    "account_no": "",
+                    "response": "Yes"
+                },
+                {
+                    "section_no": "B",
+                    "q_no": "10",
+                    "q_type": "SELF",
+                    "sub_q_no": "",
+                    "sub_q_title": "",
+                    "sub_q_type": "",
+                    "account_no": "12",
+                    "response": "4"
+                },
+                {
+                    "section_no": "B",
+                    "q_no": "11",
+                    "q_type": "SELF",
+                    "sub_q_no": "",
+                    "sub_q_title": "",
+                    "sub_q_type": "",
+                    "account_no": "",
+                    "response": [
+                        2,
+                        3
+                    ]
+                },
+                {
+                    "section_no": "B",
+                    "q_no": "12",
+                    "q_type": "SELF",
+                    "sub_q_no": "",
+                    "sub_q_title": "",
+                    "sub_q_type": "",
+                    "account_no": "",
+                    "response": "4"
+                },
+                {
+                    "section_no": "B",
+                    "q_no": "13",
+                    "q_type": "SELF",
+                    "sub_q_no": "",
+                    "sub_q_title": "",
+                    "sub_q_type": "",
+                    "account_no": "",
+                    "response": [
+                        3,
+                        2
+                    ]
+                },
+                {
+                    "section_no": "B",
+                    "q_no": "14",
+                    "q_type": "SELF",
+                    "sub_q_no": "",
+                    "sub_q_title": "",
+                    "sub_q_type": "",
+                    "account_no": "",
+                    "response": "2"
+                },
+                {
+                    "section_no": "B",
+                    "q_no": "15",
+                    "q_type": "SELF",
+                    "sub_q_no": "",
+                    "sub_q_title": "",
+                    "sub_q_type": "",
+                    "account_no": "",
+                    "response": "2"
+                },
+                {
+                    "section_no": "B",
+                    "q_no": "16",
+                    "q_type": "SELF",
+                    "sub_q_no": "",
+                    "sub_q_title": "",
+                    "sub_q_type": "",
+                    "account_no": "",
+                    "response": [
+                        3,
+                        4
+                    ]
+                },
+                {
+                    "section_no": "B",
+                    "q_no": "17",
+                    "q_type": "SELF",
+                    "sub_q_no": "",
+                    "sub_q_title": "",
+                    "sub_q_type": "",
+                    "account_no": "",
+                    "response": [
+                        2,
+                        3
+                    ]
+                },
+                {
+                    "section_no": "B",
+                    "q_no": "18",
+                    "q_type": "SELF",
+                    "sub_q_no": "",
+                    "sub_q_title": "",
+                    "sub_q_type": "",
+                    "account_no": "",
+                    "response": [
+                        4,
+                        5,
+                        6
+                    ]
+                }
+            ]
+        });
+
+        console.log('submitSurveyXml______>', raw)
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+
+        console.log('submitSurveyXml______>', requestOptions)
+
+        fetch("https://createdinam.in/RBI-CBCD/public/api/create-survey-section-b", requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
     }
 
     const onSelectedItemsChange = (selectedItems) => {
@@ -1357,7 +1666,7 @@ const BlockBSurveyScreen = () => {
                             />
                         </View> */}
                         <View style={{ padding: 10, }} />
-                        <TouchableOpacity onPress={() => submitSurvey()} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
+                        <TouchableOpacity onPress={() => stopRecording()} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
                             <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Next Block C</Text>
                         </TouchableOpacity>
                     </View>
