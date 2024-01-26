@@ -150,13 +150,13 @@ const SigninScreen = props => {
         keyboardShouldPersistTaps="always"
         showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
-          <Image style={{ height: 140, width: 140, resizeMode: 'cover', alignSelf: "center", marginTop: 80 }} source={require('../../../res/images/appLogo/app_logo_main.png')} />
+          <Image style={{ height: 180, width: 180, resizeMode: 'contain', alignSelf: "center", marginTop: 80 }} source={require('../../../res/images/appLogo/app_logo_main.png')} />
           <View style={{ flex: 1, marginTop: 50 }}>
             <Text style={{ textAlign: 'center', fontWeight: 'bold', marginBottom: 10 }}>RBI Survey</Text>
             <TextInput value={updateEmail} onChangeText={(e) => set_updateEmail(e.toLocaleLowerCase())} keyboardType={'email-address'} style={{ backgroundColor: '#fff', elevation: 5, marginBottom: 15, paddingLeft: 15 }} placeholder='Enter Email' />
             <TextInput value={updatePassword} onChangeText={(e) => set_updatePassword(e)} keyboardType={'default'} secureTextEntry={true} style={{ backgroundColor: '#fff', elevation: 5, marginBottom: 5, paddingLeft: 15 }} placeholder='Password' />
             <TouchableOpacity onPress={() => validateLogin()} style={{ backgroundColor: '#000', marginTop: 10, paddingVertical: 15, paddingHorizontal: 15, elevation: 5, borderRadius: 5 }}>
-              {isLoading === true ? <ActivityIndicator style={{alignItems:'center',}} color={'#fff'} /> : <Text style={{ textAlign: 'center', color: '#fff', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 'bold' }}>Login</Text>}
+              {isLoading === true ? <ActivityIndicator style={{ alignItems: 'center', }} color={'#fff'} /> : <Text style={{ textAlign: 'center', color: '#fff', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 'bold' }}>Login</Text>}
             </TouchableOpacity>
           </View>
         </View>

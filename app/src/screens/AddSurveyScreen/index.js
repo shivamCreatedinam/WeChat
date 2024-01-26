@@ -25,10 +25,10 @@ const AddSurveyScreen = () => {
     const [isLoading, setLoading] = React.useState(false);
     const [userSendToken, setUserSendToken] = React.useState('');
     const [audioPath, setAudioPath] = React.useState('');
-    const [areas, setAreas] = React.useState([]);
-    const [educations, setEducations] = React.useState([]);
-    const [incomes, setIncomes] = React.useState([]);
-    const [occupations, setOccupations] = React.useState([]);
+    const [areas, setAreas] = React.useState([{ "id": 1, "area_title": "Rural Area - Population Less Than 10000", "status": 1, "created_date": "2024-01-13 08:48:30" }, { "id": 2, "area_title": "Semi-Urban Area - Population Above 10000 But Less Than 1 Lakh", "status": 1, "created_date": "2024-01-13 08:48:30" }, { "id": 3, "area_title": "Urban Area - Population 1 Lakh And Above But Less Than 10 Lakhs", "status": 1, "created_date": "2024-01-13 08:48:30" }, { "id": 4, "area_title": "Metro Area - Population More Than 10 Lakhs", "status": 1, "created_date": "2024-01-13 08:48:30" }]);
+    const [educations, setEducations] = React.useState([{ "id": 1, "education_title": "Illitrate", "status": 1, "created_date": "2024-01-13 08:33:35" }, { "id": 2, "education_title": "No formal education but literate", "status": 1, "created_date": "2024-01-13 08:33:35" }, { "id": 3, "education_title": "Up to 8th std.", "status": 1, "created_date": "2024-01-13 08:33:35" }, { "id": 4, "education_title": "Matric-10th std", "status": 1, "created_date": "2024-01-13 08:33:35" }, { "id": 5, "education_title": "Graduate", "status": 1, "created_date": "2024-01-13 08:33:35" }, { "id": 6, "education_title": "Post-Graduate", "status": 1, "created_date": "2024-01-13 08:33:35" }, { "id": 7, "education_title": "Professional Degree Holder", "status": 1, "created_date": "2024-01-13 08:33:35" }]);
+    const [incomes, setIncomes] = React.useState([{ "id": 1, "icomes_title": "Up to 1 Lakh", "status": 1, "created_date": "2024-01-13 08:38:22" }, { "id": 2, "icomes_title": "1 Lakh - 3 Lakhs", "status": 1, "created_date": "2024-01-13 08:38:22" }, { "id": 3, "icomes_title": "3 Lakhs - 5 Lakhs", "status": 1, "created_date": "2024-01-13 08:38:22" }, { "id": 4, "icomes_title": "5 Lakhs - 10 Lakhs", "status": 1, "created_date": "2024-01-13 08:38:22" }, { "id": 5, "icomes_title": "10 Lakhs - 20 Lakhs", "status": 1, "created_date": "2024-01-13 08:38:22" }, { "id": 6, "icomes_title": "20 Lakhs and above", "status": 1, "created_date": "2024-01-13 08:38:22" }]);
+    const [occupations, setOccupations] = React.useState([{ "id": 1, "occupation_name": "Student", "status": 1, "created_date": "2024-01-13 08:14:06" }, { "id": 2, "occupation_name": "Homemaker", "status": 1, "created_date": "2024-01-13 08:14:06" }, { "id": 3, "occupation_name": "Govt Service", "status": 1, "created_date": "2024-01-13 08:14:06" }, { "id": 4, "occupation_name": "Private Sector Service", "status": 1, "created_date": "2024-01-13 08:14:06" }, { "id": 5, "occupation_name": "Professional", "status": 1, "created_date": "2024-01-13 08:14:06" }, { "id": 6, "occupation_name": "Farmer-L", "status": 1, "created_date": "2024-01-13 08:14:06" }, { "id": 7, "occupation_name": "Farmer-S/M", "status": 1, "created_date": "2024-01-13 08:14:06" }, { "id": 8, "occupation_name": "Tenant Farmers", "status": 1, "created_date": "2024-01-13 08:14:06" }, { "id": 9, "occupation_name": "Wholesale Trader", "status": 1, "created_date": "2024-01-13 08:14:06" }, { "id": 10, "occupation_name": "Retail Trader", "status": 1, "created_date": "2024-01-13 08:14:06" }, { "id": 11, "occupation_name": "Manufacturer", "status": 1, "created_date": "2024-01-13 08:14:06" }, { "id": 12, "occupation_name": "Daily Wager", "status": 1, "created_date": "2024-01-13 08:14:06" }, { "id": 13, "occupation_name": "Gig Worker", "status": 1, "created_date": "2024-01-13 08:14:06" }, { "id": 14, "occupation_name": "Service Provider", "status": 1, "created_date": "2024-01-13 08:14:06" }, { "id": 15, "occupation_name": "Unemployed", "status": 1, "created_date": "2024-01-13 08:14:06" }, { "id": 16, "occupation_name": "Self-Employed", "status": 1, "created_date": "2024-01-13 08:14:06" }, { "id": 17, "occupation_name": "Not Working", "status": 1, "created_date": "2024-01-13 08:14:06" }, { "id": 18, "occupation_name": "Pensioner", "status": 1, "created_date": "2024-01-13 08:14:06" }, { "id": 19, "occupation_name": "Other Occupation", "status": 1, "created_date": "2024-01-13 08:14:06" }]);
     const [areasSelected, setSelectedAreas] = React.useState([]);
     const [state, setStateData] = React.useState([]);
     const [DistrictData, setDistrictData] = React.useState([]);
@@ -55,6 +55,13 @@ const AddSurveyScreen = () => {
     const [differentlyAble, setDifferently] = React.useState('');
     const [smartPhone, setSmartphone] = React.useState('');
     const [anyGroup, setAnyGroup] = React.useState('');
+    const [is1Focus, setIs1Focus] = React.useState(false);
+    const [is2Focus, setIs2Focus] = React.useState(false);
+    const [is3Focus, setIs3Focus] = React.useState(false);
+    const [is4Focus, setIs4Focus] = React.useState(false);
+    const [is5Focus, setIs5Focus] = React.useState(false);
+    const [is6Focus, setIs6Focus] = React.useState(false);
+
 
     // gender setDifferently
     const data = [
@@ -103,10 +110,10 @@ const AddSurveyScreen = () => {
 
     useFocusEffect(
         React.useCallback(() => {
-            // getLoadingData();
             readMessages();
             return () => {
-                // Useful for cleanup functions
+                // Useful for cleanup functions.
+
             };
         }, [])
     );
@@ -127,52 +134,25 @@ const AddSurveyScreen = () => {
             setUserSendToken(UserToken);
             setUserName(UserData);
             setName(userId);
+            getState();
             console.log("error", userId)
         } catch (error) {
             console.log("error_", error)
         }
     }
 
-    const getLoadingData = async () => {
+    const getState = async () => {
         setLoading(true);
         const UserToken = await AsyncStorage.getItem(AsyncStorageContaints.UserId);
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${UserToken}`
-        }
-        Axios.get(`https://createdinam.in/RBI-CBCD/public/api/get-demographic-details`, {
-            headers: headers
-        })
-            .then((response) => {
-                console.log('getLoadingData', JSON.stringify(response.data))
-                if (response.data.status === true) {
-                    setAreas(response.data?.areas);
-                    setEducations(response.data?.educations);
-                    setIncomes(response.data?.incomes);
-                    setOccupations(response.data?.occupations);
-                    getState(UserToken);
-                } else {
-                    setLoading(false);
-                    showMessage({
-                        message: "Something went wrong!",
-                        description: "Something went wrong. Try again!",
-                        type: "danger",
-                    });
-                }
-            });
-    }
-
-    const getState = (token) => {
         let url = `https://createdinam.in/RBI-CBCD/public/api/get-states`;
         const headers = {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${UserToken}`
         }
         Axios.get(url, {
             headers: headers
         })
             .then((response) => {
-                console.log('getState', JSON.stringify(response?.data?.data))
                 if (response.data.status === true) {
                     setLoading(false);
                     setStateData(response?.data?.data);
@@ -211,11 +191,6 @@ const AddSurveyScreen = () => {
                 }
             });
     }
-
-    // AudioRecord.on('data', data => {
-    //     // base64-encoded audio data chunks
-    //     console.log('AudioRecord_>', JSON.stringify(data));
-    // });
 
     const askToCloseApp = () => {
         Alert.alert(
@@ -267,19 +242,16 @@ const AddSurveyScreen = () => {
 
     const stopRecording = async () => {
         // or to get the wav file path
-        console.warn('stopRecording')
         const audioFile = await AudioRecord.stop();
         console.warn(audioFile)
         setAudioPath(audioFile);
-        // submitSurvey(audioFile);
-        submitSurveyFetch(audioFile)
+        console.warn('stopRecording');
+        submitSurveyFetch(audioFile);
     };
 
     const validationCheck = () => {
         const pattern = /^[a-zA-Z]{2,40}( [a-zA-Z]{2,40})+$/;
-        const AgeRegex = /^(?:1[01][0-9]|120|1[7-9]|[2-9][0-9])$/
-        console.log('validationCheck', AgeRegex.test(age))
-        navigation.navigate("BlockBSurveyScreen")
+        const AgeRegex = /^(?:1[01][0-9]|120|1[7-9]|[2-9][0-9])$/;
         if (pattern.test(surveryName)) {
             if (gender !== '') {
                 if (AgeRegex.test(age)) {
@@ -484,31 +456,35 @@ const AddSurveyScreen = () => {
         formdata.append("latitude", "27.98878");
         formdata.append("longitude", "28.00000");
         formdata.append("other_occupation", "");
-        formdata.append("audio_file", file_urls, "recording_block_a.wav");
+        formdata.append('audio_file', { uri: file_urls, type: 'audio/wav', name: 'recording_block_a' });
+
+        console.log('submitSurveyFetch_>', JSON.stringify(formdata));
 
         var requestOptions = {
             method: 'POST',
+            URL: 'https://createdinam.in/RBI-CBCD/public/api/create-survey-section-b',
             headers: myHeaders,
             body: formdata,
-            redirect: 'follow'
+            redirect: 'follow',
         };
 
-        fetch("https://createdinam.in/RBI-CBCD/public/api/create-survey-section-b", requestOptions)
+        console.log('submitSurveyFetch_>', JSON.stringify(requestOptions));
+
+        fetch(requestOptions)
             .then(response => response.json())
             .then(result => {
                 console.log(result?.status)
                 if (result?.status === true) {
-                    navigation.replace('BlockASurveyScreen');
+                    // navigation.replace('BlockBSurveyScreen');
                 } else {
-                    navigation.replace('BlockASurveyScreen');
+                    // navigation.replace('BlockBSurveyScreen');
                     // showMessage({
                     //     message: "Something went wrong!",
                     //     description: result?.message,
                     //     type: "danger",
                     // });
                 }
-            })
-            .catch(error => console.log('error', error));
+            });
     }
 
     const onSelectedItemsChange = (selectedItems) => {
@@ -566,7 +542,7 @@ const AddSurveyScreen = () => {
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>4. Occupation (In case of Overlap, report primary occupation)</Text>
                             <Dropdown
-                                style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                                style={[styles.dropdown, is1Focus && { borderColor: 'blue' }]}
                                 placeholderStyle={styles.placeholderStyle}
                                 selectedTextStyle={styles.selectedTextStyle}
                                 inputSearchStyle={styles.inputSearchStyle}
@@ -576,45 +552,23 @@ const AddSurveyScreen = () => {
                                 maxHeight={300}
                                 labelField="occupation_name"
                                 valueField="id"
-                                placeholder={!isFocus ? 'Select Occupation' : value}
+                                placeholder={!is1Focus ? 'Select Occupation' : value}
                                 // searchPlaceholder="Search..."
                                 value={value}
-                                onFocus={() => setIsFocus(true)}
-                                onBlur={() => setIsFocus(false)}
+                                onFocus={() => setIs1Focus(true)}
+                                onBlur={() => setIs1Focus(false)}
                                 onChange={item => {
                                     console.log('______>', JSON.stringify(item))
                                     onSelectedOccupationsChange(item?.id);
-                                    setIsFocus(false);
+                                    setIs1Focus(false);
                                 }}
                             />
-                            {/* <MultiSelect
-                                hideTags
-                                items={occupations}
-                                uniqueKey="id"
-                                // ref={(component) => { this.multiSelect = component }}
-                                onSelectedItemsChange={(items) => onSelectedOccupationsChange(items)}
-                                selectedItems={selectedOccupations}
-                                selectText="Occupation"
-                                // searchInputPlaceholderText="Search Items..."
-                                // onChangeInput={(text) => console.log(text)}
-                                altFontFamily="ProximaNova-Light"
-                                tagRemoveIconColor="#CCC"
-                                tagBorderColor="#CCC"
-                                tagTextColor="#CCC"
-                                selectedItemTextColor="#CCC"
-                                selectedItemIconColor="#CCC"
-                                itemTextColor="#000"
-                                displayKey="occupation_name"
-                                searchInputStyle={{ color: '#CCC', paddingLeft: 10 }}
-                                submitButtonColor="#CCC"
-                                submitButtonText="Submit"
-                            /> */}
                         </View>
                         <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>5. Education</Text>
                             <Dropdown
-                                style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                                style={[styles.dropdown, is2Focus && { borderColor: 'blue' }]}
                                 placeholderStyle={styles.placeholderStyle}
                                 selectedTextStyle={styles.selectedTextStyle}
                                 inputSearchStyle={styles.inputSearchStyle}
@@ -624,15 +578,15 @@ const AddSurveyScreen = () => {
                                 maxHeight={300}
                                 labelField="education_title"
                                 valueField="id"
-                                placeholder={!isFocus ? 'Select Education' : value}
+                                placeholder={!is2Focus ? 'Select Education' : value}
                                 // searchPlaceholder="Search..."
                                 value={value}
-                                onFocus={() => setIsFocus(true)}
-                                onBlur={() => setIsFocus(false)}
+                                onFocus={() => setIs2Focus(true)}
+                                onBlur={() => setIs2Focus(false)}
                                 onChange={item => {
                                     console.log('______>', JSON.stringify(item))
                                     onSelectedEducationChange(item?.id);
-                                    setIsFocus(false);
+                                    setIs2Focus(false);
                                 }}
                             />
                         </View>
@@ -640,7 +594,7 @@ const AddSurveyScreen = () => {
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>6. Annual Income (For non-earning respondents, the income of parents or spouse can be reported)</Text>
                             <Dropdown
-                                style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                                style={[styles.dropdown, is3Focus && { borderColor: 'blue' }]}
                                 placeholderStyle={styles.placeholderStyle}
                                 selectedTextStyle={styles.selectedTextStyle}
                                 inputSearchStyle={styles.inputSearchStyle}
@@ -650,15 +604,15 @@ const AddSurveyScreen = () => {
                                 maxHeight={300}
                                 labelField="icomes_title"
                                 valueField="id"
-                                placeholder={!isFocus ? 'Select Annual Income' : value}
+                                placeholder={!is3Focus ? 'Select Annual Income' : value}
                                 // searchPlaceholder="Search..."
                                 value={value}
-                                onFocus={() => setIsFocus(true)}
-                                onBlur={() => setIsFocus(false)}
+                                onFocus={() => setIs3Focus(true)}
+                                onBlur={() => setIs3Focus(false)}
                                 onChange={item => {
                                     console.log('______>', JSON.stringify(item))
                                     onSelectedIncomesChange(item?.id);
-                                    setIsFocus(false);
+                                    setIs3Focus(false);
                                 }}
                             />
                         </View>
@@ -668,7 +622,7 @@ const AddSurveyScreen = () => {
                             <View>
                                 <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>State</Text>
                                 <Dropdown
-                                    style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                                    style={[styles.dropdown, is4Focus && { borderColor: 'blue' }]}
                                     placeholderStyle={styles.placeholderStyle}
                                     selectedTextStyle={styles.selectedTextStyle}
                                     inputSearchStyle={styles.inputSearchStyle}
@@ -678,48 +632,45 @@ const AddSurveyScreen = () => {
                                     maxHeight={300}
                                     labelField="name"
                                     valueField="id"
-                                    placeholder={!isFocus ? 'Select State' : value}
+                                    placeholder={!is4Focus ? 'Select State' : value}
                                     // searchPlaceholder="Search..."
                                     value={value}
-                                    onFocus={() => setIsFocus(true)}
-                                    onBlur={() => setIsFocus(false)}
+                                    onFocus={() => setIs4Focus(true)}
+                                    onBlur={() => setIs4Focus(false)}
                                     onChange={item => {
                                         console.log('______>', JSON.stringify(item))
                                         setValue(item?.id);
                                         loadDistrict(item.id);
-                                        setIsFocus(false);
+                                        setIs4Focus(false);
                                     }}
                                 />
                             </View>
                             <View>
                                 <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>District</Text>
                                 <Dropdown
-                                    style={[styles.dropdown, isDistrictFocus && { borderColor: 'blue' }]}
+                                    style={[styles.dropdown, is5Focus && { borderColor: 'blue' }]}
                                     placeholderStyle={styles.placeholderStyle}
                                     selectedTextStyle={styles.selectedTextStyle}
                                     inputSearchStyle={styles.inputSearchStyle}
-                                    // iconStyle={styles.iconStyle}
                                     data={DistrictData}
-                                    // search
                                     maxHeight={300}
                                     labelField="name"
-                                    valueField="distic_code"
-                                    placeholder={!isDistrictFocus ? 'Select District' : valueDistrict}
-                                    // searchPlaceholder="Search..."
-                                    value={valueDistrict}
-                                    onFocus={() => setIsDistrictFocus(true)}
-                                    onBlur={() => setIsDistrictFocus(false)}
+                                    valueField="id"
+                                    placeholder={!is5Focus ? 'Select District' : valueDistrict}
+                                    value={selectedDistrict}
+                                    onFocus={() => setIs5Focus(true)}
+                                    onBlur={() => setIs5Focus(false)}
                                     onChange={item => {
-                                        console.log(JSON.stringify(item))
-                                        setDistrictValue(item.id);
-                                        setIsDistrictFocus(false);
+                                        console.log('______>', JSON.stringify(item))
+                                        setDistrictValue(item?.id);
+                                        setIs5Focus(false);
                                     }}
                                 />
                             </View>
                             <View>
                                 <View style={{ padding: 10, }} />
                                 <Dropdown
-                                    style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                                    style={[styles.dropdown, is6Focus && { borderColor: 'blue' }]}
                                     placeholderStyle={styles.placeholderStyle}
                                     selectedTextStyle={styles.selectedTextStyle}
                                     inputSearchStyle={styles.inputSearchStyle}
@@ -729,15 +680,15 @@ const AddSurveyScreen = () => {
                                     maxHeight={300}
                                     labelField="area_title"
                                     valueField="id"
-                                    placeholder={!isFocus ? 'Select Areas' : value}
+                                    placeholder={!is6Focus ? 'Select Areas' : value}
                                     // searchPlaceholder="Search..."
                                     value={value}
-                                    onFocus={() => setIsFocus(true)}
-                                    onBlur={() => setIsFocus(false)}
+                                    onFocus={() => setIs6Focus(true)}
+                                    onBlur={() => setIs6Focus(false)}
                                     onChange={item => {
                                         console.log('______>', JSON.stringify(item))
                                         onSelectedItemsChange(item?.id);
-                                        setIsFocus(false);
+                                        setIs6Focus(false);
                                     }}
                                 />
                             </View>
@@ -816,7 +767,7 @@ const AddSurveyScreen = () => {
                             />
                         </View>
                         <View style={{ padding: 10, }} />
-                        <TouchableOpacity onPress={() => validationCheck()} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
+                        <TouchableOpacity onPress={() => navigation.replace('BlockBSurveyScreen')} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
                             <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Next Block B</Text>
                         </TouchableOpacity>
                     </View>

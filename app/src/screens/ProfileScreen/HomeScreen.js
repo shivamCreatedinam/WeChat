@@ -53,6 +53,7 @@ import ReviewComponent from '../../genriccomponents/productView/review/Review';
 import { hitReviewListingApi } from '../../redux/actions/ProductDetailsAction';
 import { hitInvoiceListingApi } from '../../redux/actions/InvoiceAction';
 import { getViewOrderDetailApi } from '../../redux/actions/OrderAction';
+import AudioRecord from 'react-native-audio-record';
 import {
   hitFirstRunningOrderApi,
   hitChatBotQueryRequestApi,
@@ -60,7 +61,13 @@ import {
 import { getCartDetailApi } from '../../redux/actions/CartAction';
 import database from '@react-native-firebase/database';
 import { TextInput } from 'react-native';
-
+const options = {
+  sampleRate: 16000,  // default 44100
+  channels: 1,        // 1 or 2, default 1
+  bitsPerSample: 16,  // 8 or 16, default 16
+  audioSource: 6,     // android only (see below)
+  wavFile: 'test.wav' // default 'audio.wav'
+};
 
 class HomeScreen extends Component {
   static ROUTE_NAME = 'HomeScreen';
@@ -95,6 +102,7 @@ class HomeScreen extends Component {
 
   async readMessages() {
     try {
+      AudioRecord.init(options);
       const userId = await AsyncStorage.getItem(AsyncStorageContaints.UserId);
       const UserData = await AsyncStorage.getItem(AsyncStorageContaints.UserData);
       this.setState({ name: UserData, userToken: userId });
@@ -166,8 +174,39 @@ class HomeScreen extends Component {
 
   CheckCurrentActiveSurvey = () => {
 
-    this.props.navigation.navigate('BlockBSurveyScreen');
+    this.props.navigation.navigate('AddSurveyScreen');
 
+  }
+
+  async finishSurvey() {
+    const userId = await AsyncStorage.getItem(AsyncStorageContaints.tempServerTokenId);
+    let SERVER = 'https://createdinam.in/RBI-CBCD/public/api/finish-survey';
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", "Bearer " + userSendToken);
+    var formdata = new FormData();
+    formdata.append("user_name", surveryName);
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: formdata,
+      redirect: 'follow',
+    };
+
+    fetch(SERVER, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        console.log(result?.status)
+        if (result?.status === true) {
+          // navigation.replace('BlockBSurveyScreen');
+        } else {
+          // navigation.replace('BlockBSurveyScreen');
+          // showMessage({
+          //     message: "Something went wrong!",
+          //     description: result?.message,
+          //     type: "danger",
+          // });
+        }
+      });
   }
 
   render() {

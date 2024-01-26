@@ -62,6 +62,7 @@ class SplashScreen extends Component {
   /*
    * Set app theme color.
    */
+
   setAppTheme = appMode => {
     let payload = {};
     if (appMode == 'dark') {
@@ -82,12 +83,7 @@ class SplashScreen extends Component {
     const { changeView } = this.state;
     return (
       <View style={styles.mainContainer}>
-        <ImageBackground
-          source={resource.images.splash_background}
-          style={styles.backgroundImage}>
-          <Image source={resource.images.img_new_logo} />
-        </ImageBackground>
-
+        <Image source={resource.images.splash_background} />
       </View>
     );
 

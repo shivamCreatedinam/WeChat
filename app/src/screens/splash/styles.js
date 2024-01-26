@@ -1,23 +1,24 @@
-import {StyleSheet} from 'react-native';
-import {widthScale, heightScale} from '../../utility/Utils';
+import { StyleSheet } from 'react-native';
+import { widthScale, heightScale } from '../../utility/Utils';
 import resources from '../../../res';
 const styles = StyleSheet.create({
   mainContainer: {
-    flex: 1, 
-  
-  },
-
-center: {
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
-},
-backgroundImage: {
-  width: '100%', height: '100%',alignItems:'center',justifyContent:'center'
-},
+  },
+
+  center: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  backgroundImage: {
+    width: 200, height: 200, alignItems: 'center', justifyContent: 'center', resizeMode: 'contain'
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems:'center'
+    alignItems: 'center'
   },
   appNameStyle: {
     marginLeft: widthScale(32.6),
@@ -26,7 +27,7 @@ backgroundImage: {
     fontSize: widthScale(48.9),
   },
 
-  
+
 });
 
 export default styles;

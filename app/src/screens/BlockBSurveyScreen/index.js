@@ -1549,8 +1549,6 @@ const BlockBSurveyScreen = () => {
                         <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>16. If you are not using your bank account, please indicate reasons?</Text>
-
-
                             <MultiSelect
                                 hideTags
                                 items={Incomedata}
@@ -1627,8 +1625,6 @@ const BlockBSurveyScreen = () => {
                         <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>18. How do you save money?</Text>
-
-
                             <MultiSelect
                                 hideTags
                                 items={saveMoney}
@@ -1662,20 +1658,8 @@ const BlockBSurveyScreen = () => {
                                 ))}
                             </View>
                         </View>
-
-                        {/* <View style={{ padding: 10, }} />
-                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>11. Do you own a smartphone ?</Text>
-                            <RadioButtonRN
-                                data={smartphone}
-                                selectedBtn={(e) => setSmartphone(e)}
-                            />
-                        </View> */}
                         <View style={{ padding: 10, }} />
-                        <TouchableOpacity onPress={() =>
-                            // submitSurvey()
-                            navigation.replace('BlockCSurveyScreen')
-                        } style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
+                        <TouchableOpacity onPress={() => navigation.replace('BlockCSurveyScreen')} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
                             <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Next Block C</Text>
                         </TouchableOpacity>
                     </View>

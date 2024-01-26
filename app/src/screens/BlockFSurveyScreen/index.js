@@ -721,7 +721,7 @@ const BlockFSurveyScreen = () => {
                 type: "danger",
             });
         }
-     
+
 
         else if (grievanceRelated?.label === 'Yes' && isgrievanceAddressed === null) {
             showMessage({
@@ -738,7 +738,7 @@ const BlockFSurveyScreen = () => {
             });
         }
         else {
-            navigation.replace('DashboardScreen')
+            navigation.replace('DashboardScreen');
         }
     }
 
@@ -1340,8 +1340,7 @@ const BlockFSurveyScreen = () => {
                             <View style={{ padding: 10, }} />
                         </View>
                         <View style={{ padding: 10, }} />
-                        <TouchableOpacity onPress={() => Validate()
-                        } style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
+                        <TouchableOpacity onPress={() => Validate()} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
                             <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Complete Survey</Text>
                         </TouchableOpacity>
                     </View>

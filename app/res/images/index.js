@@ -11,7 +11,7 @@ const images = {
   img_google: require('./imagesSocial/googlePlus.png'),
   img_linkedin: require('./imagesSocial/linkedin.png'),
   img_upload: require('../images/upload.png'),
-  splash_background: require('./splash/city.png'),
+  splash_background: require('./appLogo/app_logo_main.png'),
   splash_btnIcon: require('./splash/btnIcon.png'),
   splash_right: require('./splash/right.png'),
 

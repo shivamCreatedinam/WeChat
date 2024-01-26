@@ -50,7 +50,7 @@ export default class ProfileScreen extends Component {
             <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10, alignSelf: 'flex-start', marginTop: StatusBar.currentHeight, paddingHorizontal: 20, backgroundColor: '#fff', elevation: 5, width: '100%' }}>
                 <Image
                     source={require('../../../res/images/appLogo/app_logo_main.png')}
-                    style={{ width: 40, height: 40, borderRadius: 20 }}
+                    style={{ width: 50, height: 50, borderRadius: 20, resizeMode: 'contain' }}
                 />
                 <View style={{ marginLeft: 10 }}>
                     <Text>{user.name}</Text>
