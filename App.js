@@ -1,5 +1,8 @@
 import React, { Component, useEffect, useRef } from 'react';
 import AppNavigation from './app/src/appnavigation/AppNavigation';
+import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorageContaints from './app/src//utility/AsyncStorageConstants';
+import Geolocation from '@react-native-community/geolocation';
 import { Provider } from 'react-redux';
 import Store from './app/src/redux/store/Store';
 import RNOtpVerify from 'react-native-otp-verify';
@@ -26,10 +29,6 @@ const App = () => {
   useEffect(() => {
     checkPermission();
     try {
-      RNOtpVerify.getHash()
-        .then(console.log)
-        .catch(console.log);
-
       AudioRecord.init(options);
     } catch (error) {
       logOnConsole('Failed to initialise appsflyer !!')
@@ -45,6 +44,28 @@ const App = () => {
       } catch (error) { }
     }
   };
+
+  Geolocation.getCurrentPosition(
+    (position) => {
+      //getting the Longitude from the location json
+      const currentLongitude = JSON.stringify(position.coords.longitude);
+      //getting the Latitude from the location json
+      const currentLatitude = JSON.stringify(position.coords.latitude);
+      //Setting the state
+      saveLocationForFutureUse(currentLatitude, currentLongitude);
+    },
+    (error) => {
+      // See error code and message
+      console.log(error.code, error.message);
+    },
+    { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+  );
+
+  const saveLocationForFutureUse = async (lat, long) => {
+    AsyncStorage.setItem(AsyncStorageContaints.surveyLatitude, lat + '');
+    AsyncStorage.setItem(AsyncStorageContaints.surveyLongitude, long + '');
+    console.log('saveLocationForFutureUse');
+  }
 
   return (
     <SafeAreaView style={{ flex: 1, marginTop: 0 }}>

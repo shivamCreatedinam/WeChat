@@ -36,6 +36,8 @@ const BlockBSurveyScreen = () => {
     const [areasSelected, setSelectedAreas] = React.useState([]);
     const [state, setStateData] = React.useState([]);
     const [DistrictData, setDistrictData] = React.useState([]);
+    const [Lattitude, setLattitude] = React.useState('');
+    const [Longitude, setLongitude] = React.useState('');
 
     // country dropdowns
     const [value, setValue] = React.useState(null);
@@ -275,13 +277,17 @@ const BlockBSurveyScreen = () => {
             const userId = await AsyncStorage.getItem(AsyncStorageContaints.tempServerTokenId);
             const UserData = await AsyncStorage.getItem(AsyncStorageContaints.UserData);
             const UserToken = await AsyncStorage.getItem(AsyncStorageContaints.UserId);
+            const surveyLatitude = await AsyncStorage.getItem(AsyncStorageContaints.surveyLatitude);
+            const surveyLongitude = await AsyncStorage.getItem(AsyncStorageContaints.surveyLongitude);
             //UserId
+            setLattitude(surveyLatitude);
+            setLongitude(surveyLongitude);
             setUserSendToken(UserToken);
             setUserName(UserData);
             setName(userId);
-            console.log("error", userId)
+            console.log("readMessages", userId)
         } catch (error) {
-            console.log("error_", error)
+            console.log("readMessages_", error)
         }
     }
 
@@ -467,8 +473,6 @@ const BlockBSurveyScreen = () => {
     }
 
     const submitSurvey = async (file_urls) => {
-        // https://createdinam.in/RBI-CBCD/public/api/create-survey-demographics
-
         const response = [
             {
                 'section_no': "B",
@@ -498,7 +502,7 @@ const BlockBSurveyScreen = () => {
                 'sub_q_title': "If it is due to a lack of documents, what is it?",
                 'sub_q_type': "MULTICHECK",
                 'account_no': '',
-                'response': `${selectedDigitalpreferred}`
+                'response': `${selectedlackdocuments}`
             },
             {
                 'section_no': "B",
@@ -508,7 +512,7 @@ const BlockBSurveyScreen = () => {
                 'sub_q_title': "If you don’t want a bank account, what could be the reasons?",
                 'sub_q_type': "MULTICHECK",
                 'account_no': '',
-                'response': `${selectedDigitalpreferred}`
+                'response': `${selectedbankAccounts}`
             },
             {
                 'section_no': "B",
@@ -757,10 +761,9 @@ const BlockBSurveyScreen = () => {
         myHeaders.append("Authorization", "Bearer 33|NdofyDbXloIQg3n7MH1cnHu1yAqGi8w13uYUXVvw");
 
         var raw = JSON.stringify({
-            "latitude": 27.98878,
-            "longitude": 28.98878,
-            "survey_token": "RBI00386004",
-            "audio_file": file_urls,
+            "latitude": Lattitude,
+            "longitude": Longitude,
+            "survey_token": name,
             "section_no": "B",
             "data": [
                 {
@@ -771,7 +774,7 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "",
                     "sub_q_type": "",
                     "account_no": "",
-                    "response": "No"
+                    "response": `${bank?.label}`
                 },
                 {
                     "section_no": "B",
@@ -781,10 +784,7 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "In case you are not able to open a bank account, please, indicate the reason(s)",
                     "sub_q_type": "MULTICHECK",
                     "account_no": "",
-                    "response": [
-                        2,
-                        1
-                    ]
+                    'response': `[${selectedDigitalpreferred}]`
                 },
                 {
                     "section_no": "B",
@@ -794,10 +794,7 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "If it is due to a lack of documents, what is it?",
                     "sub_q_type": "MULTICHECK",
                     "account_no": "",
-                    "response": [
-                        2,
-                        1
-                    ]
+                    'response': `[${selectedlackdocuments}]`
                 },
                 {
                     "section_no": "B",
@@ -807,10 +804,7 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "If you don’t want a bank account, what could be the reasons?",
                     "sub_q_type": "MULTICHECK",
                     "account_no": "",
-                    "response": [
-                        2,
-                        1
-                    ]
+                    'response': `[${selectedbankAccounts}]`
                 },
                 {
                     "section_no": "B",
@@ -820,7 +814,7 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "",
                     "sub_q_type": "",
                     "account_no": "",
-                    "response": "Yes"
+                    'response': `${DepositInsurance?.label}`
                 },
                 {
                     "section_no": "B",
@@ -830,7 +824,7 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "",
                     "sub_q_type": "",
                     "account_no": "",
-                    "response": "Yes"
+                    'response': `${ZeroBalance?.label}`
                 },
                 {
                     "section_no": "B",
@@ -840,7 +834,7 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "",
                     "sub_q_type": "",
                     "account_no": "",
-                    "response": "Yes"
+                    'response': `${DirectBenefit?.label}`
                 },
                 {
                     "section_no": "B",
@@ -850,7 +844,7 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "",
                     "sub_q_type": "",
                     "account_no": "",
-                    "response": "Yes"
+                    'response': `${visitBranch?.label}`
                 },
                 {
                     "section_no": "B",
@@ -860,8 +854,8 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "Helpful and Easy-to-Understand Processes",
                     "sub_q_type": "SINGLECHECK",
                     "account_no": "",
-                    "response2": "Yes",
-                    "response": "Yes"
+                    'response2': `${EnvironmentOutlet?.label}`,
+                    'response': `${EnvironmentBranch?.label}`
                 },
                 {
                     "section_no": "B",
@@ -871,8 +865,8 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "Supportive and Welcome Attitude of Staff",
                     "sub_q_type": "SINGLECHECK",
                     "account_no": "",
-                    "response2": "Yes",
-                    "response": "Yes"
+                    'response2': `${SupportiveOutlet?.label}`,
+                    'response': `${SupportiveBranch?.label}`
                 },
                 {
                     "section_no": "B",
@@ -882,8 +876,8 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "Basic Amenities (seating/water/ washroom/ information)",
                     "sub_q_type": "SINGLECHECK",
                     "account_no": "",
-                    "response2": "Yes",
-                    "response": "Yes"
+                    'response2': `${AmenitiesOutlet?.label}`,
+                    'response': `${AmenitiesBranch?.label}`
                 },
                 {
                     "section_no": "B",
@@ -893,49 +887,38 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "Long Wait Time (more than one hour)/ Long Queues",
                     "sub_q_type": "SINGLECHECK",
                     "account_no": "",
-                    "response2": "Yes",
-                    "response": "Yes"
+                    'response2': `${LongOutlet?.label}`,
+                    'response': `${LongBranch?.label}`
                 },
                 {
-                    "section_no": "B",
-                    "q_no": "7",
-                    "q_type": "CHILD",
-                    "sub_q_no": "d",
-                    "sub_q_title": "Long Wait Time (more than one hour)/ Long Queues",
-                    "sub_q_type": "SINGLECHECK",
-                    "account_no": "",
-                    "response2": "Yes",
-                    "response": "Yes"
+                    'section_no': "B",
+                    'q_no': "8",
+                    'q_type': "SELF",
+                    'sub_q_no': "",
+                    'sub_q_title': "",
+                    'sub_q_type': "",
+                    'account_no': '',
+                    'response': `${WithoutVisiting?.label}`
                 },
                 {
-                    "section_no": "B",
-                    "q_no": "8",
-                    "q_type": "SELF",
-                    "sub_q_no": "",
-                    "sub_q_title": "",
-                    "sub_q_type": "",
-                    "account_no": "",
-                    "response": "Yes"
+                    'section_no': "B",
+                    'q_no': "9",
+                    'q_type': "SELF",
+                    'sub_q_no': "",
+                    'sub_q_title': "",
+                    'sub_q_type': "",
+                    'account_no': '',
+                    'response': `${AccountOpened?.label}`
                 },
                 {
-                    "section_no": "B",
-                    "q_no": "9",
-                    "q_type": "SELF",
-                    "sub_q_no": "",
-                    "sub_q_title": "",
-                    "sub_q_type": "",
-                    "account_no": "",
-                    "response": "Yes"
-                },
-                {
-                    "section_no": "B",
-                    "q_no": "10",
-                    "q_type": "SELF",
-                    "sub_q_no": "",
-                    "sub_q_title": "",
-                    "sub_q_type": "",
-                    "account_no": "12",
-                    "response": "4"
+                    'section_no': "B",
+                    'q_no': "10",
+                    'q_type': "SELF",
+                    'sub_q_no': "",
+                    'sub_q_title': "",
+                    'sub_q_type': "",
+                    'account_no': `${AccountNumber}`,
+                    'response': `${AccountTypeValue}`
                 },
                 {
                     "section_no": "B",
@@ -945,10 +928,7 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "",
                     "sub_q_type": "",
                     "account_no": "",
-                    "response": [
-                        2,
-                        3
-                    ]
+                    'response': `[${selectedwhatPurposes}]`
                 },
                 {
                     "section_no": "B",
@@ -958,7 +938,7 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "",
                     "sub_q_type": "",
                     "account_no": "",
-                    "response": "4"
+                    'response': `${AccountTypeValue}`
                 },
                 {
                     "section_no": "B",
@@ -968,10 +948,7 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "",
                     "sub_q_type": "",
                     "account_no": "",
-                    "response": [
-                        3,
-                        2
-                    ]
+                    'response': `[${selectedOccupations}]`
                 },
                 {
                     "section_no": "B",
@@ -981,7 +958,7 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "",
                     "sub_q_type": "",
                     "account_no": "",
-                    "response": "2"
+                    'response': `${transaction}`
                 },
                 {
                     "section_no": "B",
@@ -991,7 +968,7 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "",
                     "sub_q_type": "",
                     "account_no": "",
-                    "response": "2"
+                    'response': `${subsidy}`
                 },
                 {
                     "section_no": "B",
@@ -1001,10 +978,7 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "",
                     "sub_q_type": "",
                     "account_no": "",
-                    "response": [
-                        3,
-                        4
-                    ]
+                    'response': `[${selectedIncomes}]`
                 },
                 {
                     "section_no": "B",
@@ -1014,10 +988,7 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "",
                     "sub_q_type": "",
                     "account_no": "",
-                    "response": [
-                        2,
-                        3
-                    ]
+                    'response': `[${selectCashReceipt}]`
                 },
                 {
                     "section_no": "B",
@@ -1027,11 +998,7 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "",
                     "sub_q_type": "",
                     "account_no": "",
-                    "response": [
-                        4,
-                        5,
-                        6
-                    ]
+                    'response': `[${SelectedSaveMoney}]`
                 }
             ]
         });
@@ -1399,7 +1366,6 @@ const BlockBSurveyScreen = () => {
                                     onSelectedItemsChange={(items) =>
                                         onSelectedwhatPurposesChange(items)
                                     }
-                                    hideSubmitButton={true}
                                     selectedItems={selectedwhatPurposes}
                                     selectText="Select open a bank account"
                                     onChangeInput={(text) => console.log(text)}
@@ -1659,7 +1625,7 @@ const BlockBSurveyScreen = () => {
                             </View>
                         </View>
                         <View style={{ padding: 10, }} />
-                        <TouchableOpacity onPress={() => navigation.replace('BlockCSurveyScreen')} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
+                        <TouchableOpacity onPress={() => stopRecording()} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
                             <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Next Block C</Text>
                         </TouchableOpacity>
                     </View>

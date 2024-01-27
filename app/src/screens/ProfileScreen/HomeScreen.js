@@ -11,6 +11,7 @@ import {
   RefreshControl,
   SafeAreaView,
   ImageBackground,
+  Alert
 } from 'react-native';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import AsyncStorage from '@react-native-community/async-storage';
@@ -78,10 +79,11 @@ class HomeScreen extends Component {
       allUsers: [],
       name: '',
       userToken: '',
+      surveyNextBlock: '',
       loading: false
     };
-
   }
+
   renderHeader = () => {
     return (
       <HeaderWithLocation
@@ -104,8 +106,9 @@ class HomeScreen extends Component {
     try {
       AudioRecord.init(options);
       const userId = await AsyncStorage.getItem(AsyncStorageContaints.UserId);
-      const UserData = await AsyncStorage.getItem(AsyncStorageContaints.UserData);
-      this.setState({ name: UserData, userToken: userId });
+      const UserData = await AsyncStorage.getItem(AsyncStorageContaints.UserData);// AsyncStorageContaints.surveyNextBlock
+      const surveyNextBlock = await AsyncStorage.getItem(AsyncStorageContaints.surveyNextBlock);
+      this.setState({ name: UserData, userToken: userId, surveyNextBlock: surveyNextBlock });
       console.log("error", userId)
     } catch (error) {
       console.log("error", error)
@@ -173,9 +176,20 @@ class HomeScreen extends Component {
   }
 
   CheckCurrentActiveSurvey = () => {
-
+    // this.props.navigation.replace('BlockCSurveyScreen');
     this.props.navigation.navigate('AddSurveyScreen');
 
+  }
+
+  navigateToPendingSurvey = () => {
+    Alert.alert(
+      "Logout",
+      "Are you sure, you want to logout?",
+      [
+        { text: "Yes", onPress: () => this.clearAsyncStorage() },
+        { text: "No" }
+      ]
+    );
   }
 
   async finishSurvey() {
@@ -222,6 +236,10 @@ class HomeScreen extends Component {
             <Image style={{ width: 20, height: 20, resizeMode: 'contain', tintColor: '#fff' }} source={require('../../../res/images/add_survery_logo.png')} />
             {this.state.loading === false ? <Text style={{ textAlign: 'center', fontWeight: 'bold', color: '#fff', flex: 1 }}>Create New Survey</Text> : <ActivityIndicator style={{ alignSelf: 'center', flex: 1 }} color={'#fff'} />}
           </TouchableOpacity>
+          {this.state.surveyNextBlock !== '' ? <TouchableOpacity onPress={() => this.navigateToPendingSurvey()} style={{ paddingVertical: 14, paddingHorizontal: 20, backgroundColor: '#000', borderRadius: 5, flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
+            <Image style={{ width: 20, height: 20, resizeMode: 'contain', tintColor: '#fff' }} source={require('../../../res/images/add_survery_logo.png')} />
+            {this.state.loading === false ? <Text style={{ textAlign: 'center', fontWeight: 'bold', color: '#fff', flex: 1 }}>Pending Survey {this.state.surveyNextBlock}</Text> : <ActivityIndicator style={{ alignSelf: 'center', flex: 1 }} color={'#fff'} />}
+          </TouchableOpacity> : null}
         </View>
       </SafeAreaView>
     );

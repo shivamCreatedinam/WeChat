@@ -8,5 +8,8 @@ const AsyncStorageContaints = {
   citymaxProduct: '@CITYMAX_PRODUCT',
   tempUserId: '@temp_user_id',
   tempServerTokenId: '@temp_survey_token',
+  surveyLatitude: '@LATITUDE',
+  surveyLongitude: '@LONGITUDE',
+  surveyNextBlock: '@SURVEYNEXTBLOCK',
 };
 export default AsyncStorageContaints;

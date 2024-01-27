@@ -23,6 +23,7 @@ const AddSurveyScreen = () => {
     const [isRecording, setIsRecording] = React.useState(false);
     const [isInstruction, setSurveyInstruction] = React.useState(true);
     const [isLoading, setLoading] = React.useState(false);
+    const [isSubmitSurvey, setSubmitSurvey] = React.useState(false);
     const [userSendToken, setUserSendToken] = React.useState('');
     const [audioPath, setAudioPath] = React.useState('');
     const [areas, setAreas] = React.useState([{ "id": 1, "area_title": "Rural Area - Population Less Than 10000", "status": 1, "created_date": "2024-01-13 08:48:30" }, { "id": 2, "area_title": "Semi-Urban Area - Population Above 10000 But Less Than 1 Lakh", "status": 1, "created_date": "2024-01-13 08:48:30" }, { "id": 3, "area_title": "Urban Area - Population 1 Lakh And Above But Less Than 10 Lakhs", "status": 1, "created_date": "2024-01-13 08:48:30" }, { "id": 4, "area_title": "Metro Area - Population More Than 10 Lakhs", "status": 1, "created_date": "2024-01-13 08:48:30" }]);
@@ -32,6 +33,8 @@ const AddSurveyScreen = () => {
     const [areasSelected, setSelectedAreas] = React.useState([]);
     const [state, setStateData] = React.useState([]);
     const [DistrictData, setDistrictData] = React.useState([]);
+    const [Lattitude, setLattitude] = React.useState('');
+    const [Longitude, setLongitude] = React.useState('');
 
     // country dropdowns
     const [value, setValue] = React.useState(null);
@@ -119,18 +122,24 @@ const AddSurveyScreen = () => {
     );
 
     React.useEffect(() => {
-        BackHandler.addEventListener("hardwareBackPress", askToCloseApp);
+        BackHandler.addEventListener("hardwareBackPress", askToCloseByBackButtonApp);
         return () => {
-            BackHandler.removeEventListener("hardwareBackPress", askToCloseApp);
+            BackHandler.removeEventListener("hardwareBackPress", askToCloseByBackButtonApp);
         };
     }, []);
+
+    const askToCloseByBackButtonApp = () => false;
 
     const readMessages = async () => {
         try {
             const userId = await AsyncStorage.getItem(AsyncStorageContaints.tempServerTokenId);
             const UserData = await AsyncStorage.getItem(AsyncStorageContaints.UserData);
             const UserToken = await AsyncStorage.getItem(AsyncStorageContaints.UserId);
+            const surveyLatitude = await AsyncStorage.getItem(AsyncStorageContaints.surveyLatitude);
+            const surveyLongitude = await AsyncStorage.getItem(AsyncStorageContaints.surveyLongitude);
             //UserId
+            setLattitude(surveyLatitude);
+            setLongitude(surveyLongitude);
             setUserSendToken(UserToken);
             setUserName(UserData);
             setName(userId);
@@ -243,10 +252,10 @@ const AddSurveyScreen = () => {
     const stopRecording = async () => {
         // or to get the wav file path
         const audioFile = await AudioRecord.stop();
-        console.warn(audioFile)
+        console.warn('stopRecording', audioFile);
         setAudioPath(audioFile);
-        console.warn('stopRecording');
-        submitSurveyFetch(audioFile);
+        uploadAudioFinal(audioFile);
+        submitSurvey();
     };
 
     const validationCheck = () => {
@@ -367,9 +376,8 @@ const AddSurveyScreen = () => {
         }
     }
 
-    const submitSurvey = async (file_urls) => {
-        // https://createdinam.in/RBI-CBCD/public/api/create-survey-demographics
-        console.warn('submitSurvey', file_urls)
+    const submitSurvey = async () => {
+        setSubmitSurvey(true);
         const FormData = require('form-data');
         let data = new FormData();
         data.append('user_name', surveryName);
@@ -388,11 +396,9 @@ const AddSurveyScreen = () => {
         data.append('total', Number(adult) + Number(children));
         data.append('part_of_group', anyGroup?.label);
         data.append('own_smartphone', smartPhone?.label);
-        data.append('latitude', '27.98878');
-        data.append('longitude', '28.00000');
+        data.append('latitude', Lattitude);
+        data.append('longitude', Longitude);
         data.append('other_occupation', 1);
-        data.append("audio_file", { uri: file_urls, name: `sound.wav`, type: 'audio/mp3' });
-        console.warn('startRecording', JSON.stringify(data))
         let config = {
             method: 'post',
             maxBodyLength: Infinity,
@@ -403,37 +409,36 @@ const AddSurveyScreen = () => {
             },
             data: data,
         };
-        console.warn('startRecording', JSON.stringify(config))
+        console.warn('submitSurvey', JSON.stringify(config))
         Axios.request(config)
             .then((response) => {
-                console.warn('startRecording', JSON.stringify(response.data))
+                console.warn('submitSurvey', JSON.stringify(response.data))
                 if (response.data.status === true) {
                     showMessage({
                         message: response.data.message + ', Submit By ' + response.data?.name,
                         description: response.data.message,
                         type: "success",
                     });
-                    navigation.replace('BlockBSurveyScreen');
+                    saveSurveryAndMoveToNext();
                 } else {
+                    saveSurveryAndMoveToNext();
                     showMessage({
                         message: "Something went wrong!",
-                        description: "Someting went wrong, Please check Form Details!",
+                        description: response.data.message,
                         type: "danger",
                     });
                 }
-            })
-            .catch((error) => {
-                console.log(error);
-                showMessage({
-                    message: "Something went wrong!",
-                    description: "Someting went wrong, Please check Form Details! " + error,
-                    type: "danger",
-                });
             });
 
     }
 
-    const submitSurveyFetch = async (file_urls) => {
+    const saveSurveryAndMoveToNext = async () => {
+        AsyncStorage.setItem(AsyncStorageContaints.surveyNextBlock, 'B');
+        navigation.replace('BlockBSurveyScreen');
+    }
+
+    const submitSurveyFetch = async () => {
+        setSubmitSurvey(true);
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + userSendToken);
         var formdata = new FormData();
@@ -453,38 +458,64 @@ const AddSurveyScreen = () => {
         formdata.append("total", Number(adult) + Number(children));
         formdata.append("part_of_group", anyGroup?.label);
         formdata.append("own_smartphone", smartPhone?.label);
-        formdata.append("latitude", "27.98878");
-        formdata.append("longitude", "28.00000");
+        formdata.append("latitude", Lattitude);
+        formdata.append("longitude", Longitude);
         formdata.append("other_occupation", "");
-        formdata.append('audio_file', { uri: file_urls, type: 'audio/wav', name: 'recording_block_a' });
-
-        console.log('submitSurveyFetch_>', JSON.stringify(formdata));
 
         var requestOptions = {
             method: 'POST',
-            URL: 'https://createdinam.in/RBI-CBCD/public/api/create-survey-section-b',
+            URL: 'https://createdinam.in/RBI-CBCD/public/api/create-survey-demographics',
             headers: myHeaders,
             body: formdata,
             redirect: 'follow',
         };
-
-        console.log('submitSurveyFetch_>', JSON.stringify(requestOptions));
 
         fetch(requestOptions)
             .then(response => response.json())
             .then(result => {
                 console.log(result?.status)
                 if (result?.status === true) {
-                    // navigation.replace('BlockBSurveyScreen');
+                    setSubmitSurvey(false);
+                    navigation.replace('BlockBSurveyScreen');
                 } else {
+                    setSubmitSurvey(false);
                     // navigation.replace('BlockBSurveyScreen');
-                    // showMessage({
-                    //     message: "Something went wrong!",
-                    //     description: result?.message,
-                    //     type: "danger",
-                    // });
+                    showMessage({
+                        message: "Something went wrong!",
+                        description: result?.message,
+                        type: "danger",
+                    });
                 }
             });
+    }
+
+    const uploadAudioFinal = async (file) => {
+
+        let API_UPLOAD_MSG_FILE = `https://createdinam.in/RBI-CBCD/public/api/survey-audio-files`;
+        const path = `file://${file}`;
+        const formData = new FormData();
+        formData.append('survey_token', name);
+        formData.append('sec_no', 'D');
+        formData.append('audio_file', {
+            uri: path,
+            name: 'test.wav',
+            type: 'audio/wav',
+        })
+        console.log(JSON.stringify(formData));
+        try {
+            const res = await fetch(API_UPLOAD_MSG_FILE, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': 'Bearer ' + userSendToken,
+                },
+                body: formData,
+            });
+            const json = await res.json()
+            alert(JSON.stringify(json));
+        } catch (err) {
+            alert(err)
+        }
     }
 
     const onSelectedItemsChange = (selectedItems) => {
@@ -767,7 +798,7 @@ const AddSurveyScreen = () => {
                             />
                         </View>
                         <View style={{ padding: 10, }} />
-                        <TouchableOpacity onPress={() => navigation.replace('BlockBSurveyScreen')} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
+                        <TouchableOpacity onPress={() => validationCheck()} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
                             <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Next Block B</Text>
                         </TouchableOpacity>
                     </View>
