@@ -401,8 +401,8 @@ const BlockCSurveyScreen = () => {
         }
         else if (loan?.label === "No" && selectedReason?.length === 0) {
             showMessage({
-                message: "Please Select Repayment Mode",
-                description: "Please Select Repayment Mode!",
+                message: "Please Select Appropriate Reason",
+                description: "Please Select Appropriate Reason!",
                 type: "danger",
             });
         }
@@ -455,7 +455,7 @@ const BlockCSurveyScreen = () => {
                 type: "danger",
             });
         }
-        else if (freeLoanReceived === null) {
+        else if (freeLoan?.label === 'Yes' && freeLoanReceived === null) {
             showMessage({
                 message: "Please Select Loan Received By You",
                 description: "Please Select Loan Received By You!",

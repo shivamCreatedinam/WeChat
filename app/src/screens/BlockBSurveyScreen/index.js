@@ -137,21 +137,21 @@ const BlockBSurveyScreen = () => {
         return selectedReason ? selectedReason.lable : '';
     });
 
-    const [DepositInsurance, setSetDepositInsurance] = React.useState([]);
-    const [ZeroBalance, setZeroBalance] = React.useState([]);
-    const [DirectBenefit, setDirectBenefit] = React.useState([]);
-    const [visitBranch, setVisitBranch] = React.useState('');
-    const [EnvironmentBranch, setEnvironmentBranch] = React.useState('');
-    const [EnvironmentOutlet, setEnvironmentOutlet] = React.useState('');
-    const [SupportiveBranch, setSupportiveBranch] = React.useState('');
-    const [SupportiveOutlet, setSupportiveOutlet] = React.useState('');
-    const [AmenitiesBranch, setAmenitiesBranch] = React.useState('');
-    const [AmenitiesOutlet, setAmenitiesOutlet] = React.useState('');
-    const [LongBranch, setLongBranch] = React.useState('');
-    const [LongOutlet, setLongOutlet] = React.useState('');
-    const [WithoutVisiting, setWithoutVisiting] = React.useState('');
-    const [AccountOpened, setAccountOpened] = React.useState('');
-    const [AccountNumber, setAccountNumber] = React.useState('');
+    const [DepositInsurance, setSetDepositInsurance] = React.useState(null);
+    const [ZeroBalance, setZeroBalance] = React.useState(null);
+    const [DirectBenefit, setDirectBenefit] = React.useState(null);
+    const [visitBranch, setVisitBranch] = React.useState(null);
+    const [EnvironmentBranch, setEnvironmentBranch] = React.useState(null);
+    const [EnvironmentOutlet, setEnvironmentOutlet] = React.useState(null);
+    const [SupportiveBranch, setSupportiveBranch] = React.useState(null);
+    const [SupportiveOutlet, setSupportiveOutlet] = React.useState(null);
+    const [AmenitiesBranch, setAmenitiesBranch] = React.useState(null);
+    const [AmenitiesOutlet, setAmenitiesOutlet] = React.useState(null);
+    const [LongBranch, setLongBranch] = React.useState(null);
+    const [LongOutlet, setLongOutlet] = React.useState(null);
+    const [WithoutVisiting, setWithoutVisiting] = React.useState(null);
+    const [AccountOpened, setAccountOpened] = React.useState(null);
+    const [AccountNumber, setAccountNumber] = React.useState(null);
 
     const whatPurposesdata = [
         { id: 1, lable: 'Receive Salary/ Money' },
@@ -349,128 +349,353 @@ const BlockBSurveyScreen = () => {
         console.warn('startRecording')
         const audioFile = await AudioRecord.stop();
         console.warn(audioFile)
-        setAudioPath(audioFile);
-        submitSurveyXml(audioFile);
+
+        // setAudioPath(audioFile);
+        // submitSurveyXml(audioFile);
     };
 
-    const validationCheck = () => {
-        const pattern = /^[a-zA-Z]{2,40}( [a-zA-Z]{2,40})+$/;
-        const AgeRegex = /^(?:1[01][0-9]|120|1[7-9]|[2-9][0-9])$/
-        if (pattern.test(surveryName)) {
-            if (gender !== '') {
-                if (AgeRegex.test(age)) {
-                    if (selectedOccupations.length !== 0) {
-                        if (selectedEducation.length !== 0) {
-                            if (selectedIncomes.length !== 0) {
-                                if (value !== null) {
-                                    if (valueDistrict !== null) {
-                                        if (areasSelected.length !== 0) {
-                                            if (differentlyAble !== '') {
-                                                if (adult !== '') {
-                                                    if (children !== '') {
-                                                        if (anyGroup !== '') {
-                                                            if (smartPhone !== '') {
-                                                                console.log('validationCheck', AgeRegex.test(age))
-                                                                stopRecording();
-                                                            } else {
-                                                                showMessage({
-                                                                    message: "Please Select SmartPhone Own!",
-                                                                    description: "Please Select SmartPhone Own!",
-                                                                    type: "danger",
-                                                                });
-                                                            }
-                                                        } else {
-                                                            showMessage({
-                                                                message: "Please Select Any Group Part!",
-                                                                description: "Please Select Any Group Part SHG/JLG!",
-                                                                type: "danger",
-                                                            });
-                                                        }
-                                                    } else {
-                                                        showMessage({
-                                                            message: "Please Select Children!",
-                                                            description: "Please Select Number Of Children!",
-                                                            type: "danger",
-                                                        });
-                                                    }
-                                                } else {
-                                                    showMessage({
-                                                        message: "Please Select Adults!",
-                                                        description: "Please Select Number Of Adults!",
-                                                        type: "danger",
-                                                    });
-                                                }
-                                            } else {
-                                                showMessage({
-                                                    message: "Please Select Differently!",
-                                                    description: "Please Select Differently abled!",
-                                                    type: "danger",
-                                                });
-                                            }
-                                        } else {
-                                            showMessage({
-                                                message: "Please Select Area",
-                                                description: "Please Select Area!",
-                                                type: "danger",
-                                            });
-                                        }
-                                    } else {
-                                        showMessage({
-                                            message: "Please Select District",
-                                            description: "Please Select District!",
-                                            type: "danger",
-                                        });
-                                    }
-                                } else {
-                                    showMessage({
-                                        message: "Please Select State",
-                                        description: "Please Select State!",
-                                        type: "danger",
-                                    });
-                                }
-                            } else {
-                                showMessage({
-                                    message: "Please Select Incomes",
-                                    description: "Please Select Incomes!",
-                                    type: "danger",
-                                });
-                            }
-                        } else {
-                            showMessage({
-                                message: "Please Select Education",
-                                description: "Please Select Education!",
-                                type: "danger",
-                            });
-                        }
-                    } else {
-                        showMessage({
-                            message: "Please Select Occupation",
-                            description: "Please Select Occupation!",
-                            type: "danger",
-                        });
-                    }
-                } else {
-                    showMessage({
-                        message: "Please Enter Valid Age",
-                        description: "Please Enter Valid Age!",
-                        type: "danger",
-                    });
-                }
-            } else {
-                showMessage({
-                    message: "Please Select Gender",
-                    description: "Please Select Valid Gender!",
-                    type: "danger",
-                });
-            }
-        } else {
+    const validate = () => {
+        if (bank === null) {
             showMessage({
-                message: "Please Enter Name",
-                description: "Please Enter Valid Name!",
+                message: "Please Select Bank Account",
+                description: "Please Select Bank Account!",
                 type: "danger",
             });
         }
+        else if (bank?.label === 'No' && selectedDigitalpreferred?.length === 0) {
+            showMessage({
+                message: "Please Select Open A Bank a/c Reason",
+                description: "Please Select Open A Bank a/c Reason!",
+                type: "danger",
+            });
+        }
+        else if (bank?.label === 'No' && selectedlackdocuments?.length === 0) {
+            showMessage({
+                message: "Please Select Lack Of Documnets",
+                description: "Please Select Lack Of Documnets!",
+                type: "danger",
+            });
+        }
+        else if (bank?.label === 'No' && selectedbankAccounts?.length === 0) {
+            showMessage({
+                message: "Please Select Bank Account Reasons",
+                description: "Please Select Bank Account Reasons!",
+                type: "danger",
+            });
+        }
+        else if (bank?.label === 'No' && selectedbankAccounts?.length === 0) {
+            showMessage({
+                message: "Please Select Bank Account Reasons",
+                description: "Please Select Bank Account Reasons!",
+                type: "danger",
+            });
+        }
+        else if (DepositInsurance === null) {
+            showMessage({
+                message: "Please Select Deposit Insurance",
+                description: "Please Select Deposit Insurance!",
+                type: "danger",
+            });
+        }
+        else if (ZeroBalance === null) {
+            showMessage({
+                message: "Please Select Zero balance Account",
+                description: "Please Select Zero balance Account!",
+                type: "danger",
+            });
+        }
+        else if (DirectBenefit === null) {
+            showMessage({
+                message: "Please Select About Subsidies/ benefits",
+                description: "Please Select About Subsidies/ benefits!",
+                type: "danger",
+            });
+        }
+        else if (DirectBenefit === null) {
+            showMessage({
+                message: "Please Select About Subsidies/ benefits",
+                description: "Please Select About Subsidies/ benefits!",
+                type: "danger",
+            });
+        }
+        else if (visitBranch === null) {
+            showMessage({
+                message: "Please Select Branch Visit",
+                description: "Please Select Branch Visit!",
+                type: "danger",
+            });
+        }
+        else if (visitBranch?.label === 'Yes' && EnvironmentBranch === null) {
+            showMessage({
+                message: "Please Select Branch Processes",
+                description: "Please Select Branch Processes!",
+                type: "danger",
+            });
+        }
+        else if (visitBranch?.label === 'Yes' && EnvironmentOutlet === null) {
+            showMessage({
+                message: "Please Select Outlet Processes",
+                description: "Please Select Outlet Processes!",
+                type: "danger",
+            });
+        }
+        else if (visitBranch?.label === 'Yes' && SupportiveBranch === null) {
+            showMessage({
+                message: "Please Select Branch Attitude",
+                description: "Please Select Branch Attitude!",
+                type: "danger",
+            });
+        }
+        else if (visitBranch?.label === 'Yes' && SupportiveBranch === null) {
+            showMessage({
+                message: "Please Select Outlet Attitude",
+                description: "Please Select Outlet Attitude!",
+                type: "danger",
+            });
+        }
+        else if (visitBranch?.label === 'Yes' && SupportiveOutlet === null) {
+            showMessage({
+                message: "Please Select Outlet Attitude",
+                description: "Please Select Outlet Attitude!",
+                type: "danger",
+            });
+        }
+        else if (visitBranch?.label === 'Yes' && AmenitiesBranch === null) {
+            showMessage({
+                message: "Please Select Branch Amenities",
+                description: "Please Select Branch Amenities!",
+                type: "danger",
+            });
+        }
+        else if (visitBranch?.label === 'Yes' && AmenitiesOutlet === null) {
+            showMessage({
+                message: "Please Select Outlet Amenities",
+                description: "Please Select Outlet Amenities!",
+                type: "danger",
+            });
+        }
+        else if (visitBranch?.label === 'Yes' && LongBranch === null) {
+            showMessage({
+                message: "Please Select Branch Wait Time",
+                description: "Please Select Branch Wait Time!",
+                type: "danger",
+            });
+        }
+        else if (visitBranch?.label === 'Yes' && LongOutlet === null) {
+            showMessage({
+                message: "Please Select Outlet Wait Time",
+                description: "Please Select Outlet Wait Time!",
+                type: "danger",
+            });
+        }
+        else if (WithoutVisiting === null) {
+            showMessage({
+                message: "Please Select Account Opening",
+                description: "Please Select Account Opening!",
+                type: "danger",
+            });
+        }
+        else if (AccountOpened === null) {
+            showMessage({
+                message: "Please Select Account Opening via Online",
+                description: "Please Select Account Opening via Online!",
+                type: "danger",
+            });
+        }
+        else if (AccountTypeValue === null) {
+            showMessage({
+                message: "Please Select Type Of Account",
+                description: "Please Select Type Of Account!",
+                type: "danger",
+            });
+        }
+        else if (AccountTypeValue && AccountNumber === null) {
+            showMessage({
+                message: "Please Select Account Number",
+                description: "Please Select Account Number!",
+                type: "danger",
+            });
+        }
+        else if (selectedwhatPurposes?.length === 0) {
+            showMessage({
+                message: "Please Select purpose",
+                description: "Please Select purpose!",
+                type: "danger",
+            });
+        }
+        else if (AccountTypeValue === null) {
+            showMessage({
+                message: "Please Select Frequency",
+                description: "Please Select Frequency!",
+                type: "danger",
+            });
+        }
+        else if (selectedOccupations?.length === 0) {
+            showMessage({
+                message: "Please Select Reasons",
+                description: "Please Select Reasons!",
+                type: "danger",
+            });
+        }
+        else if (transaction === null) {
+            showMessage({
+                message: "Please Select Transact Mode",
+                description: "Please Select Transact Mode!",
+                type: "danger",
+            });
+        }
+        else if (subsidy === null) {
+            showMessage({
+                message: "Please Select Subsidy Recieved Frequency",
+                description: "Please Select Subsidy Recieved Frequency!",
+                type: "danger",
+            });
+        }
+        else if (selectedIncomes?.length === 0) {
+            showMessage({
+                message: "Please Select Reason For Not Using Account",
+                description: "Please Select Reason For Not Using Account!",
+                type: "danger",
+            });
+        }
+        else if (selectCashReceipt?.length === 0) {
+            showMessage({
+                message: "Please Select Cash Receipt",
+                description: "Please Select Cash Receipt!",
+                type: "danger",
+            });
+        }
+        else if (SelectedSaveMoney?.length === 0) {
+            showMessage({
+                message: "Please Select Save Money Method",
+                description: "Please Select Save Money Method!",
+                type: "danger",
+            });
+        }
+        else {
+            navigation.navigate("BlockCSurveyScreen")
+        }
+
     }
+
+    // const validationCheck = () => {
+    //     const pattern = /^[a-zA-Z]{2,40}( [a-zA-Z]{2,40})+$/;
+    //     const AgeRegex = /^(?:1[01][0-9]|120|1[7-9]|[2-9][0-9])$/
+    //     if (pattern.test(surveryName)) {
+    //         if (gender !== '') {
+    //             if (AgeRegex.test(age)) {
+    //                 if (selectedOccupations.length !== 0) {
+    //                     if (selectedEducation.length !== 0) {
+    //                         if (selectedIncomes.length !== 0) {
+    //                             if (value !== null) {
+    //                                 if (valueDistrict !== null) {
+    //                                     if (areasSelected.length !== 0) {
+    //                                         if (differentlyAble !== '') {
+    //                                             if (adult !== '') {
+    //                                                 if (children !== '') {
+    //                                                     if (anyGroup !== '') {
+    //                                                         if (smartPhone !== '') {
+    //                                                             console.log('validationCheck', AgeRegex.test(age))
+    //                                                             stopRecording();
+    //                                                         } else {
+    //                                                             showMessage({
+    //                                                                 message: "Please Select SmartPhone Own!",
+    //                                                                 description: "Please Select SmartPhone Own!",
+    //                                                                 type: "danger",
+    //                                                             });
+    //                                                         }
+    //                                                     } else {
+    //                                                         showMessage({
+    //                                                             message: "Please Select Any Group Part!",
+    //                                                             description: "Please Select Any Group Part SHG/JLG!",
+    //                                                             type: "danger",
+    //                                                         });
+    //                                                     }
+    //                                                 } else {
+    //                                                     showMessage({
+    //                                                         message: "Please Select Children!",
+    //                                                         description: "Please Select Number Of Children!",
+    //                                                         type: "danger",
+    //                                                     });
+    //                                                 }
+    //                                             } else {
+    //                                                 showMessage({
+    //                                                     message: "Please Select Adults!",
+    //                                                     description: "Please Select Number Of Adults!",
+    //                                                     type: "danger",
+    //                                                 });
+    //                                             }
+    //                                         } else {
+    //                                             showMessage({
+    //                                                 message: "Please Select Differently!",
+    //                                                 description: "Please Select Differently abled!",
+    //                                                 type: "danger",
+    //                                             });
+    //                                         }
+    //                                     } else {
+    //                                         showMessage({
+    //                                             message: "Please Select Area",
+    //                                             description: "Please Select Area!",
+    //                                             type: "danger",
+    //                                         });
+    //                                     }
+    //                                 } else {
+    //                                     showMessage({
+    //                                         message: "Please Select District",
+    //                                         description: "Please Select District!",
+    //                                         type: "danger",
+    //                                     });
+    //                                 }
+    //                             } else {
+    //                                 showMessage({
+    //                                     message: "Please Select State",
+    //                                     description: "Please Select State!",
+    //                                     type: "danger",
+    //                                 });
+    //                             }
+    //                         } else {
+    //                             showMessage({
+    //                                 message: "Please Select Incomes",
+    //                                 description: "Please Select Incomes!",
+    //                                 type: "danger",
+    //                             });
+    //                         }
+    //                     } else {
+    //                         showMessage({
+    //                             message: "Please Select Education",
+    //                             description: "Please Select Education!",
+    //                             type: "danger",
+    //                         });
+    //                     }
+    //                 } else {
+    //                     showMessage({
+    //                         message: "Please Select Occupation",
+    //                         description: "Please Select Occupation!",
+    //                         type: "danger",
+    //                     });
+    //                 }
+    //             } else {
+    //                 showMessage({
+    //                     message: "Please Enter Valid Age",
+    //                     description: "Please Enter Valid Age!",
+    //                     type: "danger",
+    //                 });
+    //             }
+    //         } else {
+    //             showMessage({
+    //                 message: "Please Select Gender",
+    //                 description: "Please Select Valid Gender!",
+    //                 type: "danger",
+    //             });
+    //         }
+    //     } else {
+    //         showMessage({
+    //             message: "Please Enter Name",
+    //             description: "Please Enter Valid Name!",
+    //             type: "danger",
+    //         });
+    //     }
+    // }
 
     const submitSurvey = async (file_urls) => {
         const response = [
@@ -756,6 +981,7 @@ const BlockBSurveyScreen = () => {
     }
 
     const submitSurveyXml = async (file_urls) => {
+
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", 'multipart/form-data');
         myHeaders.append("Authorization", "Bearer 33|NdofyDbXloIQg3n7MH1cnHu1yAqGi8w13uYUXVvw");
@@ -1625,11 +1851,16 @@ const BlockBSurveyScreen = () => {
                             </View>
                         </View>
                         <View style={{ padding: 10, }} />
-                        <TouchableOpacity onPress={() => stopRecording()} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
+                        <TouchableOpacity onPress={() =>
+                            validate()
+
+                            // stopRecording()
+                        } style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
                             <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Next Block C</Text>
                         </TouchableOpacity>
                     </View>
-                </ScrollView> : <ActivityIndicator style={{ alignItems: 'center', marginTop: Dimensions.get('screen').width }} color={'#000'} />}
+                </ScrollView> : <ActivityIndicator style={{ alignItems: 'center', marginTop: Dimensions.get('screen').width }} color={'#000'} />
+            }
         </SafeAreaView >
     )
 }
