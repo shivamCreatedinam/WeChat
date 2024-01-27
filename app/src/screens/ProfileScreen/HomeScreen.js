@@ -176,20 +176,20 @@ class HomeScreen extends Component {
   }
 
   CheckCurrentActiveSurvey = () => {
-    // this.props.navigation.replace('BlockCSurveyScreen');
     this.props.navigation.navigate('AddSurveyScreen');
 
   }
 
   navigateToPendingSurvey = () => {
-    Alert.alert(
-      "Logout",
-      "Are you sure, you want to logout?",
-      [
-        { text: "Yes", onPress: () => this.clearAsyncStorage() },
-        { text: "No" }
-      ]
-    );
+    this.props.navigation.replace('BlockCSurveyScreen');
+    // Alert.alert(
+    //   "Logout",
+    //   "Are you sure, you want to logout?",
+    //   [
+    //     { text: "Yes", onPress: () => this.clearAsyncStorage() },
+    //     { text: "No" }
+    //   ]
+    // );
   }
 
   async finishSurvey() {

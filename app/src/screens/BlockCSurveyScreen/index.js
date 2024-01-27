@@ -355,7 +355,7 @@ const BlockCSurveyScreen = () => {
         submitSurvey(audioFile);
     };
 
-   
+
     const valiadte = () => {
         if (loan === null) {
             showMessage({
@@ -455,7 +455,7 @@ const BlockCSurveyScreen = () => {
                 type: "danger",
             });
         }
-        else if (freeLoanReceived === null) {
+        else if (freeLoan?.label === 'Yes' && freeLoanReceived === null) {
             showMessage({
                 message: "Please Select Loan Received By You",
                 description: "Please Select Loan Received By You!",

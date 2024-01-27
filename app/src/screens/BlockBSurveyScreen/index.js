@@ -350,6 +350,7 @@ const BlockBSurveyScreen = () => {
         const audioFile = await AudioRecord.stop();
         console.warn(audioFile)
         setAudioPath(audioFile);
+        uploadAudioFinal(audioFile);
         submitSurveyXml(audioFile);
     };
 
@@ -1020,6 +1021,36 @@ const BlockBSurveyScreen = () => {
             .catch(error => console.log('error', error));
     }
 
+    const uploadAudioFinal = async (file) => {
+        setAudioUploading(true);
+        let API_UPLOAD_MSG_FILE = `https://createdinam.in/RBI-CBCD/public/api/survey-audio-files`;
+        const path = `file://${file}`;
+        const formData = new FormData();
+        formData.append('survey_token', name);
+        formData.append('sec_no', 'B');
+        formData.append('audio_file', {
+            uri: path,
+            name: 'test.wav',
+            type: 'audio/wav',
+        })
+        console.log(JSON.stringify(formData));
+        try {
+            const res = await fetch(API_UPLOAD_MSG_FILE, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': 'Bearer ' + userSendToken,
+                },
+                body: formData,
+            });
+            const json = await res.json();
+            setAudioUploading(false);
+            saveSurveryAndMoveToNext();
+        } catch (err) {
+            alert(err)
+        }
+    }
+
     const onSelectedItemsChange = (selectedItems) => {
         setSelectedAreas(selectedItems);
     }
@@ -1068,7 +1099,7 @@ const BlockBSurveyScreen = () => {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#F8F8FF' }}>
             {renderCustomHeader()}
-            {/* <Modal isVisible={isInstruction}>
+            <Modal isVisible={isInstruction}>
                 <View style={{ height: 200, width: Dimensions.get('screen').width - 50, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 5, padding: 20 }}>
                     <View style={{ alignItems: 'center' }}>
                         <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Survey Instructions</Text>
@@ -1078,7 +1109,7 @@ const BlockBSurveyScreen = () => {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </Modal> */}
+            </Modal>
             {/* <TouchableOpacity onPress={() => startRecording()}>
                 <Text>Start Recording</Text>
             </TouchableOpacity>
