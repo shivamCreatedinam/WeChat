@@ -101,7 +101,25 @@ class HomeScreen extends Component {
 
   componentDidMount() {
     this.readMessages();
+    this.getSavedLocation();
   }
+
+  getSavedLocation = async () => {
+    try {
+      const latitude = await AsyncStorage.getItem(AsyncStorageContaints.surveyLatitude);
+      const longitude = await AsyncStorage.getItem(AsyncStorageContaints.surveyLongitude);
+
+      if (latitude !== null && longitude !== null) {
+        console.log('Latitude:', latitude);
+        console.log('Longitude:', longitude);
+      } else {
+        console.log('Latitude and longitude not found in AsyncStorage.');
+      }
+    } catch (error) {
+      console.log('Error retrieving latitude and longitude from AsyncStorage:', error);
+    }
+  };
+
 
   async readMessages() {
     try {
@@ -230,7 +248,7 @@ class HomeScreen extends Component {
           {this.state.surveyNextBlock !== '' ? <TouchableOpacity onPress={() => this.navigateToPendingSurvey()} style={{ paddingVertical: 14, paddingHorizontal: 20, backgroundColor: '#000', borderRadius: 5, flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
             <Image style={{ width: 20, height: 20, resizeMode: 'contain', tintColor: '#fff' }} source={require('../../../res/images/add_survery_logo.png')} />
             {/* {this.state.loading === false ?  */}
-            <Text style={{ textAlign: 'center', fontWeight: 'bold', color: '#fff', flex: 1 }}>Draft Survey {this.state.surveyNextBlock}</Text> 
+            <Text style={{ textAlign: 'center', fontWeight: 'bold', color: '#fff', flex: 1 }}>Draft Survey {this.state.surveyNextBlock}</Text>
             {/* : <ActivityIndicator style={{ alignSelf: 'center', flex: 1 }} color={'#fff'} />} */}
           </TouchableOpacity> : null}
         </View>

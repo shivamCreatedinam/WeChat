@@ -36,11 +36,6 @@ export default class PermissionScreenMain extends Component {
         } catch (error) {
             console.error('componentDidFocus', JSON.stringify(error))
         }
-        // this.FilePermission();
-        // this.CameraPermission();
-        // this.PushNotification();
-        // this.requestLocationPermission();
-        // this.requestLocationBackgroundPermission();
     };
 
 
@@ -49,8 +44,8 @@ export default class PermissionScreenMain extends Component {
             const granted = await PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION,
                 {
-                    title: 'Parihara App',
-                    message: 'Parihara App needs to access your Location',
+                    title: 'Survey App',
+                    message: 'Survey App needs to access your Location',
                     buttonNegative: 'Cancel',
                     buttonPositive: 'Okay',
                 },
@@ -73,8 +68,8 @@ export default class PermissionScreenMain extends Component {
             const granted = await PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
                 {
-                    title: 'Parihara App',
-                    message: 'Parihara App needs to access your Location',
+                    title: 'Survey App',
+                    message: 'Survey App needs to access your Location',
                     buttonNegative: 'Cancel',
                     buttonPositive: 'Okay',
                 },
