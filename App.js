@@ -47,6 +47,7 @@ const App = () => {
 
   Geolocation.getCurrentPosition(
     (position) => {
+      console.log("position", position)
       //getting the Longitude from the location json
       const currentLongitude = JSON.stringify(position.coords.longitude);
       //getting the Latitude from the location json
@@ -61,11 +62,22 @@ const App = () => {
     { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
   );
 
-  const saveLocationForFutureUse = async (lat, long) => {
-    AsyncStorage.setItem(AsyncStorageContaints.surveyLatitude, lat + '');
-    AsyncStorage.setItem(AsyncStorageContaints.surveyLongitude, long + '');
-    // console.log('saveLocationForFutureUse');
-  }
+  // const saveLocationForFutureUse = async (lat, long) => {
+  //   console.log("lat",lat, "long",long)
+  //   AsyncStorage.setItem(AsyncStorageContaints.surveyLatitude, lat + '');
+  //   AsyncStorage.setItem(AsyncStorageContaints.surveyLongitude, long + '');
+  //   console.log('saveLocationForFutureUse',AsyncStorage.getItem("AsyncStorageContaints.surveyLatitude"));
+  // }
+
+  const saveLocationForFutureUse = async (latitude, longitude) => {
+    try {
+      await AsyncStorage.setItem(AsyncStorageContaints.surveyLatitude, latitude);
+      await AsyncStorage.setItem(AsyncStorageContaints.surveyLongitude, longitude);
+      console.log('Latitude and longitude saved successfully!');
+    } catch (error) {
+      console.log('Error saving latitude and longitude:', error);
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, marginTop: 0 }}>

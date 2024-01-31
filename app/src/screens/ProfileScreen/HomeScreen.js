@@ -101,7 +101,25 @@ class HomeScreen extends Component {
 
   componentDidMount() {
     this.readMessages();
+    this.getSavedLocation();
   }
+
+  getSavedLocation = async () => {
+    try {
+      const latitude = await AsyncStorage.getItem(AsyncStorageContaints.surveyLatitude);
+      const longitude = await AsyncStorage.getItem(AsyncStorageContaints.surveyLongitude);
+
+      if (latitude !== null && longitude !== null) {
+        console.log('Latitude:', latitude);
+        console.log('Longitude:', longitude);
+      } else {
+        console.log('Latitude and longitude not found in AsyncStorage.');
+      }
+    } catch (error) {
+      console.log('Error retrieving latitude and longitude from AsyncStorage:', error);
+    }
+  };
+
 
   async readMessages() {
     try {
