@@ -552,7 +552,7 @@ const BlockCSurveyScreen = () => {
                     "q_type": "CHILD",
                     "sub_q_no": "c",
                     "sub_q_title": "What type of loan do you have?",
-                    "sub_q_type": "SINGLECHECK",
+                    "sub_q_type": "MULTICHECK",
                     'response1': "",
                     'response2': "",
                     'response3': "",
@@ -591,12 +591,12 @@ const BlockCSurveyScreen = () => {
                     "q_type": "CHILD",
                     "sub_q_no": "f",
                     "sub_q_title": "How do you make your repayment of loan?",
-                    "sub_q_type": "SINGLECHECK",
+                    "sub_q_type": "MULTICHECK",
                     'response1': "",
                     'response2': "",
                     'response3': "",
                     'response4': "",
-                    "response": `${repay}`
+                    "response": [repay]
                 },
                 {
                     "section_no": "C",
@@ -604,12 +604,12 @@ const BlockCSurveyScreen = () => {
                     "q_type": "CHILD",
                     "sub_q_no": "g",
                     "sub_q_title": "If your answer to Q 19 (a) is No, why don’t you seek a loan from banks/NBFCs/ NBFC-MFIs?",
-                    "sub_q_type": "SINGLECHECK",
+                    "sub_q_type": "MULTICHECK",
                     'response1': "",
                     'response2': "",
                     'response3': "",
                     'response4': "",
-                    "response": `[${selectedReason}]`
+                    "response": selectedReason.length === 0 ? "" : selectedReason
                 },
                 {
                     "section_no": "C",
@@ -669,12 +669,12 @@ const BlockCSurveyScreen = () => {
                     "q_type": "CHILD",
                     "sub_q_no": "e",
                     "sub_q_title": "If refused, what was the reason cited?",
-                    "sub_q_type": "SINGLECHECK",
+                    "sub_q_type": "MULTICHECK",
                     'response1': "",
                     'response2': "",
                     'response3': "",
                     'response4': "",
-                    "response": `[${selectedRefuseReason}]`
+                    "response": selectedRefuseReason.length === 0 ? "" : selectedRefuseReason
                 },
                 {
                     "section_no": "C",
@@ -721,12 +721,12 @@ const BlockCSurveyScreen = () => {
                     "q_type": "CHILD",
                     "sub_q_no": "d",
                     "sub_q_title": "If yes, what was the reason for refusal.",
-                    "sub_q_type": "SINGLECHECK",
+                    "sub_q_type": "MULTICHECK",
                     'response1': "",
                     'response2': "",
                     'response3': "",
                     'response4': "",
-                    "response": `[${selectedFreeLoanRefuseReason}]`
+                    "response": selectedFreeLoanRefuseReason.length === 0 ? "" : selectedFreeLoanRefuseReason
                 },
                 {
                     "section_no": "C",
@@ -1227,7 +1227,7 @@ const BlockCSurveyScreen = () => {
 
                         <View style={{ padding: 10, }} />
                         <TouchableOpacity onPress={() => {
-                           
+
                             // navigation.replace('BlockDSurveyScreen');
                             valiadte();
                         }} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>

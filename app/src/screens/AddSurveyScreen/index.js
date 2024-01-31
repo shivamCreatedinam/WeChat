@@ -423,7 +423,6 @@ const AddSurveyScreen = () => {
                     });
                     saveSurveryAndMoveToNext();
                 } else {
-
                     showMessage({
                         message: "Something went wrong!",
                         description: response.data.message,

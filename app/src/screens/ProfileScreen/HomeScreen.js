@@ -178,7 +178,8 @@ class HomeScreen extends Component {
   }
 
   CheckCurrentActiveSurvey = () => {
-    this.props.navigation.navigate('AddSurveyScreen');
+    // this.props.navigation.navigate('AddSurveyScreen');
+    this.props.navigation.replace('BlockDSurveyScreen');
   }
 
   navigateToPendingSurvey = () => {
@@ -208,6 +209,15 @@ class HomeScreen extends Component {
     }
   }
 
+  checkStartSurvey() {
+    (this.state.surveyNextBlock !== '' || this.state.surveyNextBlock !== null) ? this.navigateToSurvey() : showMessage({
+      message: "Please Check",
+      description: "You May Have A Draft Survey!",
+      type: "danger",
+    });
+  }
+
+
   render() {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: '#F7F7F8', marginTop: 0 }}>
@@ -217,20 +227,14 @@ class HomeScreen extends Component {
           <TextInput placeholder='Search' style={{ flex: 1, paddingLeft: 15 }} />
         </View>
         <View style={{ marginLeft: 20, marginRight: 20 }}>
-          <TouchableOpacity onPress={() => {
-            (this.state.surveyNextBlock === '' || this.state.surveyNextBlock === null) ? this.navigateToSurvey() : showMessage({
-              message: "Please Check",
-              description: "You May Have A Draft Survey!",
-              type: "danger",
-            });
-          }} style={{ paddingVertical: 14, paddingHorizontal: 20, backgroundColor: '#000', borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
+          <TouchableOpacity onPress={() => this.checkStartSurvey()} style={{ paddingVertical: 14, paddingHorizontal: 20, backgroundColor: '#000', borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
             <Image style={{ width: 20, height: 20, resizeMode: 'contain', tintColor: '#fff' }} source={require('../../../res/images/add_survery_logo.png')} />
             {this.state.loading === false ? <Text style={{ textAlign: 'center', fontWeight: 'bold', color: '#fff', flex: 1 }}>Create New Survey</Text> : <ActivityIndicator style={{ alignSelf: 'center', flex: 1 }} color={'#fff'} />}
           </TouchableOpacity>
           {this.state.surveyNextBlock !== '' ? <TouchableOpacity onPress={() => this.navigateToPendingSurvey()} style={{ paddingVertical: 14, paddingHorizontal: 20, backgroundColor: '#000', borderRadius: 5, flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
             <Image style={{ width: 20, height: 20, resizeMode: 'contain', tintColor: '#fff' }} source={require('../../../res/images/add_survery_logo.png')} />
             {/* {this.state.loading === false ?  */}
-            <Text style={{ textAlign: 'center', fontWeight: 'bold', color: '#fff', flex: 1 }}>Draft Survey {this.state.surveyNextBlock}</Text> 
+            <Text style={{ textAlign: 'center', fontWeight: 'bold', color: '#fff', flex: 1 }}>Draft Survey {this.state.surveyNextBlock}</Text>
             {/* : <ActivityIndicator style={{ alignSelf: 'center', flex: 1 }} color={'#fff'} />} */}
           </TouchableOpacity> : null}
         </View>

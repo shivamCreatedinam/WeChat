@@ -495,13 +495,26 @@ const BlockDSurveyScreen = () => {
                     "q_no": "23",
                     "q_type": "CHILD",
                     "sub_q_no": "c",
-                    "sub_q_title": "tile here",
+                    "sub_q_title": "If not, do you want to get any insurance facilities?",
                     "sub_q_type": "SINGLECHECK",
                     'response1': "",
                     'response2': "",
                     'response3': "",
                     'response4': "",
                     "response": `${getInsurance?.label}`
+                },
+                {
+                    "section_no": "D",
+                    "q_no": "23",
+                    "q_type": "CHILD",
+                    "sub_q_no": "d",
+                    "sub_q_title": "If not interested in any insurance facility, what could be the reasons?",
+                    "sub_q_type": "MULTICHECK",
+                    'response1': "",
+                    'response2': "",
+                    'response3': "",
+                    'response4': "",
+                    "response": selectedReason.length === 0 ? "" : selectedReason
                 },
                 {
                     "section_no": "D",
@@ -572,7 +585,7 @@ const BlockDSurveyScreen = () => {
                 {
                     "section_no": "D",
                     "q_no": "26",
-                    "q_type": "MULTICHECK",
+                    "q_type": "MULTI",
                     "sub_q_no": "",
                     "sub_q_title": "",
                     "sub_q_type": "",
@@ -581,7 +594,7 @@ const BlockDSurveyScreen = () => {
                     'response3': ``,
                     'response4': ``,
                     'response5': ``,
-                    "response": `[${reasonForEnroll}]`
+                    "response": reasonForEnroll.length === 0 ? "" : reasonForEnroll
                 },
                 {
                     "section_no": "D",
@@ -614,7 +627,7 @@ const BlockDSurveyScreen = () => {
                 {
                     "section_no": "D",
                     "q_no": "29",
-                    "q_type": "SELF",
+                    "q_type": "MULTI",
                     "sub_q_no": "",
                     "sub_q_title": "",
                     "sub_q_type": "",
@@ -623,7 +636,7 @@ const BlockDSurveyScreen = () => {
                     'response3': ``,
                     'response4': ``,
                     'response5': ``,
-                    "response": `[${insuranceInactive}]`
+                    "response": insuranceInactive.length === 0 ? "" : insuranceInactive
                 },
             ]
         });
