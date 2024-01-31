@@ -182,27 +182,30 @@ class HomeScreen extends Component {
   }
 
   navigateToPendingSurvey = () => {
-    if (this.state.surveyNextBlock === '') {
-      this.props.navigation.replace('AddSurveyScreen');
+    console.log("this.state.surveyNextBlock", this.state.surveyNextBlock)
+    if (this.state.surveyNextBlock === '' || this.state.surveyNextBlock === null) {
+      showMessage({
+        message: "You Haven't Any Draft Survey",
+        description: "Create new survey!",
+        type: "danger",
+      });
+      // this.props.navigation.replace('AddSurveyScreen');
     } else if (this.state.surveyNextBlock === 'B') {
+      console.log("inside B")
       this.props.navigation.replace('BlockBSurveyScreen');
     } else if (this.state.surveyNextBlock === 'C') {
+      console.log("inside C")
       this.props.navigation.replace('BlockCSurveyScreen');
     } else if (this.state.surveyNextBlock === 'D') {
       this.props.navigation.replace('BlockDSurveyScreen');
+      console.log("inside D")
     } else if (this.state.surveyNextBlock === 'E') {
       this.props.navigation.replace('BlockESurveyScreen');
+      console.log("inside E")
     } else if (this.state.surveyNextBlock === 'F') {
+      console.log("inside F")
       this.props.navigation.replace('BlockFSurveyScreen');
     }
-    // Alert.alert(
-    //   "Logout",
-    //   "Are you sure, you want to logout?",
-    //   [
-    //     { text: "Yes", onPress: () => this.clearAsyncStorage() },
-    //     { text: "No" }
-    //   ]
-    // );
   }
 
   render() {
@@ -214,13 +217,21 @@ class HomeScreen extends Component {
           <TextInput placeholder='Search' style={{ flex: 1, paddingLeft: 15 }} />
         </View>
         <View style={{ marginLeft: 20, marginRight: 20 }}>
-          <TouchableOpacity onPress={() => this.navigateToSurvey()} style={{ paddingVertical: 14, paddingHorizontal: 20, backgroundColor: '#000', borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
+          <TouchableOpacity onPress={() => {
+            (this.state.surveyNextBlock === '' || this.state.surveyNextBlock === null) ? this.navigateToSurvey() : showMessage({
+              message: "Please Check",
+              description: "You May Have A Draft Survey!",
+              type: "danger",
+            });
+          }} style={{ paddingVertical: 14, paddingHorizontal: 20, backgroundColor: '#000', borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
             <Image style={{ width: 20, height: 20, resizeMode: 'contain', tintColor: '#fff' }} source={require('../../../res/images/add_survery_logo.png')} />
             {this.state.loading === false ? <Text style={{ textAlign: 'center', fontWeight: 'bold', color: '#fff', flex: 1 }}>Create New Survey</Text> : <ActivityIndicator style={{ alignSelf: 'center', flex: 1 }} color={'#fff'} />}
           </TouchableOpacity>
           {this.state.surveyNextBlock !== '' ? <TouchableOpacity onPress={() => this.navigateToPendingSurvey()} style={{ paddingVertical: 14, paddingHorizontal: 20, backgroundColor: '#000', borderRadius: 5, flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
             <Image style={{ width: 20, height: 20, resizeMode: 'contain', tintColor: '#fff' }} source={require('../../../res/images/add_survery_logo.png')} />
-            {this.state.loading === false ? <Text style={{ textAlign: 'center', fontWeight: 'bold', color: '#fff', flex: 1 }}>Draft Survey {this.state.surveyNextBlock}</Text> : <ActivityIndicator style={{ alignSelf: 'center', flex: 1 }} color={'#fff'} />}
+            {/* {this.state.loading === false ?  */}
+            <Text style={{ textAlign: 'center', fontWeight: 'bold', color: '#fff', flex: 1 }}>Draft Survey {this.state.surveyNextBlock}</Text> 
+            {/* : <ActivityIndicator style={{ alignSelf: 'center', flex: 1 }} color={'#fff'} />} */}
           </TouchableOpacity> : null}
         </View>
       </SafeAreaView>

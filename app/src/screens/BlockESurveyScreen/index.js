@@ -301,6 +301,7 @@ const BlockESurveyScreen = () => {
         else {
             // navigation.replace('BlockFSurveyScreen');
             submitSurvey();
+            // stopRecording();
         }
     }
 
@@ -517,7 +518,9 @@ const BlockESurveyScreen = () => {
                             </View>
                         </View>
                         <View style={{ padding: 10, }} />
-                        <TouchableOpacity onPress={() => Validate()} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
+                        <TouchableOpacity onPress={() => {
+                            //  navigation.replace('BlockFSurveyScreen');
+                            Validate()}} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
                             <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Next Block F</Text>
                         </TouchableOpacity>
                     </View>

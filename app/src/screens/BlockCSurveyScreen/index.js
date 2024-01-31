@@ -505,7 +505,7 @@ const BlockCSurveyScreen = () => {
         }
         else {
             submitSurvey();
-            // navigation.replace('BlockDSurveyScreen')
+
         }
     }
 
@@ -1227,8 +1227,9 @@ const BlockCSurveyScreen = () => {
 
                         <View style={{ padding: 10, }} />
                         <TouchableOpacity onPress={() => {
+                           
+                            // navigation.replace('BlockDSurveyScreen');
                             valiadte();
-
                         }} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
                             <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Next Block D</Text>
                         </TouchableOpacity>

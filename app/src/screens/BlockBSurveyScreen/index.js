@@ -566,7 +566,8 @@ const BlockBSurveyScreen = () => {
             });
         }
         else {
-            navigation.navigate("BlockCSurveyScreen")
+            stopRecording();
+  
         }
 
     }

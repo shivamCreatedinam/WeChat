@@ -13,4 +13,11 @@ const AsyncStorageContaints = {
   surveyNextBlock: '@SURVEYNEXTBLOCK',
   surveyCompleteCount: '@CountSurveyComplete',
 };
+
+for (const key in AsyncStorageContaints) {
+  if (Object.hasOwnProperty.call(AsyncStorageContaints, key)) {
+    const value = AsyncStorageContaints[key];
+    console.log(`${key}: ${value}`);
+  }
+}
 export default AsyncStorageContaints;

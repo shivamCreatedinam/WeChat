@@ -51,6 +51,7 @@ const BlockFSurveyScreen = () => {
     const [children, setChildren] = React.useState(0);
     const [selectedEducation, setSelectedEducation] = React.useState([]);
     const [selectedOccupations, setSelectedOccupations] = React.useState([]);
+    const [selectedReason, setSelectedReason] = React.useState([]);
     const [selectedIncomes, setSelectedIncomes] = React.useState([]);
     const [differentlyAble, setDifferently] = React.useState('');
     const [smartPhone, setSmartphone] = React.useState('');
@@ -285,6 +286,10 @@ const BlockFSurveyScreen = () => {
         const selectedReason = Digitalpreferred.find((reason) => reason.id === selectedId);
         return selectedReason ? selectedReason.lable : '';
     });
+    const SelectedReasonlabels = selectedReason.map((selectedId) => {
+        const selectedReason = transactionsdigitally.find((reason) => reason.id === selectedId);
+        return selectedReason ? selectedReason.lable : '';
+    });
 
     const onSelectedItemsChange = (selectedItems) => {
         setSelectedAreas(selectedItems);
@@ -302,8 +307,8 @@ const BlockFSurveyScreen = () => {
         setSelectedFinancial(selectedItems);
     }
 
-    const onSelectedIncomesChange = (selectedItems) => {
-        setSelectedIncomes(selectedItems);
+    const onSelectedReasonChange = (selectedItems) => {
+        setSelectedReason(selectedItems);
     }
 
     useFocusEffect(
@@ -404,7 +409,6 @@ const BlockFSurveyScreen = () => {
         submitSurvey(audioFile);
     };
 
-    console.log("comfort", comfortableConducting, "value", value);
 
     const Validate = () => {
         if (SpecificInformation === null) {
@@ -484,7 +488,7 @@ const BlockFSurveyScreen = () => {
                 type: "danger",
             });
         }
-        else if (hinderanceValue === null) {
+        else if (selectedReason?.length === 0) {
             showMessage({
                 message: "Please Select Hinderance Reasons",
                 description: "Please Select Hinderance Reasons!",
@@ -651,10 +655,12 @@ const BlockFSurveyScreen = () => {
         else {
             // navigation.replace('DashboardScreen');
             submitSurvey();
+            // stopRecording();
         }
     }
 
     const submitSurvey = async () => {
+        console.log("inside submitSurvey")
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", 'application/json');
         myHeaders.append("Authorization", "Bearer " + userSendToken);
@@ -1103,9 +1109,9 @@ const BlockFSurveyScreen = () => {
                 },
             ],
         });
-        // 
 
-        console.log(raw);
+
+
 
         var requestOptions = {
             method: 'POST',
@@ -1117,6 +1123,7 @@ const BlockFSurveyScreen = () => {
         fetch("https://createdinam.in/RBI-CBCD/public/api/create-survey-section-f", requestOptions)
             .then(response => response.json())
             .then(result => {
+                console.log("resulyyyy", result)
                 if (result?.status === true) {
                     showMessage({
                         message: result.message,
@@ -1158,11 +1165,11 @@ const BlockFSurveyScreen = () => {
                     saveSurveryAndMoveToNext();
                 } else {
                     // navigation.replace('BlockBSurveyScreen');
-                    // showMessage({
-                    //     message: "Something went wrong!",
-                    //     description: result?.message,
-                    //     type: "danger",
-                    // });
+                    showMessage({
+                        message: "Something went wrong!",
+                        description: result?.message,
+                        type: "danger",
+                    });
                 }
             });
     }
@@ -1433,29 +1440,38 @@ const BlockFSurveyScreen = () => {
                             <View>
                                 <View style={{ padding: 10, }} />
                                 <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>37 (d). If yes, please indicate top two reasons?</Text>
-                                <Dropdown
-                                    style={[styles.dropdown, hinderanceFocus && { borderColor: 'blue' }]}
-                                    placeholderStyle={styles.placeholderStyle}
-                                    selectedTextStyle={styles.selectedTextStyle}
-                                    inputSearchStyle={styles.inputSearchStyle}
-                                    // iconStyle={styles.iconStyle}
-                                    // data={AccountType}
-                                    data={transactionsdigitally}
-                                    // search
-                                    maxHeight={300}
-                                    labelField="lable"
-                                    valueField="id"
-                                    placeholder={!hinderanceFocus ? 'Select Type of account' : hinderanceValue}
-                                    // searchPlaceholder="Search..."
-                                    value={hinderanceValue}
-                                    onFocus={() => sethinderanceFocus(true)}
-                                    onBlur={() => sethinderanceFocus(false)}
-                                    onChange={item => {
-                                        console.log(JSON.stringify(item))
-                                        sethinderanceValue(item.id);
-                                        sethinderanceFocus(false);
-                                    }}
+                                <MultiSelect
+                                    hideTags
+                                    items={transactionsdigitally}
+                                    uniqueKey="id"
+                                    ref={multiSelectRef}
+                                    onSelectedItemsChange={(items) =>
+                                        onSelectedReasonChange(items)
+                                    }
+                                    selectedItems={selectedReason}
+                                    selectText="Select financial transactions"
+                                    onChangeInput={(text) => console.log(text)}
+                                    altFontFamily="ProximaNova-Light"
+                                    tagRemoveIconColor="#000"
+                                    tagBorderColor="#000"
+                                    tagTextColor="#000"
+                                    selectedItemTextColor="#000"
+                                    selectedItemIconColor="#000"
+                                    itemTextColor="#000"
+                                    displayKey="lable"
+                                    searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                    submitButtonColor="#000"
+                                    submitButtonText="Submit"
+                                    itemBackground="#000"
+                                    styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
                                 />
+                                <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                    {SelectedReasonlabels.map((label, index) => (
+                                        <View style={{ margin: 5 }}>
+                                            <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                        </View>
+                                    ))}
+                                </View>
                             </View>
                             <View style={{ padding: 10, }} />
                             <View>

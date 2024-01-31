@@ -48,7 +48,7 @@ const AddSurveyScreen = () => {
     const [isDistrictFocus, setIsDistrictFocus] = React.useState(false);
 
     // lable fields. 
-    const [surveryName, setSurveyName] = React.useState('');
+    const [surveryName, setSurveyName] = React.useState('Not to be recorded');
     const [gender, setGender] = React.useState('');
     const [age, setAgeNumber] = React.useState(0);
     const [adult, setAdults] = React.useState(0);
@@ -260,128 +260,128 @@ const AddSurveyScreen = () => {
     };
 
     const validationCheck = () => {
-        const pattern = /^[a-zA-Z]{2,40}( [a-zA-Z]{2,40})+$/;
+        const pattern = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/
         const AgeRegex = /^(?:1[01][0-9]|120|1[7-9]|[2-9][0-9])$/;
-        if (pattern.test(surveryName)) {
-            if (gender !== '') {
-                if (AgeRegex.test(age)) {
-                    if (selectedOccupations.length !== 0) {
-                        if (selectedEducation.length !== 0) {
-                            if (selectedIncomes.length !== 0) {
-                                if (value !== null) {
-                                    if (valueDistrict !== null) {
-                                        if (areasSelected.length !== 0) {
-                                            if (differentlyAble !== '') {
-                                                if (adult !== '') {
-                                                    if (children !== '') {
-                                                        if (anyGroup !== '') {
-                                                            if (smartPhone !== '') {
-                                                                stopRecording();
-                                                            } else {
-                                                                showMessage({
-                                                                    message: "Please Select SmartPhone Own!",
-                                                                    description: "Please Select SmartPhone Own!",
-                                                                    type: "danger",
-                                                                });
-                                                            }
+        // if (pattern.test(surveryName)) {
+        if (gender !== '') {
+            if (AgeRegex.test(age)) {
+                if (selectedOccupations.length !== 0) {
+                    if (selectedEducation.length !== 0) {
+                        if (selectedIncomes.length !== 0) {
+                            if (value !== null) {
+                                if (valueDistrict !== null) {
+                                    if (areasSelected.length !== 0) {
+                                        if (differentlyAble !== '') {
+                                            if (adult !== '') {
+                                                if (children !== '') {
+                                                    if (anyGroup !== '') {
+                                                        if (smartPhone !== '') {
+                                                            stopRecording();
                                                         } else {
                                                             showMessage({
-                                                                message: "Please Select Any Group Part!",
-                                                                description: "Please Select Any Group Part SHG/JLG!",
+                                                                message: "Please Select SmartPhone Own!",
+                                                                description: "Please Select SmartPhone Own!",
                                                                 type: "danger",
                                                             });
                                                         }
                                                     } else {
                                                         showMessage({
-                                                            message: "Please Select Children!",
-                                                            description: "Please Select Number Of Children!",
+                                                            message: "Please Select Any Group Part!",
+                                                            description: "Please Select Any Group Part SHG/JLG!",
                                                             type: "danger",
                                                         });
                                                     }
                                                 } else {
                                                     showMessage({
-                                                        message: "Please Select Adults!",
-                                                        description: "Please Select Number Of Adults!",
+                                                        message: "Please Select Children!",
+                                                        description: "Please Select Number Of Children!",
                                                         type: "danger",
                                                     });
                                                 }
                                             } else {
                                                 showMessage({
-                                                    message: "Please Select Differently!",
-                                                    description: "Please Select Differently abled!",
+                                                    message: "Please Select Adults!",
+                                                    description: "Please Select Number Of Adults!",
                                                     type: "danger",
                                                 });
                                             }
                                         } else {
                                             showMessage({
-                                                message: "Please Select Area",
-                                                description: "Please Select Area!",
+                                                message: "Please Select Differently!",
+                                                description: "Please Select Differently abled!",
                                                 type: "danger",
                                             });
                                         }
                                     } else {
                                         showMessage({
-                                            message: "Please Select District",
-                                            description: "Please Select District!",
+                                            message: "Please Select Area",
+                                            description: "Please Select Area!",
                                             type: "danger",
                                         });
                                     }
                                 } else {
                                     showMessage({
-                                        message: "Please Select State",
-                                        description: "Please Select State!",
+                                        message: "Please Select District",
+                                        description: "Please Select District!",
                                         type: "danger",
                                     });
                                 }
                             } else {
                                 showMessage({
-                                    message: "Please Select Incomes",
-                                    description: "Please Select Incomes!",
+                                    message: "Please Select State",
+                                    description: "Please Select State!",
                                     type: "danger",
                                 });
                             }
                         } else {
                             showMessage({
-                                message: "Please Select Education",
-                                description: "Please Select Education!",
+                                message: "Please Select Incomes",
+                                description: "Please Select Incomes!",
                                 type: "danger",
                             });
                         }
                     } else {
                         showMessage({
-                            message: "Please Select Occupation",
-                            description: "Please Select Occupation!",
+                            message: "Please Select Education",
+                            description: "Please Select Education!",
                             type: "danger",
                         });
                     }
                 } else {
                     showMessage({
-                        message: "Please Enter Valid Age",
-                        description: "Please Enter Valid Age!",
+                        message: "Please Select Occupation",
+                        description: "Please Select Occupation!",
                         type: "danger",
                     });
                 }
             } else {
                 showMessage({
-                    message: "Please Select Gender",
-                    description: "Please Select Valid Gender!",
+                    message: "Please Enter Valid Age",
+                    description: "Please Enter Valid Age!",
                     type: "danger",
                 });
             }
         } else {
             showMessage({
-                message: "Please Enter Name",
-                description: "Please Enter Valid Name!",
+                message: "Please Select Gender",
+                description: "Please Select Valid Gender!",
                 type: "danger",
             });
         }
+        // } else {
+        //     showMessage({
+        //         message: "Please Enter Name",
+        //         description: "Please Enter Valid Name!",
+        //         type: "danger",
+        //     });
+        // }
     }
 
     const submitSurvey = async () => {
         setSubmitSurvey(true);
         const FormData = require('form-data');
         let data = new FormData();
-        data.append('user_name', surveryName);
+        data.append('user_name', 'Not to be recorded');
         data.append('survey_token', name);
         data.append('gender', gender?.label);
         data.append('age_of_repons', Number(age));
@@ -413,8 +413,9 @@ const AddSurveyScreen = () => {
         console.warn('submitSurvey', JSON.stringify(config))
         Axios.request(config)
             .then((response) => {
-                console.warn('submitSurvey', JSON.stringify(response.data))
+                console.warn('submitSurvey response', JSON.stringify(response.data))
                 if (response.data.status === true) {
+                    setSubmitSurvey(false);
                     showMessage({
                         message: response.data.message + ', Submit By ' + response.data?.name,
                         description: response.data.message,
@@ -422,11 +423,13 @@ const AddSurveyScreen = () => {
                     });
                     saveSurveryAndMoveToNext();
                 } else {
+
                     showMessage({
                         message: "Something went wrong!",
                         description: response.data.message,
                         type: "danger",
                     });
+                    setSubmitSurvey(false);
                 }
             });
 
@@ -437,57 +440,7 @@ const AddSurveyScreen = () => {
         navigation.replace('BlockBSurveyScreen');
     }
 
-    const submitSurveyFetch = async () => {
-        setSubmitSurvey(true);
-        var myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer " + userSendToken);
-        var formdata = new FormData();
-        formdata.append("user_name", surveryName);
-        formdata.append("survey_token", name);
-        formdata.append("gender", gender?.label);
-        formdata.append("age_of_repons", Number(age) + '');
-        formdata.append("city", value + '');
-        formdata.append("state", valueDistrict + '');
-        formdata.append("occupation_id", selectedOccupations + '');
-        formdata.append("education_id", selectedEducation + '');
-        formdata.append("income_id", selectedIncomes + '');
-        formdata.append("area_id", areasSelected + '');
-        formdata.append("diff_abled", differentlyAble?.label + '');
-        formdata.append("adults", adult + '');
-        formdata.append("children", children + '');
-        formdata.append("total", Number(adult) + Number(children));
-        formdata.append("part_of_group", anyGroup?.label);
-        formdata.append("own_smartphone", smartPhone?.label);
-        formdata.append("latitude", Lattitude);
-        formdata.append("longitude", Longitude);
-        formdata.append("other_occupation", "");
 
-        var requestOptions = {
-            method: 'POST',
-            URL: 'https://createdinam.in/RBI-CBCD/public/api/create-survey-demographics',
-            headers: myHeaders,
-            body: formdata,
-            redirect: 'follow',
-        };
-
-        fetch(requestOptions)
-            .then(response => response.json())
-            .then(result => {
-                console.log(result?.status)
-                if (result?.status === true) {
-                    setSubmitSurvey(false);
-                    navigation.replace('BlockBSurveyScreen');
-                } else {
-                    setSubmitSurvey(false);
-                    // navigation.replace('BlockBSurveyScreen');
-                    showMessage({
-                        message: "Something went wrong!",
-                        description: result?.message,
-                        type: "danger",
-                    });
-                }
-            });
-    }
 
     const uploadAudioFinal = async (file) => {
         setAudioUploading(true);
@@ -554,7 +507,7 @@ const AddSurveyScreen = () => {
                     <View style={{ padding: 10 }}>
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>1. Name</Text>
-                            <TextInput onChangeText={(e) => setSurveyName(e)} style={{ backgroundColor: '#fff', paddingLeft: 15 }} placeholder='Enter Name' />
+                            <TextInput style={{ backgroundColor: '#fff', paddingLeft: 15 }} placeholder='Not to be recorded' editable={false} />
                         </View>
                         <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
@@ -567,7 +520,7 @@ const AddSurveyScreen = () => {
                         <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>3. Age</Text>
-                            <TextInput onChangeText={(e) => setAgeNumber(e)} style={{ backgroundColor: '#fff', paddingLeft: 15 }} placeholder='Age' keyboardType={'number-pad'} maxLength={2} />
+                            <TextInput onChangeText={(e) => setAgeNumber(e)} style={{ backgroundColor: '#fff', paddingLeft: 15 }} placeholder='Age' keyboardType={'number-pad'} maxLength={2} value={age} />
                         </View>
                         <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
@@ -798,7 +751,9 @@ const AddSurveyScreen = () => {
                             />
                         </View>
                         <View style={{ padding: 10, }} />
-                        <TouchableOpacity disabled={isSubmitSurvey} onPress={() => validationCheck()} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
+                        <TouchableOpacity disabled={isSubmitSurvey} onPress={() => {
+                            validationCheck()
+                        }} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
                             {isAudioUploading !== true ? <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Next Block B</Text> : <ActivityIndicator color={'#fff'} style={{ alignItems: 'center', alignSelf: 'center' }} />}
                         </TouchableOpacity>
                     </View>

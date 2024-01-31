@@ -64,7 +64,7 @@ const App = () => {
   const saveLocationForFutureUse = async (lat, long) => {
     AsyncStorage.setItem(AsyncStorageContaints.surveyLatitude, lat + '');
     AsyncStorage.setItem(AsyncStorageContaints.surveyLongitude, long + '');
-    console.log('saveLocationForFutureUse');
+    // console.log('saveLocationForFutureUse');
   }
 
   return (
