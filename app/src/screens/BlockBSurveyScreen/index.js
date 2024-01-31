@@ -4,18 +4,13 @@ import AsyncStorage from '@react-native-community/async-storage';
 import AsyncStorageContaints from '../../utility/AsyncStorageConstants';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import SelectDropdown from 'react-native-select-dropdown';
 import { Dropdown } from 'react-native-element-dropdown';
 import RadioButtonRN from 'radio-buttons-react-native';
 import MultiSelect from 'react-native-multiple-select';
-import database from '@react-native-firebase/database';
 import AudioRecord from 'react-native-audio-record';
-import DeviceInfo from 'react-native-device-info';
 import { Platform } from 'react-native';
 import Modal from 'react-native-modal';
 import Axios from 'axios';
-import { Children } from 'react';
-// import fs from 'fs';
 
 const BlockBSurveyScreen = () => {
 
@@ -38,6 +33,7 @@ const BlockBSurveyScreen = () => {
     const [DistrictData, setDistrictData] = React.useState([]);
     const [Lattitude, setLattitude] = React.useState('');
     const [Longitude, setLongitude] = React.useState('');
+    const [isAudioUploading, setAudioUploading] = React.useState(false);
 
     // country dropdowns
     const [value, setValue] = React.useState(null);
@@ -72,9 +68,6 @@ const BlockBSurveyScreen = () => {
     const [subsidy, setSubsidy] = React.useState(null);
     const [subsidyFocus, setSubsidyFocus] = React.useState(false);
     const multiSelectRef = useRef(null);
-
-
-
     // anyGroup
 
     const Nodata = [
@@ -304,7 +297,7 @@ const BlockBSurveyScreen = () => {
                 { text: "No" },
                 {
                     text: "Yes", onPress: () => {
-                        navigation.goBack();
+                        navigation.replace('DashboardScreen');
                         return true;
                     }
                 },
@@ -758,12 +751,12 @@ const BlockBSurveyScreen = () => {
 
     const submitSurveyXml = async (file_urls) => {
         var myHeaders = new Headers();
-        myHeaders.append("Content-Type", 'multipart/form-data');
-        myHeaders.append("Authorization", "Bearer 33|NdofyDbXloIQg3n7MH1cnHu1yAqGi8w13uYUXVvw");
+        myHeaders.append("Content-Type", 'application/json');
+        myHeaders.append("Authorization", "Bearer " + userSendToken);
 
         var raw = JSON.stringify({
-            "latitude": Lattitude,
-            "longitude": Longitude,
+            "latitude": '38.243028',
+            "longitude": '32.05903',
             "survey_token": name,
             "section_no": "B",
             "data": [
@@ -785,7 +778,7 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "In case you are not able to open a bank account, please, indicate the reason(s)",
                     "sub_q_type": "MULTICHECK",
                     "account_no": "",
-                    'response': `[${selectedDigitalpreferred}]`
+                    'response': selectedDigitalpreferred.length === 0 ? "" : [selectedDigitalpreferred]
                 },
                 {
                     "section_no": "B",
@@ -795,7 +788,7 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "If it is due to a lack of documents, what is it?",
                     "sub_q_type": "MULTICHECK",
                     "account_no": "",
-                    'response': `[${selectedlackdocuments}]`
+                    'response': selectedlackdocuments.length === 0 ? "" : [selectedlackdocuments]
                 },
                 {
                     "section_no": "B",
@@ -805,7 +798,7 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "If you don’t want a bank account, what could be the reasons?",
                     "sub_q_type": "MULTICHECK",
                     "account_no": "",
-                    'response': `[${selectedbankAccounts}]`
+                    'response': selectedbankAccounts.length === 0 ? "" : [selectedbankAccounts]
                 },
                 {
                     "section_no": "B",
@@ -924,12 +917,12 @@ const BlockBSurveyScreen = () => {
                 {
                     "section_no": "B",
                     "q_no": "11",
-                    "q_type": "SELF",
+                    "q_type": "MULTI",
                     "sub_q_no": "",
                     "sub_q_title": "",
                     "sub_q_type": "",
                     "account_no": "",
-                    'response': `[${selectedwhatPurposes}]`
+                    'response': selectedwhatPurposes.length === 0 ? "" : selectedwhatPurposes
                 },
                 {
                     "section_no": "B",
@@ -944,12 +937,12 @@ const BlockBSurveyScreen = () => {
                 {
                     "section_no": "B",
                     "q_no": "13",
-                    "q_type": "SELF",
+                    "q_type": "MULTI",
                     "sub_q_no": "",
                     "sub_q_title": "",
                     "sub_q_type": "",
                     "account_no": "",
-                    'response': `[${selectedOccupations}]`
+                    'response': selectedOccupations.length === 0 ? "" : selectedOccupations
                 },
                 {
                     "section_no": "B",
@@ -974,32 +967,32 @@ const BlockBSurveyScreen = () => {
                 {
                     "section_no": "B",
                     "q_no": "16",
-                    "q_type": "SELF",
+                    "q_type": "MULTI",
                     "sub_q_no": "",
                     "sub_q_title": "",
                     "sub_q_type": "",
                     "account_no": "",
-                    'response': `[${selectedIncomes}]`
+                    'response': selectedIncomes.length === 0 ? "" : selectedIncomes
                 },
                 {
                     "section_no": "B",
                     "q_no": "17",
-                    "q_type": "SELF",
+                    "q_type": "MULTI",
                     "sub_q_no": "",
                     "sub_q_title": "",
                     "sub_q_type": "",
                     "account_no": "",
-                    'response': `[${selectCashReceipt}]`
+                    'response': selectCashReceipt.length === 0 ? "" : selectCashReceipt
                 },
                 {
                     "section_no": "B",
                     "q_no": "18",
-                    "q_type": "SELF",
+                    "q_type": "MULTI",
                     "sub_q_no": "",
                     "sub_q_title": "",
                     "sub_q_type": "",
                     "account_no": "",
-                    'response': `[${SelectedSaveMoney}]`
+                    'response': SelectedSaveMoney.length === 0 ? "" : SelectedSaveMoney
                 }
             ]
         });
@@ -1016,8 +1009,23 @@ const BlockBSurveyScreen = () => {
         console.log('submitSurveyXml______>', requestOptions)
 
         fetch("https://createdinam.in/RBI-CBCD/public/api/create-survey-section-b", requestOptions)
-            .then(response => response.text())
-            .then(result => console.log(result))
+            .then(response => response.json())
+            .then(result => {
+                if (result?.status === true) {
+                    showMessage({
+                        message: result.message,
+                        description: result.message,
+                        type: "success",
+                    });
+                    saveSurveryAndMoveToNext();
+                } else {
+                    showMessage({
+                        message: "Something went wrong!",
+                        description: result.message,
+                        type: "danger",
+                    });
+                }
+            })
             .catch(error => console.log('error', error));
     }
 
@@ -1045,10 +1053,14 @@ const BlockBSurveyScreen = () => {
             });
             const json = await res.json();
             setAudioUploading(false);
-            saveSurveryAndMoveToNext();
         } catch (err) {
             alert(err)
         }
+    }
+
+    const saveSurveryAndMoveToNext = async () => {
+        AsyncStorage.setItem(AsyncStorageContaints.surveyNextBlock, 'C');
+        navigation.replace('BlockCSurveyScreen');
     }
 
     const onSelectedItemsChange = (selectedItems) => {
@@ -1075,7 +1087,7 @@ const BlockBSurveyScreen = () => {
     });
 
     const selectedSaveMoneyLabels = SelectedSaveMoney.map((selectedId) => {
-        const selectedReason = reasons.find((reason) => reason.id === selectedId);
+        const selectedReason = saveMoney.find((reason) => reason.id === selectedId);
         return selectedReason ? selectedReason.lable : '';
     });
 

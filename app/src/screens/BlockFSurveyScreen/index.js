@@ -263,6 +263,9 @@ const BlockFSurveyScreen = () => {
     const [charges, sCharges] = React.useState(null);
     const [isgrievanceAddressed, sIsGrievanceAddressed] = React.useState(null);
 
+    const [Lattitude, setLattitude] = React.useState('');
+    const [Longitude, setLongitude] = React.useState('');
+
     const SelectedLoanTypeLabels = selectedOccupations.map((selectedId) => {
         const selectedReason = financialtransactions.find((reason) => reason.id === selectedId);
         return selectedReason ? selectedReason.lable : '';
@@ -282,6 +285,26 @@ const BlockFSurveyScreen = () => {
         const selectedReason = Digitalpreferred.find((reason) => reason.id === selectedId);
         return selectedReason ? selectedReason.lable : '';
     });
+
+    const onSelectedItemsChange = (selectedItems) => {
+        setSelectedAreas(selectedItems);
+    }
+
+    const onSelectedEducationChange = (selectedItems) => {
+        setSelectedEducation(selectedItems);
+    }
+
+    const onSelectedOccupationsChange = (selectedItems) => {
+        setSelectedOccupations(selectedItems);
+    }
+
+    const onSelectedfinancialChange = (selectedItems) => {
+        setSelectedFinancial(selectedItems);
+    }
+
+    const onSelectedIncomesChange = (selectedItems) => {
+        setSelectedIncomes(selectedItems);
+    }
 
     useFocusEffect(
         React.useCallback(() => {
@@ -304,6 +327,11 @@ const BlockFSurveyScreen = () => {
             const userId = await AsyncStorage.getItem(AsyncStorageContaints.tempServerTokenId);
             const UserData = await AsyncStorage.getItem(AsyncStorageContaints.UserData);
             const UserToken = await AsyncStorage.getItem(AsyncStorageContaints.UserId);
+            const surveyLatitude = await AsyncStorage.getItem(AsyncStorageContaints.surveyLatitude);
+            const surveyLongitude = await AsyncStorage.getItem(AsyncStorageContaints.surveyLongitude);
+            //UserId
+            setLattitude(surveyLatitude);
+            setLongitude(surveyLongitude);
             //UserId
             setUserSendToken(UserToken);
             setUserName(UserData);
@@ -327,7 +355,7 @@ const BlockFSurveyScreen = () => {
                 { text: "No" },
                 {
                     text: "Yes", onPress: () => {
-                        navigation.goBack();
+                        navigation.replace('DashboardScreen');
                         return true;
                     }
                 },
@@ -376,125 +404,8 @@ const BlockFSurveyScreen = () => {
         submitSurvey(audioFile);
     };
 
-    // const validationCheck = () => {
-    //     const pattern = /^[a-zA-Z]{2,40}( [a-zA-Z]{2,40})+$/;
-    //     const AgeRegex = /^(?:1[01][0-9]|120|1[7-9]|[2-9][0-9])$/
-    //     if (pattern.test(surveryName)) {
-    //         if (gender !== '') {
-    //             if (AgeRegex.test(age)) {
-    //                 if (selectedOccupations.length !== 0) {
-    //                     if (selectedEducation.length !== 0) {
-    //                         if (selectedIncomes.length !== 0) {
-    //                             if (value !== null) {
-    //                                 if (valueDistrict !== null) {
-    //                                     if (areasSelected.length !== 0) {
-    //                                         if (differentlyAble !== '') {
-    //                                             if (adult !== '') {
-    //                                                 if (children !== '') {
-    //                                                     if (anyGroup !== '') {
-    //                                                         if (smartPhone !== '') {
-    //                                                             console.log('validationCheck', AgeRegex.test(age))
-    //                                                             stopRecording();
-    //                                                         } else {
-    //                                                             showMessage({
-    //                                                                 message: "Please Select SmartPhone Own!",
-    //                                                                 description: "Please Select SmartPhone Own!",
-    //                                                                 type: "danger",
-    //                                                             });
-    //                                                         }
-    //                                                     } else {
-    //                                                         showMessage({
-    //                                                             message: "Please Select Any Group Part!",
-    //                                                             description: "Please Select Any Group Part SHG/JLG!",
-    //                                                             type: "danger",
-    //                                                         });
-    //                                                     }
-    //                                                 } else {
-    //                                                     showMessage({
-    //                                                         message: "Please Select Children!",
-    //                                                         description: "Please Select Number Of Children!",
-    //                                                         type: "danger",
-    //                                                     });
-    //                                                 }
-    //                                             } else {
-    //                                                 showMessage({
-    //                                                     message: "Please Select Adults!",
-    //                                                     description: "Please Select Number Of Adults!",
-    //                                                     type: "danger",
-    //                                                 });
-    //                                             }
-    //                                         } else {
-    //                                             showMessage({
-    //                                                 message: "Please Select Differently!",
-    //                                                 description: "Please Select Differently abled!",
-    //                                                 type: "danger",
-    //                                             });
-    //                                         }
-    //                                     } else {
-    //                                         showMessage({
-    //                                             message: "Please Select Area",
-    //                                             description: "Please Select Area!",
-    //                                             type: "danger",
-    //                                         });
-    //                                     }
-    //                                 } else {
-    //                                     showMessage({
-    //                                         message: "Please Select District",
-    //                                         description: "Please Select District!",
-    //                                         type: "danger",
-    //                                     });
-    //                                 }
-    //                             } else {
-    //                                 showMessage({
-    //                                     message: "Please Select State",
-    //                                     description: "Please Select State!",
-    //                                     type: "danger",
-    //                                 });
-    //                             }
-    //                         } else {
-    //                             showMessage({
-    //                                 message: "Please Select Incomes",
-    //                                 description: "Please Select Incomes!",
-    //                                 type: "danger",
-    //                             });
-    //                         }
-    //                     } else {
-    //                         showMessage({
-    //                             message: "Please Select Education",
-    //                             description: "Please Select Education!",
-    //                             type: "danger",
-    //                         });
-    //                     }
-    //                 } else {
-    //                     showMessage({
-    //                         message: "Please Select Occupation",
-    //                         description: "Please Select Occupation!",
-    //                         type: "danger",
-    //                     });
-    //                 }
-    //             } else {
-    //                 showMessage({
-    //                     message: "Please Enter Valid Age",
-    //                     description: "Please Enter Valid Age!",
-    //                     type: "danger",
-    //                 });
-    //             }
-    //         } else {
-    //             showMessage({
-    //                 message: "Please Select Gender",
-    //                 description: "Please Select Valid Gender!",
-    //                 type: "danger",
-    //             });
-    //         }
-    //     } else {
-    //         showMessage({
-    //             message: "Please Enter Name",
-    //             description: "Please Enter Valid Name!",
-    //             type: "danger",
-    //         });
-    //     }
-    // }
-    console.log("comfort", comfortableConducting, "value", value)
+    console.log("comfort", comfortableConducting, "value", value);
+
     const Validate = () => {
         if (SpecificInformation === null) {
             showMessage({
@@ -738,90 +649,545 @@ const BlockFSurveyScreen = () => {
             });
         }
         else {
-            navigation.replace('DashboardScreen');
+            // navigation.replace('DashboardScreen');
+            submitSurvey();
         }
     }
 
-    const submitSurvey = async (file_urls) => {
-        // https://createdinam.in/RBI-CBCD/public/api/create-survey-demographics
-        const FormData = require('form-data');
-        let data = new FormData();
-        data.append('user_name', surveryName);
-        data.append('survey_token', user.name);
-        data.append('gender', gender);
-        data.append('age_of_repons', age);
-        data.append('city', value);
-        data.append('state', valueDistrict);
-        data.append('occupation_id', selectedOccupations);
-        data.append('education_id', selectedEducation);
-        data.append('income_id', selectedIncomes);
-        data.append('area_id', areasSelected);
-        data.append('diff_abled', differentlyAble);
-        data.append('adults', adult);
-        data.append('children', children);
-        data.append('total', Number(adult) + Number(children));
-        data.append('part_of_group', anyGroup);
-        data.append('own_smartphone', smartPhone);
-        data.append('latitude', '27.98878');
-        data.append('longitude', '28.00000');
-        data.append('other_occupation', '1');
-        data.append('audio_file', file_urls);
+    const submitSurvey = async () => {
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", 'application/json');
+        myHeaders.append("Authorization", "Bearer " + userSendToken);
 
-        let config = {
-            method: 'post',
-            maxBodyLength: Infinity,
-            url: 'https://createdinam.in/RBI-CBCD/public/api/create-survey-demographics',
-            headers: {
-                'Authorization': 'Bearer ' + userSendToken,
-                "Content-Type": "multipart/form-data",
-            },
-            data: data
+        var raw = JSON.stringify({
+            "latitude": '32.5645634',
+            "longitude": '26.345324523',
+            "survey_token": name,
+            "section_no": "F",
+            "data": [
+                {
+                    'section_no': "F",
+                    'q_no': "32",
+                    'q_type': "SELF",
+                    'sub_q_no': "",
+                    'sub_q_title': "",
+                    'sub_q_type': "",
+                    'response1': ``,
+                    'response': `${SpecificInformation?.label}`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "33",
+                    'q_type': "SELF",
+                    'sub_q_no': "",
+                    'sub_q_title': "",
+                    'sub_q_type': "",
+                    'response1': ``,
+                    'response': `${informationValue}`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "34",
+                    'q_type': "CHILD",
+                    'sub_q_no': "a",
+                    'sub_q_title': "In which language do you need the information?",
+                    'sub_q_type': "SINGLECHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `${WhichLanguageValue}`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "34",
+                    'q_type': "CHILD",
+                    'sub_q_no': "b",
+                    'sub_q_title': "Which medium of information sharing do you prefer?",
+                    'sub_q_type': "MULTICHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `[${InformationSharingValue}]`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "34",
+                    'q_type': "CHILD",
+                    'sub_q_no': "c",
+                    'sub_q_title': "Where do you want such financial literacy information to be disseminated?",
+                    'sub_q_type': "MULTICHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `[${financialLiteracyValue}]`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "34",
+                    'q_type': "CHILD",
+                    'sub_q_no': "d",
+                    'sub_q_title': "Where do you want such financial literacy information to be disseminated?",
+                    'sub_q_type': "MULTICHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `[${financialLiteracyValue}]`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "35",
+                    'q_type': "SELF",
+                    'sub_q_no': "",
+                    'sub_q_title': "",
+                    'sub_q_type': "",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `[${selectedOccupations}]`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "36",
+                    'q_type': "SELF",
+                    'sub_q_no': "",
+                    'sub_q_title': "",
+                    'sub_q_type': "",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `[${selectedfinancial}]`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "37",
+                    'q_type': "CHILD",
+                    'sub_q_no': "a",
+                    'sub_q_title': "Do you feel confident and comfortable doing digital transactions on your own?",
+                    'sub_q_type': "SINGLECHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `${comfortTransaction?.label}`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "37",
+                    'q_type': "CHILD",
+                    'sub_q_no': "b",
+                    'sub_q_title': "do you carry out digital transactions on your own? transactions with someone’s help?",
+                    'sub_q_type': "SINGLECHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `${transactionHelp?.label}`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "37",
+                    'q_type': "CHILD",
+                    'sub_q_no': "c",
+                    'sub_q_title': "Do you face any hinderance in carrying out transactions digitally?",
+                    'sub_q_type': "SINGLECHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `${isHinderance?.label}`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "37",
+                    'q_type': "CHILD",
+                    'sub_q_no': "d",
+                    'sub_q_title': "Do you face any hinderance in carrying out transactions digitally?",
+                    'sub_q_type': "SINGLECHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `${hinderanceValue}`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "37",
+                    'q_type': "CHILD",
+                    'sub_q_no': "e",
+                    'sub_q_title': "Have you or anyone in your family lost money in digital payment fraud?",
+                    'sub_q_type': "SINGLECHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `${hinderanceValue?.label}`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "37",
+                    'q_type': "CHILD",
+                    'sub_q_no': "f",
+                    'sub_q_title': "After the incident, do you continue to use digital banking services?",
+                    'sub_q_type': "SINGLECHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `${serviceContinue?.label}`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "37",
+                    'q_type': "CHILD",
+                    'sub_q_no': "g",
+                    'sub_q_title': "Were you or your family member could recover the money lost in digital payment fraud?",
+                    'sub_q_type': "SINGLECHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `${moneyRecover?.label}`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "37",
+                    'q_type': "CHILD",
+                    'sub_q_no': "h",
+                    'sub_q_title': "Do you know about various precautions while using digital banking?",
+                    'sub_q_type': "SINGLECHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `${preacution?.label}`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "38",
+                    'q_type': "CHILD",
+                    'sub_q_no': "a",
+                    'sub_q_title': "Do you use any of the following services via a digital channel (app/internet) linked with this account?",
+                    'sub_q_type': "MULTICHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `[${digitalChannelChange}]`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "38",
+                    'q_type': "CHILD",
+                    'sub_q_no': "b",
+                    'sub_q_title': "If Digital is your preferred mode of transaction, rate them in your order of preference?",
+                    'sub_q_type': "MULTICHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `[${DigitalpreferredChange}]`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "39",
+                    'q_type': "CHILD",
+                    'sub_q_no': "a",
+                    'sub_q_title': "As a bank customer, are you satisfied with the services?",
+                    'sub_q_type': "SINGLECHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `${satisfy?.label}`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "39",
+                    'q_type': "CHILD",
+                    'sub_q_no': "b",
+                    'sub_q_title': "Do bank staff remain attentive and sensitive to your problems?",
+                    'sub_q_type': "SINGLECHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `${attentive?.label}`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "39",
+                    'q_type': "CHILD",
+                    'sub_q_no': "c",
+                    'sub_q_title': "If you have any complaints, do you know how to lodge a complaint?",
+                    'sub_q_type': "SINGLECHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `${lodgeComplaint?.label}`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "39",
+                    'q_type': "CHILD",
+                    'sub_q_no': "d",
+                    'sub_q_title': "If you have ever lodged a complaint, are you satisfied with its resolution?",
+                    'sub_q_type': "SINGLECHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `${complaintSatisfy?.label}`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "39",
+                    'q_type': "CHILD",
+                    'sub_q_no': "e",
+                    'sub_q_title': "If no, what could be the reasons?",
+                    'sub_q_type': "SINGLECHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `${noReason?.label}`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "39",
+                    'q_type': "CHILD",
+                    'sub_q_no': "f",
+                    'sub_q_title': "Do you know about the RBI Integrated Banking Ombudsman Scheme?",
+                    'sub_q_type': "SINGLECHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `${rbiScheme?.label}`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "39",
+                    'q_type': "CHILD",
+                    'sub_q_no': "g",
+                    'sub_q_title': "Do you know about the complaint process regarding others such as Insurance, Pension, etc.?",
+                    'sub_q_type': "SINGLECHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `${rbiScheme?.label}`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "40",
+                    'q_type': "CHILD",
+                    'sub_q_no': "a",
+                    'sub_q_title': "Do you feel comfortable conducting banking transactions at an agent point (BC/BC Outlet) ?",
+                    'sub_q_type': "SINGLECHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `${comfortableConducting?.label}`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "40",
+                    'q_type': "CHILD",
+                    'sub_q_no': "b",
+                    'sub_q_title': "is ‘No’, please indicate the reasons?",
+                    'sub_q_type': "SINGLECHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `${value?.label}`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "40",
+                    'q_type': "CHILD",
+                    'sub_q_no': "c",
+                    'sub_q_title': "Is the BC agent able to offer the product or service that you require?",
+                    'sub_q_type': "SINGLECHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `${value?.label}`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "40",
+                    'q_type': "CHILD",
+                    'sub_q_no': "d",
+                    'sub_q_title': "Does the BC agent satisfactorily respond to your queries?",
+                    'sub_q_type': "SINGLECHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `${queryRespond?.label}`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "40",
+                    'q_type': "CHILD",
+                    'sub_q_no': "e",
+                    'sub_q_title': "Does your BC indicate the charges for the services offered upfront?",
+                    'sub_q_type': "SINGLECHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `${charges?.label}`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "40",
+                    'q_type': "CHILD",
+                    'sub_q_no': "f",
+                    'sub_q_title': "Do you know, how to lodge a complaint at the BC point?",
+                    'sub_q_type': "SINGLECHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `${compBC?.label}`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "40",
+                    'q_type': "CHILD",
+                    'sub_q_no': "g",
+                    'sub_q_title': "Whether you raised any grievance related to service with BC?",
+                    'sub_q_type': "SINGLECHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `${grievanceRelated?.label}`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "40",
+                    'q_type': "CHILD",
+                    'sub_q_no': "h",
+                    'sub_q_title': " whether your grievance was addressed timely (within one month)?",
+                    'sub_q_type': "SINGLECHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `${isgrievanceAddressed?.label}`
+                },
+                {
+                    'section_no': "F",
+                    'q_no': "40",
+                    'q_type': "CHILD",
+                    'sub_q_no': "i",
+                    'sub_q_title': "what were reasons provided by BC Agent?",
+                    'sub_q_type': "SINGLECHECK",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response': `${reasonprovidedBC}`
+                },
+            ],
+        });
+        // 
+
+        console.log(raw);
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
         };
 
-        Axios.request(config)
-            .then((response) => {
-                console.warn('startRecording', JSON.stringify(response.data))
-                if (response.data.status === true) {
+        fetch("https://createdinam.in/RBI-CBCD/public/api/create-survey-section-f", requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                if (result?.status === true) {
                     showMessage({
-                        message: response.data.message + ', Submit By ' + response.data?.name,
-                        description: response.data.message,
+                        message: result.message,
+                        description: result.message,
                         type: "success",
                     });
+                    finishSurvey();
                 } else {
                     showMessage({
                         message: "Something went wrong!",
-                        description: "Someting went wrong, Please check Form Details!",
+                        description: result.message,
                         type: "danger",
                     });
                 }
+            })
+            .catch(error => console.log('error', error));
+    }
+
+
+    const finishSurvey = async () => {
+        const userId = await AsyncStorage.getItem(AsyncStorageContaints.tempServerTokenId);
+        let SERVER = 'https://createdinam.in/RBI-CBCD/public/api/finish-survey';
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + userSendToken);
+        var formdata = new FormData();
+        formdata.append("surveytoken", name);
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'follow',
+        };
+
+        fetch(SERVER, requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                console.log('finishSurvey', result)
+                if (result?.status === true) {
+                    saveSurveryAndMoveToNext();
+                } else {
+                    // navigation.replace('BlockBSurveyScreen');
+                    // showMessage({
+                    //     message: "Something went wrong!",
+                    //     description: result?.message,
+                    //     type: "danger",
+                    // });
+                }
             });
-
     }
 
-    const onSelectedItemsChange = (selectedItems) => {
-        setSelectedAreas(selectedItems);
+    const saveSurveryAndMoveToNext = async () => {
+        AsyncStorage.setItem(AsyncStorageContaints.surveyNextBlock, '');
+        navigation.replace('DashboardScreen');
+        saveSurveyCount();
     }
 
-    const onSelectedEducationChange = (selectedItems) => {
-        setSelectedEducation(selectedItems);
-    }
-
-    const onSelectedOccupationsChange = (selectedItems) => {
-        setSelectedOccupations(selectedItems);
-    }
-
-    const onSelectedfinancialChange = (selectedItems) => {
-        setSelectedFinancial(selectedItems);
-    }
-
-    const onSelectedIncomesChange = (selectedItems) => {
-        setSelectedIncomes(selectedItems);
+    const saveSurveyCount = async () => {
+        const surveyNextBlock = await AsyncStorage.getItem(AsyncStorageContaints.surveyNextBlock);
+        console.log('saveSurveyCount', surveyNextBlock);
+        if (surveyNextBlock) {
+            // plus 
+        } else {
+            // fresh add +
+        }
+        // AsyncStorage.setItem(AsyncStorageContaints.surveyNextBlock, '');
     }
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#F8F8FF' }}>
             {renderCustomHeader()}
-            {/* <Modal isVisible={false}>
+            {/* <Modal isVisible={isInstruction}>
                 <View style={{ height: 200, width: Dimensions.get('screen').width - 50, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 5, padding: 20 }}>
                     <View style={{ alignItems: 'center' }}>
                         <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Survey Instructions</Text>
@@ -832,12 +1198,6 @@ const BlockFSurveyScreen = () => {
                     </View>
                 </View>
             </Modal> */}
-            {/* <TouchableOpacity onPress={() => startRecording()}>
-                <Text>Start Recording</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => stopRecording()}>
-                <Text>Stop Recording</Text>
-            </TouchableOpacity> */}
             <Text style={{ fontWeight: 'bold', paddingLeft: 20, paddingTop: 10 }}>F. QUALITY OF FINANCIAL SERVICES – FINANCIAL LITERACY, CUSTOMER SERVICE AND GRIEVANCE REDRESSAL</Text>
             {isLoading === false ?
                 <ScrollView>

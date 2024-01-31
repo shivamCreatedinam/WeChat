@@ -71,6 +71,9 @@ const BlockESurveyScreen = () => {
     const [SchemesSubscription, setSchemesSubscription] = React.useState(null);
     const [SchemesAccount, setSchemesAccount] = React.useState(null);
 
+    const [Lattitude, setLattitude] = React.useState('');
+    const [Longitude, setLongitude] = React.useState('');
+
     // gender setDifferently
     const data = [
         {
@@ -153,6 +156,11 @@ const BlockESurveyScreen = () => {
             const userId = await AsyncStorage.getItem(AsyncStorageContaints.tempServerTokenId);
             const UserData = await AsyncStorage.getItem(AsyncStorageContaints.UserData);
             const UserToken = await AsyncStorage.getItem(AsyncStorageContaints.UserId);
+            const surveyLatitude = await AsyncStorage.getItem(AsyncStorageContaints.surveyLatitude);
+            const surveyLongitude = await AsyncStorage.getItem(AsyncStorageContaints.surveyLongitude);
+            //UserId
+            setLattitude(surveyLatitude);
+            setLongitude(surveyLongitude);
             //UserId
             setUserSendToken(UserToken);
             setUserName(UserData);
@@ -177,7 +185,7 @@ const BlockESurveyScreen = () => {
                 { text: "No" },
                 {
                     text: "Yes", onPress: () => {
-                        navigation.goBack();
+                        navigation.replace('DashboardScreen');
                         return true;
                     }
                 },
@@ -225,84 +233,6 @@ const BlockESurveyScreen = () => {
         setAudioPath(audioFile);
         submitSurvey(audioFile);
     };
-
-    // const validationCheck = () => {
-    //     if (PensionAwareness !== null) {
-    //         if (PensionEnrolled !== null) {
-    //             if (PensionSubscription !== null) {
-    //                 if (PensionAccount !== null) {
-    //                     if (SchemesAwareness !== null) {
-    //                         if (SchemesEnrolled !== null) {
-    //                             if (SchemesSubscription !== null) {
-    //                                 if (SchemesAccount !== null) {
-    //                                     if (selectedReason.length !== 0) {
-    //                                         // navigation.replace('BlockFSurveyScreen');
-    //                                         stopRecording();
-    //                                     } else {
-    //                                         showMessage({
-    //                                             message: "Please Select Enrolled Pension Schemes",
-    //                                             description: "Please Select Enrolled Pension Schemes!",
-    //                                             type: "danger",
-    //                                         });
-    //                                     }
-    //                                 } else {
-    //                                     showMessage({
-    //                                         message: "Please Pension Scheme Account inactive",
-    //                                         description: "Please select Pension Scheme Account inactive!",
-    //                                         type: "danger",
-    //                                     });
-    //                                 }
-    //                             } else {
-    //                                 showMessage({
-    //                                     message: "Please Pension Scheme subscription payment",
-    //                                     description: "Please select Pension Scheme subscription payment!",
-    //                                     type: "danger",
-    //                                 });
-    //                             }
-    //                         } else {
-    //                             showMessage({
-    //                                 message: "Please Pension Scheme Enrolled",
-    //                                 description: "Please select Pension Scheme Enrolled!",
-    //                                 type: "danger",
-    //                             });
-    //                         }
-    //                     } else {
-    //                         showMessage({
-    //                             message: "Please Pension Scheme Awareness",
-    //                             description: "Please select Pension Scheme Awareness!",
-    //                             type: "danger",
-    //                         });
-    //                     }
-    //                 } else {
-    //                     showMessage({
-    //                         message: "Please Pension Scheme Account inactive",
-    //                         description: "Please select Pension Scheme Account inactive!",
-    //                         type: "danger",
-    //                     });
-    //                 }
-    //             } else {
-    //                 showMessage({
-    //                     message: "Please Pension Scheme subscription payment",
-    //                     description: "Please select Pension Scheme subscription payment!",
-    //                     type: "danger",
-    //                 });
-    //             }
-    //         } else {
-    //             showMessage({
-    //                 message: "Please Pension Scheme Enrolled",
-    //                 description: "Please select Pension Scheme Enrolled!",
-    //                 type: "danger",
-    //             });
-    //         }
-    //     } else {
-    //         showMessage({
-    //             message: "Please Pension Scheme Awareness",
-    //             description: "Please select Pension Scheme Awareness!",
-    //             type: "danger",
-    //         });
-    //     }
-
-    // }
 
     const Validate = () => {
         if (PensionAwareness === null) {
@@ -369,7 +299,8 @@ const BlockESurveyScreen = () => {
             });
         }
         else {
-            navigation.replace('BlockFSurveyScreen')
+            // navigation.replace('BlockFSurveyScreen');
+            submitSurvey();
         }
     }
 
@@ -377,126 +308,86 @@ const BlockESurveyScreen = () => {
 
     const submitSurvey = async (file_urls) => {
         var myHeaders = new Headers();
+        myHeaders.append("Content-Type", 'application/json');
         myHeaders.append("Authorization", "Bearer " + userSendToken);
 
-        const response = [
-            {
-                'section_no': "B",
-                'q_no': "1",
-                'q_type': "SELF",
-                'sub_q_no': "",
-                'sub_q_title': "",
-                'sub_q_type': "",
-                'response': `${PensionAwareness}`
-            },
-            {
-                'section_no': "B",
-                'q_no': "2",
-                'q_type': "CHILD",
-                'sub_q_no': "a",
-                'sub_q_title': "In case you are not able to open a bank account, please, indicate the reason(s)",
-                'sub_q_type': "MULTICHECK",
-                'response': `[2,4,5,]`
-            },
-            {
-                'section_no': "E",
-                'q_no': "30 (a) 3.",
-                'q_type': "SELF",
-                'sub_q_no': "",
-                'sub_q_title': "",
-                'sub_q_type': "SINGLECHECK",
-                'response': `${PensionSubscription}`
-            },
-            {
-                'section_no': "E",
-                'q_no': "30 (a) 4.",
-                'q_type': "SELF",
-                'sub_q_no': "",
-                'sub_q_title': "",
-                'sub_q_type': "SINGLECHECK",
-                'response': `${PensionAccount}`
-            }, {
-                'section_no': "E",
-                'q_no': "30 (b) 1.",
-                'q_type': "SELF",
-                'sub_q_no': "",
-                'sub_q_title': "",
-                'sub_q_type': "SINGLECHECK",
-                'response': `${SchemesAwareness}`
-            },
-            {
-                'section_no': "E",
-                'q_no': "30 (b) 2.",
-                'q_type': "SELF",
-                'sub_q_no': "",
-                'sub_q_title': "",
-                'sub_q_type': "SINGLECHECK",
-                'response': `${SchemesEnrolled}`
-            },
-            {
-                'section_no': "E",
-                'q_no': "30 (b) 3.",
-                'q_type': "SELF",
-                'sub_q_no': "",
-                'sub_q_title': "",
-                'sub_q_type': "SINGLECHECK",
-                'response': `${SchemesSubscription}`
-            },
-            {
-                'section_no': "E",
-                'q_no': "30 (b) 4.",
-                'q_type': "SELF",
-                'sub_q_no': "",
-                'sub_q_title': "",
-                'sub_q_type': "SINGLECHECK",
-                'response': `${SchemesAccount}`
-            },
-            {
-                'section_no': "E",
-                'q_no': "31",
-                'q_type': "SELF",
-                'sub_q_no': "",
-                'sub_q_title': "",
-                'sub_q_type': "MULTICHECK",
-                'response': `${selectedReason}`
-            }
-        ];
+        var raw = JSON.stringify({
+            "latitude": '23.000',
+            "longitude": '32.0042',
+            "survey_token": name,
+            "section_no": "E",
+            "data": [
+                {
+                    'section_no': "E",
+                    'q_no': "30",
+                    'q_type': "CHILD",
+                    'sub_q_no': "a",
+                    'sub_q_title': "Atal Pension Yojana (APY)",
+                    'sub_q_type': "SINGLECHECK",
+                    'response1': `${PensionAwareness?.label}`,
+                    'response2': `${PensionEnrolled?.label}`,
+                    'response3': `${PensionSubscription?.label}`,
+                    'response4': `${PensionAccount?.label}`,
+                    'response': ``
+                },
+                {
+                    'section_no': "E",
+                    'q_no': "30",
+                    'q_type': "CHILD",
+                    'sub_q_no': "b",
+                    'sub_q_title': "Any other Pension Schemes?",
+                    'sub_q_type': "SINGLECHECK",
+                    'response1': `${SchemesAwareness?.label}`,
+                    'response2': `${SchemesEnrolled?.label}`,
+                    'response3': `${SchemesSubscription?.label}`,
+                    'response4': `${SchemesAccount?.label}`,
+                    'response': ``
+                },
+                {
+                    'section_no': "E",
+                    'q_no': "31",
+                    'q_type': "SELF",
+                    'sub_q_no': "",
+                    'sub_q_title': "",
+                    'sub_q_type': "MULTICHECK",
+                    'response': `[${selectedReason}]`
+                },
+            ],
+        });
 
-        console.log(JSON.stringify(response))
-
-        const FormData = require('form-data');
-        let data = new FormData();
-        data.append('data', response);
-        data.append('survey_token', name);
-        data.append('latitude', '27.98878');
-        data.append('longitude', '28.00000');
-        data.append("audio_file", file_urls, "recording_block_a.wav");
+        console.log(raw);
 
         var requestOptions = {
             method: 'POST',
             headers: myHeaders,
-            body: data,
+            body: raw,
             redirect: 'follow'
         };
 
-        console.log(JSON.stringify(requestOptions))
-
-        fetch("https://createdinam.in/RBI-CBCD/public/api/create-survey-section-b", requestOptions)
+        fetch("https://createdinam.in/RBI-CBCD/public/api/create-survey-section-e", requestOptions)
             .then(response => response.json())
             .then(result => {
-                console.log(result?.status)
                 if (result?.status === true) {
-                    navigation.replace('BlockBSurveyScreen');
+                    showMessage({
+                        message: result.message,
+                        description: result.message,
+                        type: "success",
+                    });
+                    saveSurveryAndMoveToNext();
                 } else {
-                    navigation.replace('BlockBSurveyScreen');
-                    // showMessage({
-                    //     message: "Something went wrong!",
-                    //     description: result?.message,
-                    //     type: "danger",
-                    // });
+                    showMessage({
+                        message: "Something went wrong!",
+                        description: result.message,
+                        type: "danger",
+                    });
                 }
             })
             .catch(error => console.log('error', error));
+    }
+
+    const saveSurveryAndMoveToNext = async () => {
+        AsyncStorage.setItem(AsyncStorageContaints.surveyNextBlock, 'F');
+        navigation.replace('BlockFSurveyScreen');
     }
 
     const onSelectedItemsChange = (selectedItems) => {

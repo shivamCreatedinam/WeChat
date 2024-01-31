@@ -129,7 +129,7 @@ const AddSurveyScreen = () => {
         };
     }, []);
 
-    const askToCloseByBackButtonApp = () => false;
+    const askToCloseByBackButtonApp = () => navigation.replace('DashboardScreen');
 
     const readMessages = async () => {
         try {
@@ -210,7 +210,7 @@ const AddSurveyScreen = () => {
                 { text: "No" },
                 {
                     text: "Yes", onPress: () => {
-                        navigation.goBack();
+                        navigation.replace('DashboardScreen');
                         return true;
                     }
                 },
@@ -420,6 +420,7 @@ const AddSurveyScreen = () => {
                         description: response.data.message,
                         type: "success",
                     });
+                    saveSurveryAndMoveToNext();
                 } else {
                     showMessage({
                         message: "Something went wrong!",
@@ -512,7 +513,6 @@ const AddSurveyScreen = () => {
             });
             const json = await res.json();
             setAudioUploading(false);
-            saveSurveryAndMoveToNext();
         } catch (err) {
             alert(err)
         }
@@ -538,7 +538,7 @@ const AddSurveyScreen = () => {
         <SafeAreaView style={{ flex: 1, backgroundColor: '#F8F8FF' }}>
             {renderCustomHeader()}
             <Modal isVisible={isInstruction}>
-                <View style={{ height: 250, width: Dimensions.get('screen').width - 50, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 5, padding: 20 }}>
+                <View style={{ height: 300, width: Dimensions.get('screen').width - 50, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 5, padding: 20 }}>
                     <View style={{ alignItems: 'center', alignContent: 'center', marginTop: 15 }}>
                         <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Survey Instructions</Text>
                         <Text style={{ textAlign: 'center', paddingVertical: 15 }}>Once your start the survey, this will track your location, and also record your audio, by click on start button all the featurs enable and track your location and record your audio.</Text>

@@ -80,6 +80,7 @@ class HomeScreen extends Component {
       name: '',
       userToken: '',
       surveyNextBlock: '',
+      surveCount: null,
       loading: false
     };
   }
@@ -108,7 +109,8 @@ class HomeScreen extends Component {
       const userId = await AsyncStorage.getItem(AsyncStorageContaints.UserId);
       const UserData = await AsyncStorage.getItem(AsyncStorageContaints.UserData);// AsyncStorageContaints.surveyNextBlock
       const surveyNextBlock = await AsyncStorage.getItem(AsyncStorageContaints.surveyNextBlock);
-      this.setState({ name: UserData, userToken: userId, surveyNextBlock: surveyNextBlock });
+      const surveyCompleteCount = await AsyncStorage.getItem(AsyncStorageContaints.surveyCompleteCount);
+      this.setState({ name: UserData, userToken: userId, surveyNextBlock: surveyNextBlock, surveCount: surveyCompleteCount });
       console.log("error", userId)
     } catch (error) {
       console.log("error", error)
@@ -177,11 +179,22 @@ class HomeScreen extends Component {
 
   CheckCurrentActiveSurvey = () => {
     this.props.navigation.navigate('AddSurveyScreen');
-
   }
 
   navigateToPendingSurvey = () => {
-    this.props.navigation.replace('BlockCSurveyScreen');
+    if (this.state.surveyNextBlock === '') {
+      this.props.navigation.replace('AddSurveyScreen');
+    } else if (this.state.surveyNextBlock === 'B') {
+      this.props.navigation.replace('BlockBSurveyScreen');
+    } else if (this.state.surveyNextBlock === 'C') {
+      this.props.navigation.replace('BlockCSurveyScreen');
+    } else if (this.state.surveyNextBlock === 'D') {
+      this.props.navigation.replace('BlockDSurveyScreen');
+    } else if (this.state.surveyNextBlock === 'E') {
+      this.props.navigation.replace('BlockESurveyScreen');
+    } else if (this.state.surveyNextBlock === 'F') {
+      this.props.navigation.replace('BlockFSurveyScreen');
+    }
     // Alert.alert(
     //   "Logout",
     //   "Are you sure, you want to logout?",
@@ -190,37 +203,6 @@ class HomeScreen extends Component {
     //     { text: "No" }
     //   ]
     // );
-  }
-
-  async finishSurvey() {
-    const userId = await AsyncStorage.getItem(AsyncStorageContaints.tempServerTokenId);
-    let SERVER = 'https://createdinam.in/RBI-CBCD/public/api/finish-survey';
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", "Bearer " + userSendToken);
-    var formdata = new FormData();
-    formdata.append("user_name", surveryName);
-    var requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: formdata,
-      redirect: 'follow',
-    };
-
-    fetch(SERVER, requestOptions)
-      .then(response => response.json())
-      .then(result => {
-        console.log(result?.status)
-        if (result?.status === true) {
-          // navigation.replace('BlockBSurveyScreen');
-        } else {
-          // navigation.replace('BlockBSurveyScreen');
-          // showMessage({
-          //     message: "Something went wrong!",
-          //     description: result?.message,
-          //     type: "danger",
-          // });
-        }
-      });
   }
 
   render() {
@@ -238,7 +220,7 @@ class HomeScreen extends Component {
           </TouchableOpacity>
           {this.state.surveyNextBlock !== '' ? <TouchableOpacity onPress={() => this.navigateToPendingSurvey()} style={{ paddingVertical: 14, paddingHorizontal: 20, backgroundColor: '#000', borderRadius: 5, flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
             <Image style={{ width: 20, height: 20, resizeMode: 'contain', tintColor: '#fff' }} source={require('../../../res/images/add_survery_logo.png')} />
-            {this.state.loading === false ? <Text style={{ textAlign: 'center', fontWeight: 'bold', color: '#fff', flex: 1 }}>Pending Survey {this.state.surveyNextBlock}</Text> : <ActivityIndicator style={{ alignSelf: 'center', flex: 1 }} color={'#fff'} />}
+            {this.state.loading === false ? <Text style={{ textAlign: 'center', fontWeight: 'bold', color: '#fff', flex: 1 }}>Draft Survey {this.state.surveyNextBlock}</Text> : <ActivityIndicator style={{ alignSelf: 'center', flex: 1 }} color={'#fff'} />}
           </TouchableOpacity> : null}
         </View>
       </SafeAreaView>
