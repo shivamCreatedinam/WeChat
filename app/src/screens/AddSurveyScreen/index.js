@@ -24,6 +24,7 @@ const AddSurveyScreen = () => {
     const [isInstruction, setSurveyInstruction] = React.useState(true);
     const [isLoading, setLoading] = React.useState(false);
     const [isSubmitSurvey, setSubmitSurvey] = React.useState(false);
+    const [isAudioUploading, setAudioUploading] = React.useState(false);
     const [userSendToken, setUserSendToken] = React.useState('');
     const [audioPath, setAudioPath] = React.useState('');
     const [areas, setAreas] = React.useState([{ "id": 1, "area_title": "Rural Area - Population Less Than 10000", "status": 1, "created_date": "2024-01-13 08:48:30" }, { "id": 2, "area_title": "Semi-Urban Area - Population Above 10000 But Less Than 1 Lakh", "status": 1, "created_date": "2024-01-13 08:48:30" }, { "id": 3, "area_title": "Urban Area - Population 1 Lakh And Above But Less Than 10 Lakhs", "status": 1, "created_date": "2024-01-13 08:48:30" }, { "id": 4, "area_title": "Metro Area - Population More Than 10 Lakhs", "status": 1, "created_date": "2024-01-13 08:48:30" }]);
@@ -128,7 +129,7 @@ const AddSurveyScreen = () => {
         };
     }, []);
 
-    const askToCloseByBackButtonApp = () => false;
+    const askToCloseByBackButtonApp = () => navigation.replace('DashboardScreen');
 
     const readMessages = async () => {
         try {
@@ -209,7 +210,7 @@ const AddSurveyScreen = () => {
                 { text: "No" },
                 {
                     text: "Yes", onPress: () => {
-                        navigation.goBack();
+                        navigation.replace('DashboardScreen');
                         return true;
                     }
                 },
@@ -421,7 +422,6 @@ const AddSurveyScreen = () => {
                     });
                     saveSurveryAndMoveToNext();
                 } else {
-                    saveSurveryAndMoveToNext();
                     showMessage({
                         message: "Something went wrong!",
                         description: response.data.message,
@@ -490,12 +490,12 @@ const AddSurveyScreen = () => {
     }
 
     const uploadAudioFinal = async (file) => {
-
+        setAudioUploading(true);
         let API_UPLOAD_MSG_FILE = `https://createdinam.in/RBI-CBCD/public/api/survey-audio-files`;
         const path = `file://${file}`;
         const formData = new FormData();
         formData.append('survey_token', name);
-        formData.append('sec_no', 'D');
+        formData.append('sec_no', 'A');
         formData.append('audio_file', {
             uri: path,
             name: 'test.wav',
@@ -511,8 +511,8 @@ const AddSurveyScreen = () => {
                 },
                 body: formData,
             });
-            const json = await res.json()
-            alert(JSON.stringify(json));
+            const json = await res.json();
+            setAudioUploading(false);
         } catch (err) {
             alert(err)
         }
@@ -538,7 +538,7 @@ const AddSurveyScreen = () => {
         <SafeAreaView style={{ flex: 1, backgroundColor: '#F8F8FF' }}>
             {renderCustomHeader()}
             <Modal isVisible={isInstruction}>
-                <View style={{ height: 250, width: Dimensions.get('screen').width - 50, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 5, padding: 20 }}>
+                <View style={{ height: 300, width: Dimensions.get('screen').width - 50, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 5, padding: 20 }}>
                     <View style={{ alignItems: 'center', alignContent: 'center', marginTop: 15 }}>
                         <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Survey Instructions</Text>
                         <Text style={{ textAlign: 'center', paddingVertical: 15 }}>Once your start the survey, this will track your location, and also record your audio, by click on start button all the featurs enable and track your location and record your audio.</Text>
@@ -798,8 +798,8 @@ const AddSurveyScreen = () => {
                             />
                         </View>
                         <View style={{ padding: 10, }} />
-                        <TouchableOpacity onPress={() => validationCheck()} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
-                            <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Next Block B</Text>
+                        <TouchableOpacity disabled={isSubmitSurvey} onPress={() => validationCheck()} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
+                            {isAudioUploading !== true ? <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Next Block B</Text> : <ActivityIndicator color={'#fff'} style={{ alignItems: 'center', alignSelf: 'center' }} />}
                         </TouchableOpacity>
                     </View>
                 </ScrollView> : <ActivityIndicator style={{ alignItems: 'center', marginTop: Dimensions.get('screen').width }} color={'#000'} />}

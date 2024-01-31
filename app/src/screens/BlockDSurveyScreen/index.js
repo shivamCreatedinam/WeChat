@@ -81,9 +81,12 @@ const BlockDSurveyScreen = () => {
     const [enrolledOtherInsurance, setEnrolledOtherInsurance] = React.useState(null);
     const [rupayCover, setRupayCover] = React.useState(null);
     const [PMJJBY, setPMJJBY] = React.useState(null);
+    const [PMSBY, setPMSBY] = React.useState(null);
     const [PMFBY, setPMFBY] = React.useState(null);
     const [other, setOther] = React.useState(null);
     const [insuranceInactive, setInsuranceInactive] = React.useState([]);
+    const [Lattitude, setLattitude] = React.useState('');
+    const [Longitude, setLongitude] = React.useState('');
     const multiSelectRef = useRef(null);
     // gender setDifferently
     const data = [
@@ -179,6 +182,11 @@ const BlockDSurveyScreen = () => {
             const userId = await AsyncStorage.getItem(AsyncStorageContaints.tempServerTokenId);
             const UserData = await AsyncStorage.getItem(AsyncStorageContaints.UserData);
             const UserToken = await AsyncStorage.getItem(AsyncStorageContaints.UserId);
+            const surveyLatitude = await AsyncStorage.getItem(AsyncStorageContaints.surveyLatitude);
+            const surveyLongitude = await AsyncStorage.getItem(AsyncStorageContaints.surveyLongitude);
+            //UserId
+            setLattitude(surveyLatitude);
+            setLongitude(surveyLongitude);
             //UserId
             setUserSendToken(UserToken);
             setUserName(UserData);
@@ -189,90 +197,6 @@ const BlockDSurveyScreen = () => {
         }
     }
 
-    const getLoadingData = async () => {
-        setLoading(true);
-        const UserToken = await AsyncStorage.getItem(AsyncStorageContaints.UserId);
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${UserToken}`
-        }
-        Axios.get(`https://createdinam.in/RBI-CBCD/public/api/get-demographic-details`, {
-            headers: headers
-        })
-            .then((response) => {
-                console.log('getLoadingData', JSON.stringify(response.data))
-                if (response.data.status === true) {
-                    setAreas(response.data?.areas);
-                    setEducations(response.data?.educations);
-                    setIncomes(response.data?.incomes);
-                    setOccupations(response.data?.occupations);
-                    getState(UserToken);
-                } else {
-                    setLoading(false);
-                    showMessage({
-                        message: "Something went wrong!",
-                        description: "Something went wrong. Try again!",
-                        type: "danger",
-                    });
-                }
-            });
-    }
-
-    const getState = (token) => {
-        let url = `https://createdinam.in/RBI-CBCD/public/api/get-states`;
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        }
-        Axios.get(url, {
-            headers: headers
-        })
-            .then((response) => {
-                console.log('getState', JSON.stringify(response?.data?.data))
-                if (response.data.status === true) {
-                    setLoading(false);
-                    setStateData(response?.data?.data);
-                } else {
-                    setLoading(false);
-                    showMessage({
-                        message: "Something went wrong!",
-                        description: "Something went wrong. Try again!",
-                        type: "danger",
-                    });
-                }
-            });
-    }
-
-    const loadDistrict = async (state) => {
-        console.log('loadDistrict______', JSON.stringify(state))
-        const UserToken = await AsyncStorage.getItem(AsyncStorageContaints.UserId);
-        let url = `https://createdinam.in/RBI-CBCD/public/api/get-city/${Number(state)}`;
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${UserToken}`
-        }
-        Axios.get(url, {
-            headers: headers,
-        })
-            .then((response) => {
-                if (response.data.status === true) {
-                    setDistrictData(response?.data?.data);
-                } else {
-                    setLoading(false);
-                    showMessage({
-                        message: "Something went wrong!",
-                        description: "Something went wrong. Try again!",
-                        type: "danger",
-                    });
-                }
-            });
-    }
-
-    // AudioRecord.on('data', data => {
-    //     // base64-encoded audio data chunks
-    //     console.log('AudioRecord_>', JSON.stringify(data));
-    // });
-
     const askToCloseApp = () => {
         Alert.alert(
             "Close Survey",
@@ -281,7 +205,7 @@ const BlockDSurveyScreen = () => {
                 { text: "No" },
                 {
                     text: "Yes", onPress: () => {
-                        navigation.goBack();
+                        navigation.replace('DashboardScreen');
                         return true;
                     }
                 },
@@ -329,125 +253,6 @@ const BlockDSurveyScreen = () => {
         setAudioPath(audioFile);
         submitSurvey(audioFile);
     };
-
-    // const validationCheck = () => {
-    //     const pattern = /^[a-zA-Z]{2,40}( [a-zA-Z]{2,40})+$/;
-    //     const AgeRegex = /^(?:1[01][0-9]|120|1[7-9]|[2-9][0-9])$/
-    //     if (pattern.test(surveryName)) {
-    //         if (gender !== '') {
-    //             if (AgeRegex.test(age)) {
-    //                 if (selectedOccupations.length !== 0) {
-    //                     if (selectedEducation.length !== 0) {
-    //                         if (selectedIncomes.length !== 0) {
-    //                             if (value !== null) {
-    //                                 if (valueDistrict !== null) {
-    //                                     if (areasSelected.length !== 0) {
-    //                                         if (differentlyAble !== '') {
-    //                                             if (adult !== '') {
-    //                                                 if (children !== '') {
-    //                                                     if (anyGroup !== '') {
-    //                                                         if (smartPhone !== '') {
-    //                                                             console.log('validationCheck', AgeRegex.test(age))
-    //                                                             stopRecording();
-    //                                                         } else {
-    //                                                             showMessage({
-    //                                                                 message: "Please Select SmartPhone Own!",
-    //                                                                 description: "Please Select SmartPhone Own!",
-    //                                                                 type: "danger",
-    //                                                             });
-    //                                                         }
-    //                                                     } else {
-    //                                                         showMessage({
-    //                                                             message: "Please Select Any Group Part!",
-    //                                                             description: "Please Select Any Group Part SHG/JLG!",
-    //                                                             type: "danger",
-    //                                                         });
-    //                                                     }
-    //                                                 } else {
-    //                                                     showMessage({
-    //                                                         message: "Please Select Children!",
-    //                                                         description: "Please Select Number Of Children!",
-    //                                                         type: "danger",
-    //                                                     });
-    //                                                 }
-    //                                             } else {
-    //                                                 showMessage({
-    //                                                     message: "Please Select Adults!",
-    //                                                     description: "Please Select Number Of Adults!",
-    //                                                     type: "danger",
-    //                                                 });
-    //                                             }
-    //                                         } else {
-    //                                             showMessage({
-    //                                                 message: "Please Select Differently!",
-    //                                                 description: "Please Select Differently abled!",
-    //                                                 type: "danger",
-    //                                             });
-    //                                         }
-    //                                     } else {
-    //                                         showMessage({
-    //                                             message: "Please Select Area",
-    //                                             description: "Please Select Area!",
-    //                                             type: "danger",
-    //                                         });
-    //                                     }
-    //                                 } else {
-    //                                     showMessage({
-    //                                         message: "Please Select District",
-    //                                         description: "Please Select District!",
-    //                                         type: "danger",
-    //                                     });
-    //                                 }
-    //                             } else {
-    //                                 showMessage({
-    //                                     message: "Please Select State",
-    //                                     description: "Please Select State!",
-    //                                     type: "danger",
-    //                                 });
-    //                             }
-    //                         } else {
-    //                             showMessage({
-    //                                 message: "Please Select Incomes",
-    //                                 description: "Please Select Incomes!",
-    //                                 type: "danger",
-    //                             });
-    //                         }
-    //                     } else {
-    //                         showMessage({
-    //                             message: "Please Select Education",
-    //                             description: "Please Select Education!",
-    //                             type: "danger",
-    //                         });
-    //                     }
-    //                 } else {
-    //                     showMessage({
-    //                         message: "Please Select Occupation",
-    //                         description: "Please Select Occupation!",
-    //                         type: "danger",
-    //                     });
-    //                 }
-    //             } else {
-    //                 showMessage({
-    //                     message: "Please Enter Valid Age",
-    //                     description: "Please Enter Valid Age!",
-    //                     type: "danger",
-    //                 });
-    //             }
-    //         } else {
-    //             showMessage({
-    //                 message: "Please Select Gender",
-    //                 description: "Please Select Valid Gender!",
-    //                 type: "danger",
-    //             });
-    //         }
-    //     } else {
-    //         showMessage({
-    //             message: "Please Enter Name",
-    //             description: "Please Enter Valid Name!",
-    //             type: "danger",
-    //         });
-    //     }
-    // }
 
     const validate = () => {
         if (life === null) {
@@ -613,10 +418,17 @@ const BlockDSurveyScreen = () => {
                 type: "danger",
             });
         }
-        else if (PMFBY === null) {
+        else if (PMSBY === null) {
             showMessage({
                 message: "Please Select PMSBY",
                 description: "Please Select PMSBY!",
+                type: "danger",
+            });
+        }
+        else if (PMFBY === null) {
+            showMessage({
+                message: "Please Select PMFBY",
+                description: "Please Select PMFBY!",
                 type: "danger",
             });
         }
@@ -635,64 +447,223 @@ const BlockDSurveyScreen = () => {
             });
         }
         else {
-            navigation.replace('BlockESurveyScreen')
+            submitSurvey();
         }
     }
 
-    const submitSurvey = async (file_urls) => {
-        // https://createdinam.in/RBI-CBCD/public/api/create-survey-demographics
-        const FormData = require('form-data');
-        let data = new FormData();
-        data.append('user_name', surveryName);
-        data.append('survey_token', user.name);
-        data.append('gender', gender);
-        data.append('age_of_repons', age);
-        data.append('city', value);
-        data.append('state', valueDistrict);
-        data.append('occupation_id', selectedOccupations);
-        data.append('education_id', selectedEducation);
-        data.append('income_id', selectedIncomes);
-        data.append('area_id', areasSelected);
-        data.append('diff_abled', differentlyAble);
-        data.append('adults', adult);
-        data.append('children', children);
-        data.append('total', Number(adult) + Number(children));
-        data.append('part_of_group', anyGroup);
-        data.append('own_smartphone', smartPhone);
-        data.append('latitude', '27.98878');
-        data.append('longitude', '28.00000');
-        data.append('other_occupation', '1');
-        data.append('audio_file', file_urls);
+    const submitSurvey = async () => {
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", 'application/json');
+        myHeaders.append("Authorization", "Bearer " + userSendToken);
 
-        let config = {
-            method: 'post',
-            maxBodyLength: Infinity,
-            url: 'https://createdinam.in/RBI-CBCD/public/api/create-survey-demographics',
-            headers: {
-                'Authorization': 'Bearer ' + userSendToken,
-                "Content-Type": "multipart/form-data",
-            },
-            data: data
+        var raw = JSON.stringify({
+            "latitude": '39.123123',
+            "longitude": '32.123123',
+            "survey_token": name,
+            "section_no": "D",
+            "data": [
+                {
+                    "section_no": "D",
+                    "q_no": "23",
+                    "q_type": "CHILD",
+                    "sub_q_no": "a",
+                    "sub_q_title": "Life",
+                    "sub_q_type": "SINGLECHECK",
+                    'response1': "",
+                    'response2': "",
+                    'response3': "",
+                    'response4': "",
+                    'response5': "",
+                    "response": `${life?.label}`
+                },
+                {
+                    "section_no": "D",
+                    "q_no": "23",
+                    "q_type": "CHILD",
+                    "sub_q_no": "b",
+                    "sub_q_title": "Non-Life",
+                    "sub_q_type": "SINGLECHECK",
+                    'response1': "",
+                    'response2': "",
+                    'response3': "",
+                    'response4': "",
+                    "response": `${nonLife?.label}`
+                },
+                {
+                    "section_no": "D",
+                    "q_no": "23",
+                    "q_type": "CHILD",
+                    "sub_q_no": "c",
+                    "sub_q_title": "tile here",
+                    "sub_q_type": "SINGLECHECK",
+                    'response1': "",
+                    'response2': "",
+                    'response3': "",
+                    'response4': "",
+                    "response": `${getInsurance?.label}`
+                },
+                {
+                    "section_no": "D",
+                    "q_no": "24",
+                    "q_type": "CHILD",
+                    "sub_q_no": "a",
+                    "sub_q_title": "In-built Insurance Accident Cover on RuPay card holders under PM Jan Dhan Account [Accidental]",
+                    "sub_q_type": "SINGLECHECK",
+                    'response1': `${awareA?.label}`,
+                    'response2': `${enrollA?.label}`,
+                    'response3': `${renewalA?.label}`,
+                    'response4': `${inactiveA?.label}`,
+                    "response": ``
+                },
+                {
+                    "section_no": "D",
+                    "q_no": "24",
+                    "q_type": "CHILD",
+                    "sub_q_no": "b",
+                    "sub_q_title": "Pradhan Mantri Suraksha Bima Yojana (PMSBY) having an annual premium of ₹ 20- per year",
+                    "sub_q_type": "SINGLECHECK",
+                    'response1': `${awareB?.label}`,
+                    'response2': `${enrollB?.label}`,
+                    'response3': `${renewalB?.label}`,
+                    'response4': `${inactiveB?.label}`,
+                    "response": ``
+                },
+                {
+                    "section_no": "D",
+                    "q_no": "24",
+                    "q_type": "CHILD",
+                    "sub_q_no": "c",
+                    "sub_q_title": "Pradhan Mantri Jeevan Jyoti Bima Yojana (PMJJBY)",
+                    "sub_q_type": "SINGLECHECK",
+                    'response1': `${awareC?.label}`,
+                    'response2': `${enrollC?.label}`,
+                    'response3': `${renewalC?.label}`,
+                    'response4': `${inactiveC?.label}`,
+                    "response": ``
+                },
+                {
+                    "section_no": "D",
+                    "q_no": "24",
+                    "q_type": "CHILD",
+                    "sub_q_no": "d",
+                    "sub_q_title": "IPM Fasal Bima Yojana [PMFBY]",
+                    "sub_q_type": "SINGLECHECK",
+                    'response1': `${awareD?.label}`,
+                    'response2': `${enrollD?.label}`,
+                    'response3': `${renewalD?.label}`,
+                    'response4': `${inactiveD?.label}`,
+                    "response": ``
+                },
+                {
+                    "section_no": "D",
+                    "q_no": "25",
+                    "q_type": "SINGLECHECK",
+                    "sub_q_no": "",
+                    "sub_q_title": "",
+                    "sub_q_type": "",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response5': ``,
+                    "response": `${privateBorrowing}`
+                },
+                {
+                    "section_no": "D",
+                    "q_no": "26",
+                    "q_type": "MULTICHECK",
+                    "sub_q_no": "",
+                    "sub_q_title": "",
+                    "sub_q_type": "",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response5': ``,
+                    "response": `[${reasonForEnroll}]`
+                },
+                {
+                    "section_no": "D",
+                    "q_no": "27",
+                    "q_type": "SINGLECHECK",
+                    "sub_q_no": "",
+                    "sub_q_title": "",
+                    "sub_q_type": "",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response5': ``,
+                    "response": `${enrolledOtherInsurance?.label}`
+                },
+                {
+                    "section_no": "D",
+                    "q_no": "28",
+                    "q_type": "SELF",
+                    "sub_q_no": "",
+                    "sub_q_title": "",
+                    "sub_q_type": "",
+                    'response1': `${rupayCover?.label}`,
+                    'response2': `${PMJJBY?.label}`,
+                    'response3': `${PMSBY?.label}`,
+                    'response4': `${PMFBY?.label}`,
+                    'response5': `${other?.label}`,
+                    "response": ``
+                },
+                {
+                    "section_no": "D",
+                    "q_no": "29",
+                    "q_type": "SELF",
+                    "sub_q_no": "",
+                    "sub_q_title": "",
+                    "sub_q_type": "",
+                    'response1': ``,
+                    'response2': ``,
+                    'response3': ``,
+                    'response4': ``,
+                    'response5': ``,
+                    "response": `[${insuranceInactive}]`
+                },
+            ]
+        });
+
+        console.log(raw);
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
         };
 
-        Axios.request(config)
-            .then((response) => {
-                console.warn('startRecording', JSON.stringify(response.data))
-                if (response.data.status === true) {
+        console.log('--------->>', requestOptions?.body);
+
+        fetch("https://createdinam.in/RBI-CBCD/public/api/create-survey-section-d", requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                if (result?.status === true) {
                     showMessage({
-                        message: response.data.message + ', Submit By ' + response.data?.name,
-                        description: response.data.message,
+                        message: result.message,
+                        description: result.message,
                         type: "success",
                     });
+                    saveSurveryAndMoveToNext();
                 } else {
                     showMessage({
                         message: "Something went wrong!",
-                        description: "Someting went wrong, Please check Form Details!",
+                        description: result.message,
                         type: "danger",
                     });
                 }
-            });
+            })
+            .catch(error => console.log('error', error));
+        // navigation.replace('BlockESurveyScreen');
+    }
 
+
+    const saveSurveryAndMoveToNext = async () => {
+        AsyncStorage.setItem(AsyncStorageContaints.surveyNextBlock, 'E');
+        navigation.replace('BlockESurveyScreen');
     }
 
     const onSelectedReason = (selectedItems) => {
@@ -721,26 +692,16 @@ const BlockDSurveyScreen = () => {
         return selectedReason ? selectedReason.lable : '';
     });
 
+    // SelectedReasonTypeLabels
+
+    const SelectedReasonTypeLabels = selectedReason.map((selectedId) => {
+        const selectedReason = reason.find((reason) => reason.id === selectedId);
+        return selectedReason ? selectedReason.lable : '';
+    });
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#F8F8FF' }}>
             {renderCustomHeader()}
-            {/* <Modal isVisible={isInstruction}>
-                <View style={{ height: 200, width: Dimensions.get('screen').width - 50, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 5, padding: 20 }}>
-                    <View style={{ alignItems: 'center' }}>
-                        <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Survey Instructions</Text>
-                        <Text style={{ textAlign: 'center', paddingVertical: 15 }}>Once your start the survey, this will track your location, and also record your audio, by click on start button all the featurs enable and track your location and record your audio.</Text>
-                        <TouchableOpacity onPress={() => startRecording()} style={{ paddingVertical: 10, paddingHorizontal: 50, backgroundColor: '#000', borderRadius: 5, elevation: 5, }}>
-                            <Text style={{ fontWeight: 'bold', color: '#fff' }}>Start</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </Modal> */}
-            {/* <TouchableOpacity onPress={() => startRecording()}>
-                <Text>Start Recording</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => stopRecording()}>
-                <Text>Stop Recording</Text>
-            </TouchableOpacity> */}
             <Text style={{ fontWeight: 'bold', paddingLeft: 20, paddingTop: 10 }}>D. ACCESS and USAGE OF FINANCIAL SERVICES – INSURANCE FACILITIES</Text>
             {isLoading === false ?
                 <ScrollView>
@@ -770,8 +731,6 @@ const BlockDSurveyScreen = () => {
                             </View> : null}
                             {getInsurance?.label === "No" ? <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
                                 <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>23(d). If not interested in any insurance facility, what could be the reasons?</Text>
-
-
                                 <MultiSelect
                                     hideTags
                                     items={reason}
@@ -956,8 +915,6 @@ const BlockDSurveyScreen = () => {
                         </View>
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>26 . Why did you enrol in this product?</Text>
-
-
                             <MultiSelect
                                 hideTags
                                 items={enrolReason}
@@ -1021,6 +978,13 @@ const BlockDSurveyScreen = () => {
                                 <Text style={{ marginBottom: 5, fontWeight: '500' }}>PMSBY</Text>
                                 <RadioButtonRN
                                     data={dataGroup}
+                                    selectedBtn={(e) => setPMSBY(e)}
+                                />
+                            </View>
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: '500' }}>PMFBY</Text>
+                                <RadioButtonRN
+                                    data={dataGroup}
                                     selectedBtn={(e) => setPMFBY(e)}
                                 />
                             </View>
@@ -1034,8 +998,6 @@ const BlockDSurveyScreen = () => {
                         </View>
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>29 . If your insurance has become inactive, please indicate the reasons?</Text>
-
-
                             <MultiSelect
                                 hideTags
                                 items={InsuranceInactiveReason}
@@ -1076,7 +1038,7 @@ const BlockDSurveyScreen = () => {
                         </TouchableOpacity>
                     </View>
                 </ScrollView> : <ActivityIndicator style={{ alignItems: 'center', marginTop: Dimensions.get('screen').width }} color={'#000'} />}
-        </SafeAreaView >
+        </SafeAreaView>
     )
 }
 

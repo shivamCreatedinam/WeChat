@@ -11,5 +11,6 @@ const AsyncStorageContaints = {
   surveyLatitude: '@LATITUDE',
   surveyLongitude: '@LONGITUDE',
   surveyNextBlock: '@SURVEYNEXTBLOCK',
+  surveyCompleteCount: '@CountSurveyComplete',
 };
 export default AsyncStorageContaints;

@@ -13,7 +13,6 @@ import AudioRecord from 'react-native-audio-record';
 import Modal from 'react-native-modal';
 import Axios from 'axios';
 import { Children } from 'react';
-// import fs from 'fs';
 
 const BlockCSurveyScreen = () => {
 
@@ -77,6 +76,8 @@ const BlockCSurveyScreen = () => {
     const [privateLend, setPrivateLend] = React.useState(null);
     const [privateBorrowing, setprivateBorrowing] = React.useState(null);
     const [privateBorrowingFocus, setPrivateBorrowingFocus] = React.useState(null);
+    const [Lattitude, setLattitude] = React.useState('');
+    const [Longitude, setLongitude] = React.useState('');
     const multiSelectRef = useRef(null);
 
     // gender setDifferently
@@ -204,6 +205,11 @@ const BlockCSurveyScreen = () => {
             const userId = await AsyncStorage.getItem(AsyncStorageContaints.tempServerTokenId);
             const UserData = await AsyncStorage.getItem(AsyncStorageContaints.UserData);
             const UserToken = await AsyncStorage.getItem(AsyncStorageContaints.UserId);
+            const surveyLatitude = await AsyncStorage.getItem(AsyncStorageContaints.surveyLatitude);
+            const surveyLongitude = await AsyncStorage.getItem(AsyncStorageContaints.surveyLongitude);
+            //UserId
+            setLattitude(surveyLatitude);
+            setLongitude(surveyLongitude);
             //UserId
             setUserSendToken(UserToken);
             setUserName(UserData);
@@ -306,7 +312,7 @@ const BlockCSurveyScreen = () => {
                 { text: "No" },
                 {
                     text: "Yes", onPress: () => {
-                        navigation.goBack();
+                        navigation.replace('DashboardScreen');
                         return true;
                     }
                 },
@@ -355,7 +361,7 @@ const BlockCSurveyScreen = () => {
         submitSurvey(audioFile);
     };
 
-   
+
     const valiadte = () => {
         if (loan === null) {
             showMessage({
@@ -498,64 +504,293 @@ const BlockCSurveyScreen = () => {
             });
         }
         else {
-            navigation.replace('BlockDSurveyScreen')
+            submitSurvey();
+            // navigation.replace('BlockDSurveyScreen')
         }
     }
 
-    const submitSurvey = async (file_urls) => {
-        // https://createdinam.in/RBI-CBCD/public/api/create-survey-demographics
-        const FormData = require('form-data');
-        let data = new FormData();
-        data.append('user_name', surveryName);
-        data.append('survey_token', user.name);
-        data.append('gender', gender);
-        data.append('age_of_repons', age);
-        data.append('city', value);
-        data.append('state', valueDistrict);
-        data.append('occupation_id', selectedOccupations);
-        data.append('education_id', selectedEducation);
-        data.append('income_id', selectedIncomes);
-        data.append('area_id', areasSelected);
-        data.append('diff_abled', differentlyAble);
-        data.append('adults', adult);
-        data.append('children', children);
-        data.append('total', Number(adult) + Number(children));
-        data.append('part_of_group', anyGroup);
-        data.append('own_smartphone', smartPhone);
-        data.append('latitude', '27.98878');
-        data.append('longitude', '28.00000');
-        data.append('other_occupation', '1');
-        data.append('audio_file', file_urls);
+    const submitSurvey = async () => {
 
-        let config = {
-            method: 'post',
-            maxBodyLength: Infinity,
-            url: 'https://createdinam.in/RBI-CBCD/public/api/create-survey-demographics',
-            headers: {
-                'Authorization': 'Bearer ' + userSendToken,
-                "Content-Type": "multipart/form-data",
-            },
-            data: data
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", 'application/json');
+        myHeaders.append("Authorization", "Bearer " + userSendToken);
+
+        var raw = JSON.stringify({
+            "latitude": "31.232423", // Lattitude,
+            "longitude": "32.32523",  // Longitude,
+            "survey_token": name,
+            "section_no": "C",
+            "data": [
+                {
+                    "section_no": "C",
+                    "q_no": "19",
+                    "q_type": "CHILD",
+                    "sub_q_no": "a",
+                    "sub_q_title": "Do you have any need for loan?",
+                    "sub_q_type": "SINGLECHECK",
+                    'response1': "",
+                    'response2': "",
+                    'response3': "",
+                    'response4': "",
+                    "response": `${loan?.label}`
+                }, {
+                    "section_no": "C",
+                    "q_no": "19",
+                    "q_type": "CHILD",
+                    "sub_q_no": "b",
+                    "sub_q_title": "If yes, do you have any credit facility/loan from bank/NBFC/NBFC- MFI?",
+                    "sub_q_type": "SINGLECHECK",
+                    'response1': "",
+                    'response2': "",
+                    'response3': "",
+                    'response4': "",
+                    "response": `${credFacility?.label}`
+                },
+                {
+                    "section_no": "C",
+                    "q_no": "19",
+                    "q_type": "CHILD",
+                    "sub_q_no": "c",
+                    "sub_q_title": "What type of loan do you have?",
+                    "sub_q_type": "SINGLECHECK",
+                    'response1': "",
+                    'response2': "",
+                    'response3': "",
+                    'response4': "",
+                    "response": selectedLoantype === 0 ? "" : selectedLoantype
+                },
+                {
+                    "section_no": "C",
+                    "q_no": "19",
+                    "q_type": "CHILD",
+                    "sub_q_no": "d",
+                    "sub_q_title": "Where did you enrol for the credit (loan) product?",
+                    "sub_q_type": "SINGLECHECK",
+                    'response1': "",
+                    'response2': "",
+                    'response3': "",
+                    'response4': "",
+                    "response": `${loanEnroll}`
+                },
+                {
+                    "section_no": "C",
+                    "q_no": "19",
+                    "q_type": "CHILD",
+                    "sub_q_no": "e",
+                    "sub_q_title": "How much is your total borrowing (amount outstanding) from banks/NBFCs/ NBFC-MFI?",
+                    "sub_q_type": "SINGLECHECK",
+                    'response1': "",
+                    'response2': "",
+                    'response3': "",
+                    'response4': "",
+                    "response": `${amount}`
+                },
+                {
+                    "section_no": "C",
+                    "q_no": "19",
+                    "q_type": "CHILD",
+                    "sub_q_no": "f",
+                    "sub_q_title": "How do you make your repayment of loan?",
+                    "sub_q_type": "SINGLECHECK",
+                    'response1': "",
+                    'response2': "",
+                    'response3': "",
+                    'response4': "",
+                    "response": `${repay}`
+                },
+                {
+                    "section_no": "C",
+                    "q_no": "19",
+                    "q_type": "CHILD",
+                    "sub_q_no": "g",
+                    "sub_q_title": "If your answer to Q 19 (a) is No, why don’t you seek a loan from banks/NBFCs/ NBFC-MFIs?",
+                    "sub_q_type": "SINGLECHECK",
+                    'response1': "",
+                    'response2': "",
+                    'response3': "",
+                    'response4': "",
+                    "response": `[${selectedReason}]`
+                },
+                {
+                    "section_no": "C",
+                    "q_no": "20",
+                    "q_type": "CHILD",
+                    "sub_q_no": "a",
+                    "sub_q_title": "Are you aware of Overdraft facility in PMJDY account?",
+                    "sub_q_type": "SINGLECHECK",
+                    'response1': "",
+                    'response2': "",
+                    'response3': "",
+                    'response4': "",
+                    "response": `${overDraft?.label}`
+                },
+                {
+                    "section_no": "C",
+                    "q_no": "20",
+                    "q_type": "CHILD",
+                    "sub_q_no": "b",
+                    "sub_q_title": "If you have a PM Jan Dhan Account, have you received an overdraft limit?",
+                    "sub_q_type": "SINGLECHECK",
+                    'response1': "",
+                    'response2': "",
+                    'response3': "",
+                    'response4': "",
+                    "response": `${ReceivedOverDraft?.label}`
+                },
+                {
+                    "section_no": "C",
+                    "q_no": "20",
+                    "q_type": "CHILD",
+                    "sub_q_no": "c",
+                    "sub_q_title": "Have you approached your bank for it?",
+                    "sub_q_type": "SINGLECHECK",
+                    'response1': "",
+                    'response2': "",
+                    'response3': "",
+                    'response4': "",
+                    "response": `${bank?.label}`
+                },
+                {
+                    "section_no": "C",
+                    "q_no": "20",
+                    "q_type": "CHILD",
+                    "sub_q_no": "d",
+                    "sub_q_title": "When the bank was approached, have the branch officials refused it?",
+                    "sub_q_type": "SINGLECHECK",
+                    'response1': "",
+                    'response2': "",
+                    'response3': "",
+                    'response4': "",
+                    "response": `${refuse?.label}`
+                },
+                {
+                    "section_no": "C",
+                    "q_no": "20",
+                    "q_type": "CHILD",
+                    "sub_q_no": "e",
+                    "sub_q_title": "If refused, what was the reason cited?",
+                    "sub_q_type": "SINGLECHECK",
+                    'response1': "",
+                    'response2': "",
+                    'response3': "",
+                    'response4': "",
+                    "response": `[${selectedRefuseReason}]`
+                },
+                {
+                    "section_no": "C",
+                    "q_no": "21",
+                    "q_type": "CHILD",
+                    "sub_q_no": "a",
+                    "sub_q_title": "Are you aware of Collateral-free loans under PM Mudra Yojana (PMMY)?",
+                    "sub_q_type": "SINGLECHECK",
+                    'response1': "",
+                    'response2': "",
+                    'response3': "",
+                    'response4': "",
+                    "response": `${freeLoan?.label}`
+                },
+                {
+                    "section_no": "C",
+                    "q_no": "21",
+                    "q_type": "CHILD",
+                    "sub_q_no": "b",
+                    "sub_q_title": "If yes, have you received a loan under this collateral-free scheme?",
+                    "sub_q_type": "SINGLECHECK",
+                    'response1': "",
+                    'response2': "",
+                    'response3': "",
+                    'response4': "",
+                    "response": `${freeLoanReceived?.label}`
+                },
+                {
+                    "section_no": "C",
+                    "q_no": "21",
+                    "q_type": "CHILD",
+                    "sub_q_no": "c",
+                    "sub_q_title": "Have you been refused loan under PMMY?",
+                    "sub_q_type": "SINGLECHECK",
+                    'response1': "",
+                    'response2': "",
+                    'response3': "",
+                    'response4': "",
+                    "response": `${loanRefuseByYou?.label}`
+                },
+                {
+                    "section_no": "C",
+                    "q_no": "21",
+                    "q_type": "CHILD",
+                    "sub_q_no": "d",
+                    "sub_q_title": "If yes, what was the reason for refusal.",
+                    "sub_q_type": "SINGLECHECK",
+                    'response1': "",
+                    'response2': "",
+                    'response3': "",
+                    'response4': "",
+                    "response": `[${selectedFreeLoanRefuseReason}]`
+                },
+                {
+                    "section_no": "C",
+                    "q_no": "22",
+                    "q_type": "CHILD",
+                    "sub_q_no": "a",
+                    "sub_q_title": "Do you have borrowings from private money lenders/ informal sources?",
+                    "sub_q_type": "SINGLECHECK",
+                    'response1': "",
+                    'response2': "",
+                    'response3': "",
+                    'response4': "",
+                    "response": `${privateLend?.label}`
+                },
+                {
+                    "section_no": "C",
+                    "q_no": "22",
+                    "q_type": "CHILD",
+                    "sub_q_no": "b",
+                    "sub_q_title": "How much is your total borrowing (amount outstanding) from Private Money Lenders/ Informal sources?",
+                    "sub_q_type": "SINGLECHECK",
+                    'response1': "",
+                    'response2': "",
+                    'response3': "",
+                    'response4': "",
+                    "response": `${privateBorrowing}`
+                },
+            ]
+        });
+
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
         };
 
-        Axios.request(config)
-            .then((response) => {
-                console.warn('startRecording', JSON.stringify(response.data))
-                if (response.data.status === true) {
+        console.log('--------->>', requestOptions?.body);
+
+        fetch("https://createdinam.in/RBI-CBCD/public/api/create-survey-section-c", requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                if (result?.status === true) {
                     showMessage({
-                        message: response.data.message + ', Submit By ' + response.data?.name,
-                        description: response.data.message,
+                        message: result.message,
+                        description: result.message,
                         type: "success",
                     });
+                    saveSurveryAndMoveToNext();
                 } else {
                     showMessage({
                         message: "Something went wrong!",
-                        description: "Someting went wrong, Please check Form Details!",
+                        description: result.message,
                         type: "danger",
                     });
                 }
-            });
+            })
+            .catch(error => console.log('error', error));
+    }
 
+    const saveSurveryAndMoveToNext = async () => {
+        AsyncStorage.setItem(AsyncStorageContaints.surveyNextBlock, 'D');
+        navigation.replace('BlockDSurveyScreen');
     }
 
     const onSelectedItemsChange = (selectedItems) => {

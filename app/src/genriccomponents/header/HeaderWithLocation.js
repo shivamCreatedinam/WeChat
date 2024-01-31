@@ -31,6 +31,7 @@ const HeaderWithLocation = props => {
     isProfileIconVisible,
     onClickLocation,
     isSearch,
+    headerTitle
   } = props;
 
   const searchVisible = isSearch || false;
@@ -132,7 +133,7 @@ const HeaderWithLocation = props => {
           style={{ flexDirection: 'row' }}>
           <View style={{ justifyContent: 'center', elevation: 5 }}>
             <Image
-              style={{ width: 28, height: 28, resizeMode: 'contain' }}
+              style={{ width: 60, height: 25, resizeMode: 'contain' }}
               source={require('../../../res/images/appLogo/app_logo_main.png')}
             />
           </View>
@@ -143,6 +144,7 @@ const HeaderWithLocation = props => {
           </View>
         </TouchableOpacity>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Text style={{ color: 'green', fontSize: 14, fontWeight: 'bold', textAlign: 'center', paddingTop: 3, backgroundColor: '#fff', elevation: 5, paddingVertical: 5, paddingHorizontal: 10 }}>Survey Count {headerTitle}</Text>
         </View>
       </View>
     </View>
