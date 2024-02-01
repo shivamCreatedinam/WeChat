@@ -139,12 +139,12 @@ const HeaderWithLocation = props => {
           </View>
           <View style={{ marginLeft: 10 }}>
             <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
-              {props.headerTitle}
+              {props.headerTitle?.name}
             </Text>
           </View>
         </TouchableOpacity>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={{ color: 'green', fontSize: 14, fontWeight: 'bold', textAlign: 'center', paddingTop: 3, backgroundColor: '#fff', elevation: 5, paddingVertical: 5, paddingHorizontal: 10 }}>Survey Count {headerTitle}</Text>
+          <Text style={{ color: 'green', fontSize: 14, fontWeight: 'bold', textAlign: 'center', paddingTop: 3, backgroundColor: '#fff', elevation: 5, paddingVertical: 5, paddingHorizontal: 10 }}>Survey Count {props.headerTitle?.surveCount}</Text>
         </View>
       </View>
     </View>

@@ -32,11 +32,12 @@ const BlockFSurveyScreen = () => {
     const [areasSelected, setSelectedAreas] = React.useState([]);
     const [state, setStateData] = React.useState([]);
     const [DistrictData, setDistrictData] = React.useState([]);
-
+    const [isSubmitSurvey, setSubmitSurvey] = React.useState(false);
     // country dropdowns
     const [value, setValue] = React.useState(null);
     const [selectedState, setSelectedState] = React.useState(null);
     const [isFocus, setIsFocus] = React.useState(false);
+    const [isAudioUploading, setAudioUploading] = React.useState(false);
 
     // select district
     const [valueDistrict, setDistrictValue] = React.useState(null);
@@ -50,6 +51,7 @@ const BlockFSurveyScreen = () => {
     const [adult, setAdults] = React.useState(0);
     const [children, setChildren] = React.useState(0);
     const [selectedEducation, setSelectedEducation] = React.useState([]);
+    const [selectedSatisfiedReasons, setSatisfiedReasons] = React.useState([]);
     const [selectedOccupations, setSelectedOccupations] = React.useState([]);
     const [selectedReason, setSelectedReason] = React.useState([]);
     const [selectedIncomes, setSelectedIncomes] = React.useState([]);
@@ -101,16 +103,20 @@ const BlockFSurveyScreen = () => {
 
     const differently = [
         {
-            label: 'Yes'
+            label: 'Yes',
+            index: 1
         },
         {
-            label: 'No'
+            label: 'No',
+            index: 2
         },
         {
-            label: 'Can’t say/ Never approached'
+            label: 'Can’t say/ Never approached',
+            index: 3
         },
         {
-            label: 'NA (do not use agent point)'
+            label: 'NA (do not use agent point)',
+            index: 4
         }
     ];
 
@@ -282,10 +288,16 @@ const BlockFSurveyScreen = () => {
         return selectedReason ? selectedReason.lable : '';
     });
 
+    const SelectedSatisfiedReasonsLabels = selectedSatisfiedReasons.map((selectedId) => {
+        const selectedReason = lodgedcomplaintreasons.find((reason) => reason.id === selectedId);
+        return selectedReason ? selectedReason.lable : '';
+    });
+
     const SelectedDigitalpreferredLabels = DigitalpreferredChange.map((selectedId) => {
         const selectedReason = Digitalpreferred.find((reason) => reason.id === selectedId);
         return selectedReason ? selectedReason.lable : '';
     });
+
     const SelectedReasonlabels = selectedReason.map((selectedId) => {
         const selectedReason = transactionsdigitally.find((reason) => reason.id === selectedId);
         return selectedReason ? selectedReason.lable : '';
@@ -295,8 +307,8 @@ const BlockFSurveyScreen = () => {
         setSelectedAreas(selectedItems);
     }
 
-    const onSelectedEducationChange = (selectedItems) => {
-        setSelectedEducation(selectedItems);
+    const onSelectedSatisfiedReasons = (selectedItems) => {
+        setSatisfiedReasons(selectedItems);
     }
 
     const onSelectedOccupationsChange = (selectedItems) => {
@@ -321,10 +333,8 @@ const BlockFSurveyScreen = () => {
     );
 
     React.useEffect(() => {
-        BackHandler.addEventListener("hardwareBackPress", askToCloseApp);
-        return () => {
-            BackHandler.removeEventListener("hardwareBackPress", askToCloseApp);
-        };
+        const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true)
+        return () => backHandler.remove()
     }, []);
 
     const readMessages = async () => {
@@ -360,6 +370,7 @@ const BlockFSurveyScreen = () => {
                 { text: "No" },
                 {
                     text: "Yes", onPress: () => {
+                        stopRecordingBack();
                         navigation.replace('DashboardScreen');
                         return true;
                     }
@@ -367,6 +378,8 @@ const BlockFSurveyScreen = () => {
             ]
         );
     }
+
+    const stopRecordingBack = async () => { const audioFile = await AudioRecord.stop(); }
 
     const renderCustomHeader = () => {
         const user = {
@@ -397,7 +410,7 @@ const BlockFSurveyScreen = () => {
     const startRecording = async () => {
         setSurveyInstruction(false);
         setIsRecording(true);
-        // AudioRecord.start();
+        AudioRecord.start();
     };
 
     const stopRecording = async () => {
@@ -406,8 +419,38 @@ const BlockFSurveyScreen = () => {
         const audioFile = await AudioRecord.stop();
         console.warn(audioFile)
         setAudioPath(audioFile);
+        uploadAudioFinal(audioFile);
         submitSurvey(audioFile);
     };
+
+    const uploadAudioFinal = async (file) => {
+        setAudioUploading(true);
+        let API_UPLOAD_MSG_FILE = `https://createdinam.in/RBI-CBCD/public/api/survey-audio-files`;
+        const path = `file://${file}`;
+        const formData = new FormData();
+        formData.append('survey_token', name);
+        formData.append('sec_no', 'F');
+        formData.append('audio_file', {
+            uri: path,
+            name: 'test.wav',
+            type: 'audio/wav',
+        })
+        console.log(JSON.stringify(formData));
+        try {
+            const res = await fetch(API_UPLOAD_MSG_FILE, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': 'Bearer ' + userSendToken,
+                },
+                body: formData,
+            });
+            const json = await res.json();
+            setAudioUploading(false);
+        } catch (err) {
+            alert(err)
+        }
+    }
 
 
     const Validate = () => {
@@ -566,7 +609,7 @@ const BlockFSurveyScreen = () => {
                 type: "danger",
             });
         }
-        else if (noReason === null) {
+        else if (selectedSatisfiedReasons === null) {
             showMessage({
                 message: "Please Select Reason For NotSatisfactory",
                 description: "Please Select Reason For NotSatisfactory!",
@@ -653,21 +696,19 @@ const BlockFSurveyScreen = () => {
             });
         }
         else {
-            // navigation.replace('DashboardScreen');
-            submitSurvey();
-            // stopRecording();
+            stopRecording();
         }
     }
 
     const submitSurvey = async () => {
-        console.log("inside submitSurvey")
+        setSubmitSurvey(true);
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", 'application/json');
         myHeaders.append("Authorization", "Bearer " + userSendToken);
 
         var raw = JSON.stringify({
-            "latitude": '32.5645634',
-            "longitude": '26.345324523',
+            "latitude": Lattitude,
+            "longitude": Longitude,
             "survey_token": name,
             "section_no": "F",
             "data": [
@@ -715,7 +756,7 @@ const BlockFSurveyScreen = () => {
                     'response2': ``,
                     'response3': ``,
                     'response4': ``,
-                    'response': `[${InformationSharingValue}]`
+                    'response': [InformationSharingValue]
                 },
                 {
                     'section_no': "F",
@@ -728,7 +769,7 @@ const BlockFSurveyScreen = () => {
                     'response2': ``,
                     'response3': ``,
                     'response4': ``,
-                    'response': `[${financialLiteracyValue}]`
+                    'response': [financialLiteracyValue]
                 },
                 {
                     'section_no': "F",
@@ -741,12 +782,12 @@ const BlockFSurveyScreen = () => {
                     'response2': ``,
                     'response3': ``,
                     'response4': ``,
-                    'response': `[${financialLiteracyValue}]`
+                    'response': [financialLiteracyValue]
                 },
                 {
                     'section_no': "F",
                     'q_no': "35",
-                    'q_type': "SELF",
+                    'q_type': "MULTI",
                     'sub_q_no': "",
                     'sub_q_title': "",
                     'sub_q_type': "",
@@ -754,12 +795,12 @@ const BlockFSurveyScreen = () => {
                     'response2': ``,
                     'response3': ``,
                     'response4': ``,
-                    'response': `[${selectedOccupations}]`
+                    'response': selectedOccupations.length === 0 ? "" : selectedOccupations
                 },
                 {
                     'section_no': "F",
                     'q_no': "36",
-                    'q_type': "SELF",
+                    'q_type': "MULTI",
                     'sub_q_no': "",
                     'sub_q_title': "",
                     'sub_q_type': "",
@@ -767,7 +808,7 @@ const BlockFSurveyScreen = () => {
                     'response2': ``,
                     'response3': ``,
                     'response4': ``,
-                    'response': `[${selectedfinancial}]`
+                    'response': selectedfinancial.length === 0 ? "" : selectedfinancial
                 },
                 {
                     'section_no': "F",
@@ -813,13 +854,13 @@ const BlockFSurveyScreen = () => {
                     'q_no': "37",
                     'q_type': "CHILD",
                     'sub_q_no': "d",
-                    'sub_q_title': "Do you face any hinderance in carrying out transactions digitally?",
+                    'sub_q_title': "If yes, please indicate top two reasons?",
                     'sub_q_type': "SINGLECHECK",
                     'response1': ``,
                     'response2': ``,
                     'response3': ``,
                     'response4': ``,
-                    'response': `${hinderanceValue}`
+                    'response': selectedReason.length === 0 ? "" : selectedReason
                 },
                 {
                     'section_no': "F",
@@ -832,7 +873,7 @@ const BlockFSurveyScreen = () => {
                     'response2': ``,
                     'response3': ``,
                     'response4': ``,
-                    'response': `${hinderanceValue?.label}`
+                    'response': `${payFraud?.label}`
                 },
                 {
                     'section_no': "F",
@@ -884,7 +925,7 @@ const BlockFSurveyScreen = () => {
                     'response2': ``,
                     'response3': ``,
                     'response4': ``,
-                    'response': `[${digitalChannelChange}]`
+                    'response': digitalChannelChange.length === 0 ? "" : digitalChannelChange
                 },
                 {
                     'section_no': "F",
@@ -897,7 +938,7 @@ const BlockFSurveyScreen = () => {
                     'response2': ``,
                     'response3': ``,
                     'response4': ``,
-                    'response': `[${DigitalpreferredChange}]`
+                    'response': DigitalpreferredChange.length === 0 ? "" : DigitalpreferredChange
                 },
                 {
                     'section_no': "F",
@@ -957,12 +998,12 @@ const BlockFSurveyScreen = () => {
                     'q_type': "CHILD",
                     'sub_q_no': "e",
                     'sub_q_title': "If no, what could be the reasons?",
-                    'sub_q_type': "SINGLECHECK",
+                    'sub_q_type': "MULTICHECK",
                     'response1': ``,
                     'response2': ``,
                     'response3': ``,
                     'response4': ``,
-                    'response': `${noReason?.label}`
+                    'response': selectedSatisfiedReasons.length === 0 ? "" : selectedSatisfiedReasons
                 },
                 {
                     'section_no': "F",
@@ -1014,7 +1055,7 @@ const BlockFSurveyScreen = () => {
                     'response2': ``,
                     'response3': ``,
                     'response4': ``,
-                    'response': `${value?.label}`
+                    'response': `${value}`
                 },
                 {
                     'section_no': "F",
@@ -1027,7 +1068,7 @@ const BlockFSurveyScreen = () => {
                     'response2': ``,
                     'response3': ``,
                     'response4': ``,
-                    'response': `${value?.label}`
+                    'response': `${offerPdt}`
                 },
                 {
                     'section_no': "F",
@@ -1079,7 +1120,7 @@ const BlockFSurveyScreen = () => {
                     'response2': ``,
                     'response3': ``,
                     'response4': ``,
-                    'response': `${grievanceRelated?.label}`
+                    'response': `${grievanceRelated?.label}`,
                 },
                 {
                     'section_no': "F",
@@ -1111,6 +1152,7 @@ const BlockFSurveyScreen = () => {
         });
 
 
+        console.log(raw);
 
 
         var requestOptions = {
@@ -1177,25 +1219,39 @@ const BlockFSurveyScreen = () => {
     const saveSurveryAndMoveToNext = async () => {
         AsyncStorage.setItem(AsyncStorageContaints.surveyNextBlock, '');
         navigation.replace('DashboardScreen');
+        setSubmitSurvey(true);
         saveSurveyCount();
     }
 
     const saveSurveyCount = async () => {
-        const surveyNextBlock = await AsyncStorage.getItem(AsyncStorageContaints.surveyNextBlock);
-        console.log('saveSurveyCount', surveyNextBlock);
-        if (surveyNextBlock) {
-            // plus 
-        } else {
-            // fresh add +
+        try {
+            const value = await AsyncStorage.getItem(AsyncStorageContaints.surveyCompleteCount);
+            if (value !== null) {
+                console.log('saveSurveyCountX', value);
+                let counterPlus = Number(value) + 1;
+                storeData(counterPlus)
+            } else {
+                console.log('saveSurveyCountY', value);
+                storeData(1)
+            }
+        } catch (e) {
+            console.log('saveSurveyCountZ', e);
         }
-        // AsyncStorage.setItem(AsyncStorageContaints.surveyNextBlock, '');
+    }
+
+    const storeData = async (counter) => {
+        try {
+            await AsyncStorage.setItem(AsyncStorageContaints.surveyCompleteCount, counter.toString())
+        } catch (e) {
+            console.log('saveSurveyCountXYZ', e);
+        }
     }
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#F8F8FF' }}>
             {renderCustomHeader()}
-            {/* <Modal isVisible={isInstruction}>
-                <View style={{ height: 200, width: Dimensions.get('screen').width - 50, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 5, padding: 20 }}>
+            <Modal isVisible={isInstruction}>
+                <View style={{ height: 250, width: Dimensions.get('screen').width - 50, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 5, padding: 20 }}>
                     <View style={{ alignItems: 'center' }}>
                         <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Survey Instructions</Text>
                         <Text style={{ textAlign: 'center', paddingVertical: 15 }}>Once your start the survey, this will track your location, and also record your audio, by click on start button all the featurs enable and track your location and record your audio.</Text>
@@ -1204,7 +1260,7 @@ const BlockFSurveyScreen = () => {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </Modal> */}
+            </Modal>
             <Text style={{ fontWeight: 'bold', paddingLeft: 20, paddingTop: 10 }}>F. QUALITY OF FINANCIAL SERVICES – FINANCIAL LITERACY, CUSTOMER SERVICE AND GRIEVANCE REDRESSAL</Text>
             {isLoading === false ?
                 <ScrollView>
@@ -1486,7 +1542,7 @@ const BlockFSurveyScreen = () => {
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>37 (f). After the incident, do you continue to use digital banking services?</Text>
                             <RadioButtonRN
-                                data={differently}
+                                data={smartphone}
                                 selectedBtn={(e) => setServiceContinue(e)}
                             />
                         </View>
@@ -1494,13 +1550,13 @@ const BlockFSurveyScreen = () => {
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
                             <Text style={{ marginBottom: 5, fontWeight: 'bold', flex: 1 }}>37 (g). Were you or your family member could recover the money lost in digital payment fraud?</Text>
                             <RadioButtonRN
-                                data={differently}
+                                data={smartphone}
                                 selectedBtn={(e) => setMoneyRecover(e)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text style={{ fontWeight: 'bold' }}>37 (h). Do you know about various precautions while using digital banking?</Text>
                             <RadioButtonRN
-                                data={differently}
+                                data={smartphone}
                                 selectedBtn={(e) => setPreacution(e)}
                             />
                             <View style={{ padding: 10, }} />
@@ -1604,10 +1660,38 @@ const BlockFSurveyScreen = () => {
                             />
                             <View style={{ padding: 10, }} />
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>39 (e). If no, what could be the reasons?</Text>
-                            <RadioButtonRN
-                                data={smartphone}
-                                selectedBtn={(e) => setNoReason(e)}
+                            <MultiSelect
+                                hideTags
+                                items={lodgedcomplaintreasons}
+                                uniqueKey="id"
+                                ref={multiSelectRef}
+                                onSelectedItemsChange={(items) =>
+                                    onSelectedSatisfiedReasons(items)
+                                }
+                                selectedItems={selectedSatisfiedReasons}
+                                selectText="Select Satisfied Reasons"
+                                onChangeInput={(text) => console.log(text)}
+                                altFontFamily="ProximaNova-Light"
+                                tagRemoveIconColor="#000"
+                                tagBorderColor="#000"
+                                tagTextColor="#000"
+                                selectedItemTextColor="#000"
+                                selectedItemIconColor="#000"
+                                itemTextColor="#000"
+                                displayKey="lable"
+                                searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                submitButtonColor="#000"
+                                submitButtonText="Submit"
+                                itemBackground="#000"
+                                styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
                             />
+                            <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                {SelectedSatisfiedReasonsLabels.map((label, index) => (
+                                    <View style={{ margin: 5 }}>
+                                        <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                    </View>
+                                ))}
+                            </View>
                             <View style={{ padding: 10, }} />
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>39 (f). Do you know about the RBI Integrated Banking Ombudsman Scheme?</Text>
                             <RadioButtonRN
@@ -1655,31 +1739,31 @@ const BlockFSurveyScreen = () => {
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>40 (c). Is the BC agent able to offer the product or service that you require?</Text>
                             <RadioButtonRN
                                 data={differently}
-                                selectedBtn={(e) => setofferPdt(e)}
+                                selectedBtn={(e, index) => setofferPdt(e?.index)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>40 (d). Does the BC agent satisfactorily respond to your queries?</Text>
                             <RadioButtonRN
                                 data={differently}
-                                selectedBtn={(e) => setQueryRespond(e)}
+                                selectedBtn={(e) => setQueryRespond(e?.index)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>40 (e). Does your BC indicate the charges for the services offered upfront?</Text>
                             <RadioButtonRN
                                 data={differently}
-                                selectedBtn={(e) => sCharges(e)}
+                                selectedBtn={(e) => sCharges(e?.index)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>40 (f). Do you know, how to lodge a complaint at the BC point?</Text>
                             <RadioButtonRN
                                 data={differently}
-                                selectedBtn={(e) => sCompBC(e)}
+                                selectedBtn={(e) => sCompBC(e?.index)}
                             />
                             <View style={{ padding: 10, }} />
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>40 (g). Whether you raised any grievance related to service with BC?</Text>
                             <RadioButtonRN
                                 data={differently}
-                                selectedBtn={(e) => setGrievanceRelated(e)}
+                                selectedBtn={(e) => setGrievanceRelated(e?.index)}
                             />
                             {grievanceRelated?.label === 'Yes' ? <>
                                 <View style={{ padding: 10, }} />
@@ -1716,8 +1800,8 @@ const BlockFSurveyScreen = () => {
                             <View style={{ padding: 10, }} />
                         </View>
                         <View style={{ padding: 10, }} />
-                        <TouchableOpacity onPress={() => finishSurvey()} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
-                            <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Complete Survey</Text>
+                        <TouchableOpacity disabled={isSubmitSurvey} onPress={() => Validate()} style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
+                            {isSubmitSurvey === true ? <ActivityIndicator color={'#fff'} style={{ alignItems: 'center', }} /> : <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Complete Survey</Text>}
                         </TouchableOpacity>
                     </View>
                 </ScrollView> : <ActivityIndicator style={{ alignItems: 'center', marginTop: Dimensions.get('screen').width }} color={'#000'} />}

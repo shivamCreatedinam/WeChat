@@ -59,7 +59,7 @@ const App = () => {
       // See error code and message
       console.log(error.code, error.message);
     },
-    { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+    { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 },
   );
 
   // const saveLocationForFutureUse = async (lat, long) => {

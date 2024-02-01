@@ -32,7 +32,8 @@ const BlockDSurveyScreen = () => {
     const [areasSelected, setSelectedAreas] = React.useState([]);
     const [state, setStateData] = React.useState([]);
     const [DistrictData, setDistrictData] = React.useState([]);
-
+    const [isSubmitSurvey, setSubmitSurvey] = React.useState(false);
+    const [isAudioUploading, setAudioUploading] = React.useState(false);
     // country dropdowns
     const [value, setValue] = React.useState(null);
     const [selectedState, setSelectedState] = React.useState(null);
@@ -171,10 +172,8 @@ const BlockDSurveyScreen = () => {
     );
 
     React.useEffect(() => {
-        BackHandler.addEventListener("hardwareBackPress", askToCloseApp);
-        return () => {
-            BackHandler.removeEventListener("hardwareBackPress", askToCloseApp);
-        };
+        const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true)
+        return () => backHandler.remove()
     }, []);
 
     const readMessages = async () => {
@@ -205,6 +204,7 @@ const BlockDSurveyScreen = () => {
                 { text: "No" },
                 {
                     text: "Yes", onPress: () => {
+                        stopRecordingBack();
                         navigation.replace('DashboardScreen');
                         return true;
                     }
@@ -212,6 +212,8 @@ const BlockDSurveyScreen = () => {
             ]
         );
     }
+
+    const stopRecordingBack = async () => { const audioFile = await AudioRecord.stop(); }
 
     const renderCustomHeader = () => {
         const user = {
@@ -251,8 +253,39 @@ const BlockDSurveyScreen = () => {
         const audioFile = await AudioRecord.stop();
         console.warn(audioFile)
         setAudioPath(audioFile);
+        uploadAudioFinal(audioFile);
         submitSurvey(audioFile);
     };
+
+
+    const uploadAudioFinal = async (file) => {
+        setAudioUploading(true);
+        let API_UPLOAD_MSG_FILE = `https://createdinam.in/RBI-CBCD/public/api/survey-audio-files`;
+        const path = `file://${file}`;
+        const formData = new FormData();
+        formData.append('survey_token', name);
+        formData.append('sec_no', 'D');
+        formData.append('audio_file', {
+            uri: path,
+            name: 'test.wav',
+            type: 'audio/wav',
+        })
+        console.log(JSON.stringify(formData));
+        try {
+            const res = await fetch(API_UPLOAD_MSG_FILE, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': 'Bearer ' + userSendToken,
+                },
+                body: formData,
+            });
+            const json = await res.json();
+            setAudioUploading(false);
+        } catch (err) {
+            alert(err)
+        }
+    }
 
     const validate = () => {
         if (life === null) {
@@ -447,19 +480,19 @@ const BlockDSurveyScreen = () => {
             });
         }
         else {
-            submitSurvey();
-            //   stopRecording();
+            stopRecording();
         }
     }
 
     const submitSurvey = async () => {
+        setSubmitSurvey(true);
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", 'application/json');
         myHeaders.append("Authorization", "Bearer " + userSendToken);
 
         var raw = JSON.stringify({
-            "latitude": '39.123123',
-            "longitude": '32.123123',
+            "latitude": Lattitude,
+            "longitude": Longitude,
             "survey_token": name,
             "section_no": "D",
             "data": [
@@ -571,7 +604,7 @@ const BlockDSurveyScreen = () => {
                 {
                     "section_no": "D",
                     "q_no": "25",
-                    "q_type": "SINGLECHECK",
+                    "q_type": "SELF",
                     "sub_q_no": "",
                     "sub_q_title": "",
                     "sub_q_type": "",
@@ -589,25 +622,15 @@ const BlockDSurveyScreen = () => {
                     "sub_q_no": "",
                     "sub_q_title": "",
                     "sub_q_type": "",
-                    'response1': ``,
-                    'response2': ``,
-                    'response3': ``,
-                    'response4': ``,
-                    'response5': ``,
                     "response": reasonForEnroll.length === 0 ? "" : reasonForEnroll
                 },
                 {
                     "section_no": "D",
                     "q_no": "27",
-                    "q_type": "SINGLECHECK",
+                    "q_type": "SELF",
                     "sub_q_no": "",
                     "sub_q_title": "",
                     "sub_q_type": "",
-                    'response1': ``,
-                    'response2': ``,
-                    'response3': ``,
-                    'response4': ``,
-                    'response5': ``,
                     "response": `${enrolledOtherInsurance?.label}`
                 },
                 {
@@ -631,11 +654,6 @@ const BlockDSurveyScreen = () => {
                     "sub_q_no": "",
                     "sub_q_title": "",
                     "sub_q_type": "",
-                    'response1': ``,
-                    'response2': ``,
-                    'response3': ``,
-                    'response4': ``,
-                    'response5': ``,
                     "response": insuranceInactive.length === 0 ? "" : insuranceInactive
                 },
             ]
@@ -676,6 +694,7 @@ const BlockDSurveyScreen = () => {
 
 
     const saveSurveryAndMoveToNext = async () => {
+        setSubmitSurvey(false);
         AsyncStorage.setItem(AsyncStorageContaints.surveyNextBlock, 'E');
         navigation.replace('BlockESurveyScreen');
     }
@@ -716,6 +735,19 @@ const BlockDSurveyScreen = () => {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#F8F8FF' }}>
             {renderCustomHeader()}
+            <Modal isVisible={isInstruction}>
+                <View style={{ height: 250, width: Dimensions.get('screen').width - 50, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 5, padding: 20 }}>
+                    <View style={{ alignItems: 'center' }}>
+                        <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Survey Instructions</Text>
+                        <Text style={{ textAlign: 'center', paddingVertical: 15 }}>Once your start the survey, this will track your location, and also record your audio, by click on start button all the featurs enable and track your location and record your audio.</Text>
+                        <TouchableOpacity
+                            onPress={() => startRecording()}
+                            style={{ paddingVertical: 10, paddingHorizontal: 50, backgroundColor: '#000', borderRadius: 5, elevation: 5, }}>
+                            <Text style={{ fontWeight: 'bold', color: '#fff' }}>Start</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
             <Text style={{ fontWeight: 'bold', paddingLeft: 20, paddingTop: 10 }}>D. ACCESS and USAGE OF FINANCIAL SERVICES – INSURANCE FACILITIES</Text>
             {isLoading === false ?
                 <ScrollView>
@@ -1046,7 +1078,7 @@ const BlockDSurveyScreen = () => {
                             </View>
                         </View>
                         <View style={{ padding: 10, }} />
-                        <TouchableOpacity onPress={() => {
+                        <TouchableOpacity disabled={isSubmitSurvey} onPress={() => {
                             //  navigation.replace('BlockESurveyScreen');
                             validate()
                         }}

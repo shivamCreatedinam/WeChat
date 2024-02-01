@@ -81,14 +81,15 @@ class HomeScreen extends Component {
       userToken: '',
       surveyNextBlock: '',
       surveCount: null,
-      loading: false
+      loading: false,
+      counter: null,
     };
   }
 
   renderHeader = () => {
     return (
       <HeaderWithLocation
-        headerTitle={this.state.name}
+        headerTitle={this.state}
         appLogoVisible={true}
         isBackIconVisible={false}
         isLogoutVisible={false}
@@ -129,7 +130,7 @@ class HomeScreen extends Component {
       const surveyNextBlock = await AsyncStorage.getItem(AsyncStorageContaints.surveyNextBlock);
       const surveyCompleteCount = await AsyncStorage.getItem(AsyncStorageContaints.surveyCompleteCount);
       this.setState({ name: UserData, userToken: userId, surveyNextBlock: surveyNextBlock, surveCount: surveyCompleteCount });
-      console.log("error", userId)
+      console.log("readMessages" + surveyCompleteCount, JSON.stringify(this.state))
     } catch (error) {
       console.log("error", error)
     }
@@ -196,8 +197,8 @@ class HomeScreen extends Component {
   }
 
   CheckCurrentActiveSurvey = () => {
-    // this.props.navigation.navigate('AddSurveyScreen');
-    this.props.navigation.replace('BlockDSurveyScreen');
+    this.props.navigation.navigate('AddSurveyScreen');
+    // this.props.navigation.replace('BlockFSurveyScreen');
   }
 
   navigateToPendingSurvey = () => {
@@ -228,7 +229,7 @@ class HomeScreen extends Component {
   }
 
   checkStartSurvey() {
-    (this.state.surveyNextBlock !== '' || this.state.surveyNextBlock !== null) ? this.navigateToSurvey() : showMessage({
+    (this.state.surveyNextBlock === '' || this.state.surveyNextBlock === null) ? this.navigateToSurvey() : showMessage({
       message: "Please Check",
       description: "You May Have A Draft Survey!",
       type: "danger",

@@ -123,13 +123,10 @@ const AddSurveyScreen = () => {
     );
 
     React.useEffect(() => {
-        BackHandler.addEventListener("hardwareBackPress", askToCloseByBackButtonApp);
-        return () => {
-            BackHandler.removeEventListener("hardwareBackPress", askToCloseByBackButtonApp);
-        };
+        const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true)
+        return () => backHandler.remove()
     }, []);
 
-    const askToCloseByBackButtonApp = () => navigation.replace('DashboardScreen');
 
     const readMessages = async () => {
         try {
@@ -210,6 +207,7 @@ const AddSurveyScreen = () => {
                 { text: "No" },
                 {
                     text: "Yes", onPress: () => {
+                        stopRecordingBack();
                         navigation.replace('DashboardScreen');
                         return true;
                     }
@@ -217,6 +215,8 @@ const AddSurveyScreen = () => {
             ]
         );
     }
+
+    const stopRecordingBack = async () => { const audioFile = await AudioRecord.stop(); }
 
     const renderCustomHeader = () => {
         const user = {

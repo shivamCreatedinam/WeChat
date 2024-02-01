@@ -34,6 +34,7 @@ const BlockBSurveyScreen = () => {
     const [Lattitude, setLattitude] = React.useState('');
     const [Longitude, setLongitude] = React.useState('');
     const [isAudioUploading, setAudioUploading] = React.useState(false);
+    const [isSubmitSurvey, setSubmitSurvey] = React.useState(false);
 
     // country dropdowns
     const [value, setValue] = React.useState(null);
@@ -259,10 +260,8 @@ const BlockBSurveyScreen = () => {
     );
 
     React.useEffect(() => {
-        BackHandler.addEventListener("hardwareBackPress", askToCloseApp);
-        return () => {
-            BackHandler.removeEventListener("hardwareBackPress", askToCloseApp);
-        };
+        const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true)
+        return () => backHandler.remove()
     }, []);
 
     const readMessages = async () => {
@@ -297,6 +296,7 @@ const BlockBSurveyScreen = () => {
                 { text: "No" },
                 {
                     text: "Yes", onPress: () => {
+                        stopRecordingBack();
                         navigation.replace('DashboardScreen');
                         return true;
                     }
@@ -304,6 +304,8 @@ const BlockBSurveyScreen = () => {
             ]
         );
     }
+
+    const stopRecordingBack = async () => { const audioFile = await AudioRecord.stop(); }
 
     const renderCustomHeader = () => {
         const user = {
@@ -344,7 +346,7 @@ const BlockBSurveyScreen = () => {
         console.warn(audioFile)
         setAudioPath(audioFile);
         uploadAudioFinal(audioFile);
-        submitSurveyXml(audioFile);
+        submitSurveyXml();
     };
 
     const validate = () => {
@@ -566,7 +568,7 @@ const BlockBSurveyScreen = () => {
             });
         }
         else {
-            submitSurveyXml();
+            stopRecording();
         }
 
     }
@@ -574,14 +576,14 @@ const BlockBSurveyScreen = () => {
 
 
     const submitSurveyXml = async () => {
-
+        setSubmitSurvey(true);
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", 'application/json');
         myHeaders.append("Authorization", "Bearer " + userSendToken);
 
         var raw = JSON.stringify({
-            "latitude": '38.243028',
-            "longitude": '32.05903',
+            "latitude": Lattitude,
+            "longitude": Longitude,
             "survey_token": name,
             "section_no": "B",
             "data": [
@@ -884,6 +886,7 @@ const BlockBSurveyScreen = () => {
     }
 
     const saveSurveryAndMoveToNext = async () => {
+        setSubmitSurvey(false);
         AsyncStorage.setItem(AsyncStorageContaints.surveyNextBlock, 'C');
         navigation.replace('BlockCSurveyScreen');
     }
@@ -1493,7 +1496,7 @@ const BlockBSurveyScreen = () => {
                             </View>
                         </View>
                         <View style={{ padding: 10, }} />
-                        <TouchableOpacity onPress={() =>
+                        <TouchableOpacity disabled={isSubmitSurvey} onPress={() =>
                             validate()
 
                             // stopRecording()
