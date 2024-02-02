@@ -416,35 +416,35 @@ const BlockCSurveyScreen = () => {
                 type: "danger",
             });
         }
-        else if (loan?.label === "Yes" && selectedLoantype?.length === 0) {
+        else if (credFacility?.label === "Yes" && selectedLoantype?.length === 0) {
             showMessage({
                 message: "Please Select Loan Type",
                 description: "Please Select Loan Type!",
                 type: "danger",
             });
         }
-        else if (loan?.label === "Yes" && loanEnroll === null) {
+        else if (credFacility?.label === "Yes" && loanEnroll === null) {
             showMessage({
                 message: "Please Select Place For Loan Enroll",
                 description: "Please Select Place For Loan Enroll!",
                 type: "danger",
             });
         }
-        else if (loan?.label === "Yes" && amount === null) {
+        else if (credFacility?.label === "Yes" && amount === null) {
             showMessage({
                 message: "Please Select Total Borrowings",
                 description: "Please Select Total Borrowings!",
                 type: "danger",
             });
         }
-        else if (loan?.label === "Yes" && repay === null) {
+        else if (credFacility?.label === "Yes" && repay === null) {
             showMessage({
                 message: "Please Select Repayment Mode",
                 description: "Please Select Repayment Mode!",
                 type: "danger",
             });
         }
-        else if (loan?.label === "No" && selectedReason?.length === 0) {
+        else if (credFacility?.label === "No" && selectedReason?.length === 0) {
             showMessage({
                 message: "Please Select Appropriate Reason",
                 description: "Please Select Appropriate Reason!",
@@ -472,21 +472,15 @@ const BlockCSurveyScreen = () => {
                 type: "danger",
             });
         }
-        else if (bank === null) {
-            showMessage({
-                message: "Please Select Bank Approach",
-                description: "Please Select Bank Approach!",
-                type: "danger",
-            });
-        }
-        else if (refuse === null) {
+
+        else if (bank?.label === 'Yes' && refuse === null) {
             showMessage({
                 message: "Please Select Refusal Reason",
                 description: "Please Select Refusal Reason!",
                 type: "danger",
             });
         }
-        else if (selectedRefuseReason?.length === 0) {
+        else if (bank?.label === 'Yes' && selectedRefuseReason?.length === 0) {
             showMessage({
                 message: "Please Select Refusal Reason Cited",
                 description: "Please Select Refusal Reason Cited!",
@@ -535,7 +529,7 @@ const BlockCSurveyScreen = () => {
                 type: "danger",
             });
         }
-        else if (privateBorrowing === null) {
+        else if (privateLend?.label === "Yes" && privateBorrowing === null) {
             showMessage({
                 message: "Please Select Your Amount",
                 description: "Please Select Your Private Amount!",
@@ -846,6 +840,16 @@ const BlockCSurveyScreen = () => {
     }
 
     const onSelectedIncomesChange = (selectedItems) => {
+        if (selectedItems.length === 0) {
+            Alert.alert('Selection Required', 'Please select two valid reason.');
+            return
+        }
+        else if (selectedItems.length > 2) {
+            Alert.alert('Limit Exceeded', 'You cannot select more than 2 reasons.', [
+                { text: 'OK', onPress: () => multiSelectRef.current._removeItem(selectedItems[selectedItems.length - 1]) },
+            ]);
+            return
+        }
         setSelectedIncomes(selectedItems);
     }
     const onSelectedLoanType = (selectedItems) => {
@@ -857,10 +861,31 @@ const BlockCSurveyScreen = () => {
     }
 
     const onSelecteRefusedReason = (selectedItems) => {
+        console.log("selectedItems", selectedItems)
+        if (selectedItems.length === 0) {
+            Alert.alert('Selection Required', 'Please select two valid reason.');
+            return
+        }
+        else if (selectedItems.length > 2) {
+            Alert.alert('Limit Exceeded', 'You cannot select more than 2 reasons.', [
+                { text: 'OK', onPress: () => multiSelectRef.current._removeItem(selectedItems[selectedItems.length - 1]) },
+            ]);
+            return
+        }
         setSelectedRefuseReason(selectedItems);
     }
 
     const onSelecteFreeLoanRefusedReason = (selectedItems) => {
+        if (selectedItems.length === 0) {
+            Alert.alert('Selection Required', 'Please select two valid reason.');
+            return
+        }
+        else if (selectedItems.length > 2) {
+            Alert.alert('Limit Exceeded', 'You cannot select more than 2 reasons.', [
+                { text: 'OK', onPress: () => multiSelectRef.current._removeItem(selectedItems[selectedItems.length - 1]) },
+            ]);
+            return
+        }
         setSelectedFreeLoanRefuseReason(selectedItems);
     }
 
@@ -927,8 +952,7 @@ const BlockCSurveyScreen = () => {
                                             selectedBtn={(e) => setCredFacility(e)}
                                         />
                                     </View>
-
-                                    <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
+                                    {credFacility?.label === "Yes" && <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
                                         <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>19(c). What type of loan do you have?</Text>
 
 
@@ -964,10 +988,9 @@ const BlockCSurveyScreen = () => {
                                                 </View>
                                             ))}
                                         </View>
-                                    </View>
+                                    </View>}
 
-                                    {/* <View style={{ padding: 10, }} /> */}
-                                    <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                    {credFacility?.label === "Yes" && <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
                                         <Text style={{ marginBottom: 5, fontWeight: 'bold', flex: 1 }}>19(d). Where did you enrol for the credit (loan) product?</Text>
                                         <Dropdown
                                             style={[styles.dropdown, loanEnrollFocus && { borderColor: 'blue' }]}
@@ -992,10 +1015,12 @@ const BlockCSurveyScreen = () => {
                                                 setLoanEnrollFocus(false);
                                             }}
                                         />
-                                    </View>
+                                    </View>}
+                                    {/* <View style={{ padding: 10, }} /> */}
+
 
                                     {/* <View style={{ padding: 10, }} /> */}
-                                    <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
+                                    {credFacility?.label === "Yes" && <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
                                         <Text style={{ marginBottom: 5, fontWeight: 'bold', flex: 1 }}>19(e). How much is your total borrowing (amount outstanding) from banks/NBFCs/ NBFC-MFI?</Text>
                                         <Dropdown
                                             style={[styles.dropdown, amountFocus && { borderColor: 'blue' }]}
@@ -1020,9 +1045,9 @@ const BlockCSurveyScreen = () => {
                                                 setAmountFocus(false);
                                             }}
                                         />
-                                    </View>
+                                    </View>}
 
-                                    <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
+                                    {credFacility?.label === "Yes" && <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
                                         <Text style={{ marginBottom: 5, fontWeight: 'bold', flex: 1 }}>19(f). How do you make your repayment of loan?</Text>
                                         <Dropdown
                                             style={[styles.dropdown, repayFocus && { borderColor: 'blue' }]}
@@ -1047,46 +1072,49 @@ const BlockCSurveyScreen = () => {
                                                 setRepayFocus(false);
                                             }}
                                         />
-                                    </View>
-                                </> :
-                                <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
-                                    <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>19(g). why don’t you seek a loan from banks/NBFCs/ NBFC-MFIs?</Text>
+                                    </View>}
+
+                                </> : null}
+
+                            {credFacility?.label === "No" && <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
+                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>19(g). why don’t you seek a loan from banks/NBFCs/ NBFC-MFIs?</Text>
 
 
-                                    <MultiSelect
-                                        hideTags
-                                        items={reason}
-                                        uniqueKey="id"
-                                        ref={multiSelectRef}
-                                        onSelectedItemsChange={(items) =>
-                                            onSelectedReason(items)
-                                        }
-                                        selectedItems={selectedReason}
-                                        selectText="Select Reason"
-                                        onChangeInput={(text) => console.log(text)}
-                                        altFontFamily="ProximaNova-Light"
-                                        tagRemoveIconColor="#000"
-                                        tagBorderColor="#000"
-                                        tagTextColor="#000"
-                                        selectedItemTextColor="#000"
-                                        selectedItemIconColor="#000"
-                                        itemTextColor="#000"
-                                        displayKey="lable"
-                                        searchInputStyle={{ color: '#000', paddingLeft: 10 }}
-                                        submitButtonColor="#000"
-                                        submitButtonText="Submit"
-                                        itemBackground="#000"
-                                        styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
-                                    />
-                                    <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
-                                        {SelectedReasonTypeLabels.map((label, index) => (
-                                            <View style={{ margin: 5 }}>
-                                                <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
-                                            </View>
-                                        ))}
-                                    </View>
+                                <MultiSelect
+                                    hideTags
+                                    items={reason}
+                                    uniqueKey="id"
+                                    ref={multiSelectRef}
+                                    onSelectedItemsChange={(items) =>
+                                        onSelectedReason(items)
+                                    }
+                                    selectedItems={selectedReason}
+                                    selectText="Select Reason"
+                                    onChangeInput={(text) => console.log(text)}
+                                    altFontFamily="ProximaNova-Light"
+                                    tagRemoveIconColor="#000"
+                                    tagBorderColor="#000"
+                                    tagTextColor="#000"
+                                    selectedItemTextColor="#000"
+                                    selectedItemIconColor="#000"
+                                    itemTextColor="#000"
+                                    displayKey="lable"
+                                    searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                    submitButtonColor="#000"
+                                    submitButtonText="Submit"
+                                    itemBackground="#000"
+                                    styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
+                                />
+                                <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                    {SelectedReasonTypeLabels.map((label, index) => (
+                                        <View style={{ margin: 5 }}>
+                                            <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                        </View>
+                                    ))}
                                 </View>
-                            }
+                            </View>}
+
+
 
                         </View>
                         {/* <View style={{ padding: 10, }} /> */}
@@ -1115,51 +1143,56 @@ const BlockCSurveyScreen = () => {
                                     selectedBtn={(e) => setbank(e)}
                                 />
                             </View>
-                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>20(d). When the bank was approached, have the branch officials refused it?</Text>
-                                <RadioButtonRN
-                                    data={dataGroup}
-                                    selectedBtn={(e) => setRefuse(e)}
-                                />
-                            </View>
+                            {bank?.label === 'Yes' &&
+                                <>
+                                    <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                        <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>20(d). When the bank was approached, have the branch officials refused it?</Text>
+                                        <RadioButtonRN
+                                            data={dataGroup}
+                                            selectedBtn={(e) => setRefuse(e)}
+                                        />
+                                    </View>
 
-                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
-                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>20(e). If refused, what was the reason cited?</Text>
+                                    <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
+                                        <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>20(e). If refused, what was the reason cited?</Text>
 
 
-                                <MultiSelect
-                                    hideTags
-                                    items={refuseReason}
-                                    uniqueKey="id"
-                                    ref={multiSelectRef}
-                                    onSelectedItemsChange={(items) =>
-                                        onSelecteRefusedReason(items)
-                                    }
-                                    selectedItems={selectedRefuseReason}
-                                    selectText="Select Reason"
-                                    onChangeInput={(text) => console.log(text)}
-                                    altFontFamily="ProximaNova-Light"
-                                    tagRemoveIconColor="#000"
-                                    tagBorderColor="#000"
-                                    tagTextColor="#000"
-                                    selectedItemTextColor="#000"
-                                    selectedItemIconColor="#000"
-                                    itemTextColor="#000"
-                                    displayKey="lable"
-                                    searchInputStyle={{ color: '#000', paddingLeft: 10 }}
-                                    submitButtonColor="#000"
-                                    submitButtonText="Submit"
-                                    itemBackground="#000"
-                                    styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
-                                />
-                                <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
-                                    {SelectedRefuseReasonTypeLabels.map((label, index) => (
-                                        <View style={{ margin: 5 }}>
-                                            <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                        <MultiSelect
+                                            hideTags
+                                            items={refuseReason}
+                                            uniqueKey="id"
+                                            ref={multiSelectRef}
+                                            onSelectedItemsChange={(items) =>
+                                                onSelecteRefusedReason(items)
+                                            }
+                                            selectedItems={selectedRefuseReason}
+                                            selectText="Select Reason"
+                                            onChangeInput={(text) => console.log(text)}
+                                            altFontFamily="ProximaNova-Light"
+                                            tagRemoveIconColor="#000"
+                                            tagBorderColor="#000"
+                                            tagTextColor="#000"
+                                            selectedItemTextColor="#000"
+                                            selectedItemIconColor="#000"
+                                            itemTextColor="#000"
+                                            displayKey="lable"
+                                            searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                            submitButtonColor="#000"
+                                            submitButtonText="Submit"
+                                            itemBackground="#000"
+                                            styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
+                                        />
+                                        <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                            {SelectedRefuseReasonTypeLabels.map((label, index) => (
+                                                <View style={{ margin: 5 }}>
+                                                    <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                                </View>
+                                            ))}
                                         </View>
-                                    ))}
-                                </View>
-                            </View>
+                                    </View>
+                                </>
+                            }
+
                         </View>
 
                         <View style={{ padding: 10, }} />
@@ -1237,7 +1270,7 @@ const BlockCSurveyScreen = () => {
                                     selectedBtn={(e) => setPrivateLend(e)}
                                 />
                             </View>
-                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
+                            {privateLend?.label === "Yes" && <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
                                 <Text style={{ marginBottom: 5, fontWeight: 'bold', flex: 1 }}>22(b). How much is your total borrowing (amount outstanding) from Private Money Lenders/ Informal sources?</Text>
                                 <Dropdown
                                     style={[styles.dropdown, privateBorrowingFocus && { borderColor: 'blue' }]}
@@ -1262,7 +1295,8 @@ const BlockCSurveyScreen = () => {
                                         setPrivateBorrowingFocus(false);
                                     }}
                                 />
-                            </View>
+                            </View>}
+
                         </View>
 
                         <View style={{ padding: 10, }} />

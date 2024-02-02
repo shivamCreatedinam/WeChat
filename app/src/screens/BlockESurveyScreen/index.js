@@ -133,6 +133,16 @@ const BlockESurveyScreen = () => {
     });
 
     const onSelectedReason = (selectedItems) => {
+        if (selectedItems.length === 0) {
+            Alert.alert('Selection Required', 'Please select two valid reason.');
+            return
+        }
+        else if (selectedItems.length > 2) {
+            Alert.alert('Limit Exceeded', 'You cannot select more than 2 reasons.', [
+                { text: 'OK', onPress: () => multiSelectRef.current._removeItem(selectedItems[selectedItems.length - 1]) },
+            ]);
+            return
+        }
         setSelectedReason(selectedItems);
     }
 
@@ -323,7 +333,7 @@ const BlockESurveyScreen = () => {
                 type: "danger",
             });
         }
-        else if (selectedReason?.length === 0) {
+        else if (PensionEnrolled?.label === "Yes" && selectedReason?.length === 0) {
             showMessage({
                 message: "Please Select Reason",
                 description: "Please Select Reason!",
@@ -513,42 +523,48 @@ const BlockESurveyScreen = () => {
                             />
                             <View style={{ padding: 10, }} />
                         </View>
-                        <View style={{ padding: 10, }} />
-                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>31. If you are not enrolled in any of pension schemes, please indicate the reasons?</Text>
-                            <MultiSelect
-                                hideTags
-                                items={reason}
-                                uniqueKey="id"
-                                ref={multiSelectRef}
-                                onSelectedItemsChange={(items) =>
-                                    onSelectedReason(items)
-                                }
-                                selectedItems={selectedReason}
-                                selectText="Select Reason"
-                                onChangeInput={(text) => console.log(text)}
-                                altFontFamily="ProximaNova-Light"
-                                tagRemoveIconColor="#000"
-                                tagBorderColor="#000"
-                                tagTextColor="#000"
-                                selectedItemTextColor="#000"
-                                selectedItemIconColor="#000"
-                                itemTextColor="#000"
-                                displayKey="lable"
-                                searchInputStyle={{ color: '#000', paddingLeft: 10 }}
-                                submitButtonColor="#000"
-                                submitButtonText="Submit"
-                                itemBackground="#000"
-                                styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
-                            />
-                            <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
-                                {SelectedReasonTypeLabels.map((label, index) => (
-                                    <View style={{ margin: 5 }}>
-                                        <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+
+                        {PensionEnrolled?.label === "Yes" &&
+                            <View>
+                                <View style={{ padding: 10, }} />
+                                <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                    <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>31. If you are not enrolled in any of pension schemes, please indicate the reasons?</Text>
+                                    <MultiSelect
+                                        hideTags
+                                        items={reason}
+                                        uniqueKey="id"
+                                        ref={multiSelectRef}
+                                        onSelectedItemsChange={(items) =>
+                                            onSelectedReason(items)
+                                        }
+                                        selectedItems={selectedReason}
+                                        selectText="Select Reason"
+                                        onChangeInput={(text) => console.log(text)}
+                                        altFontFamily="ProximaNova-Light"
+                                        tagRemoveIconColor="#000"
+                                        tagBorderColor="#000"
+                                        tagTextColor="#000"
+                                        selectedItemTextColor="#000"
+                                        selectedItemIconColor="#000"
+                                        itemTextColor="#000"
+                                        displayKey="lable"
+                                        searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                        submitButtonColor="#000"
+                                        submitButtonText="Submit"
+                                        itemBackground="#000"
+                                        styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
+                                    />
+                                    <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                        {SelectedReasonTypeLabels.map((label, index) => (
+                                            <View style={{ margin: 5 }}>
+                                                <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                            </View>
+                                        ))}
                                     </View>
-                                ))}
+                                </View>
                             </View>
-                        </View>
+                        }
+
                         <View style={{ padding: 10, }} />
                         <TouchableOpacity disabled={isSubmitSurvey} onPress={() => {
                             //  navigation.replace('BlockFSurveyScreen');

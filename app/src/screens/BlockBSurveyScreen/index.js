@@ -64,6 +64,8 @@ const BlockBSurveyScreen = () => {
     // blockB    
     const [isAccountTypeFocus, setAccountTypeFocus] = React.useState(false);
     const [AccountTypeValue, setAccountTypeValue] = React.useState(null);
+    const [AccountFrequency, setAccountFrequency] = React.useState(null);
+    const [AccountFrequencyFocus, setAccountFrequencyFocus] = React.useState(null);
     const [transaction, sTransaction] = React.useState(null);
     const [istransactionFocus, setIsTransactionFocus] = React.useState(false);
     const [subsidy, setSubsidy] = React.useState(null);
@@ -123,6 +125,17 @@ const BlockBSurveyScreen = () => {
     const [selectedbankAccounts, setSelectedbankAccounts] = React.useState([]);
 
     const onSelectedbankAccountsChange = (selectedItems) => {
+        if (selectedItems.length === 0) {
+            Alert.alert('Selection Required', 'Please select two valid reason.');
+            return
+        }
+        else if (selectedItems.length > 2) {
+            Alert.alert('Limit Exceeded', 'You cannot select more than 2 reasons.', [
+                { text: 'OK', onPress: () => multiSelectRef.current._removeItem(selectedItems[selectedItems.length - 1]) },
+            ]);
+            return
+        }
+
         setSelectedbankAccounts(selectedItems);
     }
 
@@ -490,56 +503,56 @@ const BlockBSurveyScreen = () => {
                 type: "danger",
             });
         }
-        else if (AccountOpened === null) {
+        else if (bank?.label === 'Yes' && AccountOpened === null) {
             showMessage({
                 message: "Please Select Account Opening via Online",
                 description: "Please Select Account Opening via Online!",
                 type: "danger",
             });
         }
-        else if (AccountTypeValue === null) {
+        else if (bank?.label === 'Yes' && AccountTypeValue === null) {
             showMessage({
                 message: "Please Select Type Of Account",
                 description: "Please Select Type Of Account!",
                 type: "danger",
             });
         }
-        else if (AccountTypeValue && AccountNumber === null) {
+        else if (bank?.label === 'Yes' && AccountTypeValue && AccountNumber === null) {
             showMessage({
                 message: "Please Select Account Number",
                 description: "Please Select Account Number!",
                 type: "danger",
             });
         }
-        else if (selectedwhatPurposes?.length === 0) {
+        else if (bank?.label === 'Yes' && selectedwhatPurposes?.length === 0) {
             showMessage({
                 message: "Please Select purpose",
                 description: "Please Select purpose!",
                 type: "danger",
             });
         }
-        else if (AccountTypeValue === null) {
+        else if (bank?.label === 'Yes' && AccountFrequency === null) {
             showMessage({
                 message: "Please Select Frequency",
                 description: "Please Select Frequency!",
                 type: "danger",
             });
         }
-        else if (selectedOccupations?.length === 0) {
+        else if (bank?.label === 'Yes' && selectedOccupations?.length === 0) {
             showMessage({
                 message: "Please Select Reasons",
                 description: "Please Select Reasons!",
                 type: "danger",
             });
         }
-        else if (transaction === null) {
+        else if (bank?.label === 'Yes' && transaction === null) {
             showMessage({
                 message: "Please Select Transact Mode",
                 description: "Please Select Transact Mode!",
                 type: "danger",
             });
         }
-        else if (subsidy === null) {
+        else if (bank?.label === 'Yes' && subsidy === null) {
             showMessage({
                 message: "Please Select Subsidy Recieved Frequency",
                 description: "Please Select Subsidy Recieved Frequency!",
@@ -572,9 +585,6 @@ const BlockBSurveyScreen = () => {
         }
 
     }
-
-
-
     const submitSurveyXml = async () => {
         setSubmitSurvey(true);
         var myHeaders = new Headers();
@@ -905,12 +915,12 @@ const BlockBSurveyScreen = () => {
     });
 
     const selectedIncomeLabels = selectedIncomes.map((selectedId) => {
-        const selectedReason = reasons.find((reason) => reason.id === selectedId);
+        const selectedReason = Incomedata.find((reason) => reason.id === selectedId);
         return selectedReason ? selectedReason.lable : '';
     });
 
     const selectedCashReceiptLabels = selectCashReceipt.map((selectedId) => {
-        const selectedReason = reasons.find((reason) => reason.id === selectedId);
+        const selectedReason = cashReceipt?.find((reason) => reason.id === selectedId);
         return selectedReason ? selectedReason.lable : '';
     });
 
@@ -920,6 +930,16 @@ const BlockBSurveyScreen = () => {
     });
 
     const onSelectedOccupationsChange = (selectedItems) => {
+        if (selectedItems.length === 0) {
+            Alert.alert('Selection Required', 'Please select two valid reason.');
+            return
+        }
+        else if (selectedItems.length > 2) {
+            Alert.alert('Limit Exceeded', 'You cannot select more than 2 reasons.', [
+                { text: 'OK', onPress: () => multiSelectRef.current._removeItem(selectedItems[selectedItems.length - 1]) },
+            ]);
+            return
+        }
         setSelectedOccupations(selectedItems);
     }
 
@@ -928,10 +948,30 @@ const BlockBSurveyScreen = () => {
     }
 
     const onSelectedSaveMoney = (selectedItems) => {
+        if (selectedItems.length === 0) {
+            Alert.alert('Selection Required', 'Please select two valid reason.');
+            return
+        }
+        else if (selectedItems.length > 2) {
+            Alert.alert('Limit Exceeded', 'You cannot select more than 2 reasons.', [
+                { text: 'OK', onPress: () => multiSelectRef.current._removeItem(selectedItems[selectedItems.length - 1]) },
+            ]);
+            return
+        }
         setSelectSaveMoney(selectedItems);
     }
 
     const onSelectedIncomesChange = (selectedItems) => {
+        if (selectedItems.length === 0) {
+            Alert.alert('Selection Required', 'Please select two valid reason.');
+            return
+        }
+        else if (selectedItems.length > 2) {
+            Alert.alert('Limit Exceeded', 'You cannot select more than 2 reasons.', [
+                { text: 'OK', onPress: () => multiSelectRef.current._removeItem(selectedItems[selectedItems.length - 1]) },
+            ]);
+            return
+        }
         setSelectedIncomes(selectedItems);
     }
 
@@ -1267,7 +1307,7 @@ const BlockBSurveyScreen = () => {
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
                             <Text style={{ marginBottom: 5, fontWeight: 'bold', flex: 1 }}>12. How frequently you use bank account?</Text>
                             <Dropdown
-                                style={[styles.dropdown, isAccountTypeFocus && { borderColor: 'blue' }]}
+                                style={[styles.dropdown, AccountFrequencyFocus && { borderColor: 'blue' }]}
                                 placeholderStyle={styles.placeholderStyle}
                                 selectedTextStyle={styles.selectedTextStyle}
                                 inputSearchStyle={styles.inputSearchStyle}
@@ -1278,15 +1318,15 @@ const BlockBSurveyScreen = () => {
                                 maxHeight={300}
                                 labelField="lable"
                                 valueField="id"
-                                placeholder={!isAccountTypeFocus ? 'Select Type of account' : AccountTypeValue}
+                                placeholder={!AccountFrequencyFocus ? 'Select Type of account' : AccountFrequency}
                                 // searchPlaceholder="Search..."
-                                value={AccountTypeValue}
+                                value={AccountFrequency}
                                 onFocus={() => setAccountTypeFocus(true)}
                                 onBlur={() => setAccountTypeFocus(false)}
                                 onChange={item => {
                                     console.log(JSON.stringify(item))
-                                    setAccountTypeValue(item.id);
-                                    setAccountTypeFocus(false);
+                                    setAccountFrequency(item.id);
+                                    setAccountFrequencyFocus(false);
                                 }}
                             />
                         </View>
@@ -1415,49 +1455,54 @@ const BlockBSurveyScreen = () => {
                                 {selectedIncomeLabels.map((label, index) => (
                                     <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
                                         <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                        {console.log("labelllll", label)}
                                     </View>
                                 ))}
                             </View>
                         </View>
+                        {selectedIncomeLabels.includes("Cash") && (
+                            <>
+                                <View style={{ padding: 10, }} />
+                                <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                    <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>17. In case you prefer cash receipts, please indicate the reason?</Text>
 
-                        <View style={{ padding: 10, }} />
-                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>17. In case you prefer cash receipts, please indicate the reason?</Text>
 
-
-                            <MultiSelect
-                                hideTags
-                                items={cashReceipt}
-                                uniqueKey="id"
-                                ref={multiSelectRef}
-                                onSelectedItemsChange={(items) =>
-                                    onSelectedCashReceipt(items)
-                                }
-                                selectedItems={selectCashReceipt}
-                                selectText="Select reason"
-                                onChangeInput={(text) => console.log(text)}
-                                altFontFamily="ProximaNova-Light"
-                                tagRemoveIconColor="#000"
-                                tagBorderColor="#000"
-                                tagTextColor="#000"
-                                selectedItemTextColor="#000"
-                                selectedItemIconColor="#000"
-                                itemTextColor="#000"
-                                displayKey="lable"
-                                searchInputStyle={{ color: '#000', paddingLeft: 10 }}
-                                submitButtonColor="#000"
-                                submitButtonText="Submit"
-                                itemBackground="#000"
-                                styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
-                            />
-                            <View>
-                                {selectedCashReceiptLabels.map((label, index) => (
-                                    <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
-                                        <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                    <MultiSelect
+                                        hideTags
+                                        items={cashReceipt}
+                                        uniqueKey="id"
+                                        ref={multiSelectRef}
+                                        onSelectedItemsChange={(items) =>
+                                            onSelectedCashReceipt(items)
+                                        }
+                                        selectedItems={selectCashReceipt}
+                                        selectText="Select reason"
+                                        onChangeInput={(text) => console.log(text)}
+                                        altFontFamily="ProximaNova-Light"
+                                        tagRemoveIconColor="#000"
+                                        tagBorderColor="#000"
+                                        tagTextColor="#000"
+                                        selectedItemTextColor="#000"
+                                        selectedItemIconColor="#000"
+                                        itemTextColor="#000"
+                                        displayKey="lable"
+                                        searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                        submitButtonColor="#000"
+                                        submitButtonText="Submit"
+                                        itemBackground="#000"
+                                        styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
+                                    />
+                                    <View>
+                                        {selectedCashReceiptLabels.map((label, index) => (
+                                            <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                                <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                            </View>
+                                        ))}
                                     </View>
-                                ))}
-                            </View>
-                        </View>
+                                </View>
+                            </>
+                        )}
+
 
                         <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>

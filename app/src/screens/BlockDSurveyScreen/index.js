@@ -317,49 +317,56 @@ const BlockDSurveyScreen = () => {
                 type: "danger",
             });
         }
-        else if (enrollA === null) {
+        else if (awareB === null) {
             showMessage({
-                message: "Please Select IF Enroll A",
-                description: "Please Select IF Enroll A!",
+                message: "Please Select IF Awareness B",
+                description: "Please Select IF Awareness B!",
                 type: "danger",
             });
         }
-        else if (renewalA === null) {
-            showMessage({
-                message: "Please Select IF renewal A",
-                description: "Please Select IF renewal A!",
-                type: "danger",
-            });
-        }
-        else if (inactiveA === null) {
-            showMessage({
-                message: "Please Select IF inactive A",
-                description: "Please Select IF inactive A!",
-                type: "danger",
-            });
-        }
-        else if (enrollB === null) {
-            showMessage({
-                message: "Please Select IF Enroll B",
-                description: "Please Select IF Enroll B!",
-                type: "danger",
-            });
-        }
+        // else if (enrollA === null) {
+        //     showMessage({
+        //         message: "Please Select IF Enroll A",
+        //         description: "Please Select IF Enroll A!",
+        //         type: "danger",
+        //     });
+        // }
+        // else if (renewalA === null) {
+        //     showMessage({
+        //         message: "Please Select IF renewal A",
+        //         description: "Please Select IF renewal A!",
+        //         type: "danger",
+        //     });
+        // }
+        // else if (inactiveA === null) {
+        //     showMessage({
+        //         message: "Please Select IF inactive A",
+        //         description: "Please Select IF inactive A!",
+        //         type: "danger",
+        //     });
+        // }
+        // else if (enrollB === null) {
+        //     showMessage({
+        //         message: "Please Select IF Enroll B",
+        //         description: "Please Select IF Enroll B!",
+        //         type: "danger",
+        //     });
+        // }
 
-        else if (renewalB === null) {
-            showMessage({
-                message: "Please Select IF renewal B",
-                description: "Please Select IF renewal B!",
-                type: "danger",
-            });
-        }
-        else if (inactiveB === null) {
-            showMessage({
-                message: "Please Select IF inactive B",
-                description: "Please Select IF inactive B!",
-                type: "danger",
-            });
-        }
+        // else if (renewalB === null) {
+        //     showMessage({
+        //         message: "Please Select IF renewal B",
+        //         description: "Please Select IF renewal B!",
+        //         type: "danger",
+        //     });
+        // }
+        // else if (inactiveB === null) {
+        //     showMessage({
+        //         message: "Please Select IF inactive B",
+        //         description: "Please Select IF inactive B!",
+        //         type: "danger",
+        //     });
+        // }
         else if (awareC === null) {
             showMessage({
                 message: "Please Select IF Awareness C",
@@ -367,27 +374,27 @@ const BlockDSurveyScreen = () => {
                 type: "danger",
             });
         }
-        else if (enrollC === null) {
-            showMessage({
-                message: "Please Select IF Enroll C",
-                description: "Please Select IF Enroll A!",
-                type: "danger",
-            });
-        }
-        else if (renewalC === null) {
-            showMessage({
-                message: "Please Select IF renewal C",
-                description: "Please Select IF renewal C!",
-                type: "danger",
-            });
-        }
-        else if (inactiveC === null) {
-            showMessage({
-                message: "Please Select IF inactive C",
-                description: "Please Select IF inactive C!",
-                type: "danger",
-            });
-        }
+        // else if (enrollC === null) {
+        //     showMessage({
+        //         message: "Please Select IF Enroll C",
+        //         description: "Please Select IF Enroll A!",
+        //         type: "danger",
+        //     });
+        // }
+        // else if (renewalC === null) {
+        //     showMessage({
+        //         message: "Please Select IF renewal C",
+        //         description: "Please Select IF renewal C!",
+        //         type: "danger",
+        //     });
+        // }
+        // else if (inactiveC === null) {
+        //     showMessage({
+        //         message: "Please Select IF inactive C",
+        //         description: "Please Select IF inactive C!",
+        //         type: "danger",
+        //     });
+        // }
         else if (awareD === null) {
             showMessage({
                 message: "Please Select IF Awareness D",
@@ -395,35 +402,35 @@ const BlockDSurveyScreen = () => {
                 type: "danger",
             });
         }
-        else if (enrollD === null) {
-            showMessage({
-                message: "Please Select IF Enroll D",
-                description: "Please Select IF Enroll D!",
-                type: "danger",
-            });
-        }
-        else if (renewalD === null) {
-            showMessage({
-                message: "Please Select IF renewal D",
-                description: "Please Select IF renewal D!",
-                type: "danger",
-            });
-        }
-        else if (inactiveD === null) {
-            showMessage({
-                message: "Please Select IF inactive D",
-                description: "Please Select IF inactive D!",
-                type: "danger",
-            });
-        }
-        else if (privateBorrowing === null) {
+        // else if (enrollD === null) {
+        //     showMessage({
+        //         message: "Please Select IF Enroll D",
+        //         description: "Please Select IF Enroll D!",
+        //         type: "danger",
+        //     });
+        // }
+        // else if (renewalD === null) {
+        //     showMessage({
+        //         message: "Please Select IF renewal D",
+        //         description: "Please Select IF renewal D!",
+        //         type: "danger",
+        //     });
+        // }
+        // else if (inactiveD === null) {
+        //     showMessage({
+        //         message: "Please Select IF inactive D",
+        //         description: "Please Select IF inactive D!",
+        //         type: "danger",
+        //     });
+        // }
+        else if ((enrollA?.label === "Yes" || enrollB?.label === "Yes" || enrollC?.label === "Yes" || enrollD?.label === "Yes") && privateBorrowing === null) {
             showMessage({
                 message: "Please Select  Place Of Enroll",
                 description: "Please Select  Place Of Enroll!",
                 type: "danger",
             });
         }
-        else if (reasonForEnroll?.length === 0) {
+        else if ((enrollA?.label === "Yes" || enrollB?.label === "Yes" || enrollC?.label === "Yes" || enrollD?.label === "Yes") && reasonForEnroll?.length === 0) {
             showMessage({
                 message: "Please Select Reason For Enroll",
                 description: "Please Select Reason For Enroll!",
@@ -432,8 +439,8 @@ const BlockDSurveyScreen = () => {
         }
         else if (enrolledOtherInsurance === null) {
             showMessage({
-                message: "Please Select Other Enroll",
-                description: "Please Select Other Enroll!",
+                message: "Please Select Other IF Enroll",
+                description: "Please Select Other IF Enroll!",
                 type: "danger",
             });
         }
@@ -472,7 +479,7 @@ const BlockDSurveyScreen = () => {
                 type: "danger",
             });
         }
-        else if (insuranceInactive?.length === 0) {
+        else if ((enrollA?.label === "Yes" || enrollB?.label === "Yes" || enrollC?.label === "Yes" || enrollD?.label === "Yes") && insuranceInactive?.length === 0) {
             showMessage({
                 message: "Please Select Insurance Inactive Resaon",
                 description: "Please Select Insurance Inactive Resaon!",
@@ -704,6 +711,16 @@ const BlockDSurveyScreen = () => {
     }
 
     const onSelectedInsuranceInactiveReason = (selectedItems) => {
+        if (selectedItems.length === 0) {
+            Alert.alert('Selection Required', 'Please select two valid reason.');
+            return
+        }
+        else if (selectedItems.length > 2) {
+            Alert.alert('Limit Exceeded', 'You cannot select more than 2 reasons.', [
+                { text: 'OK', onPress: () => multiSelectRef.current._removeItem(selectedItems[selectedItems.length - 1]) },
+            ]);
+            return
+        }
         setInsuranceInactive(selectedItems);
     }
 
@@ -933,67 +950,73 @@ const BlockDSurveyScreen = () => {
                             </View>
                         </View>
 
-                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold', flex: 1 }}>25. Where did you enrol for any of the above insurance product?</Text>
-                            <Dropdown
-                                style={[styles.dropdown, privateBorrowingFocus && { borderColor: 'blue' }]}
-                                placeholderStyle={styles.placeholderStyle}
-                                selectedTextStyle={styles.selectedTextStyle}
-                                inputSearchStyle={styles.inputSearchStyle}
-                                // iconStyle={styles.iconStyle}
-                                // data={AccountType}
-                                data={enrolPlace}
-                                // search
-                                maxHeight={300}
-                                labelField="lable"
-                                valueField="id"
-                                placeholder={!privateBorrowingFocus ? 'Select' : privateBorrowing}
-                                // searchPlaceholder="Search..."
-                                value={privateBorrowing}
-                                onFocus={() => setPrivateBorrowingFocus(true)}
-                                onBlur={() => setPrivateBorrowingFocus(false)}
-                                onChange={item => {
-                                    console.log(JSON.stringify(item))
-                                    setprivateBorrowing(item.id);
-                                    setPrivateBorrowingFocus(false);
-                                }}
-                            />
-                        </View>
-                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>26 . Why did you enrol in this product?</Text>
-                            <MultiSelect
-                                hideTags
-                                items={enrolReason}
-                                uniqueKey="id"
-                                ref={multiSelectRef}
-                                onSelectedItemsChange={(items) =>
-                                    onSelectedReason(items)
-                                }
-                                selectedItems={reasonForEnroll}
-                                selectText="Select Reason"
-                                onChangeInput={(text) => console.log(text)}
-                                altFontFamily="ProximaNova-Light"
-                                tagRemoveIconColor="#000"
-                                tagBorderColor="#000"
-                                tagTextColor="#000"
-                                selectedItemTextColor="#000"
-                                selectedItemIconColor="#000"
-                                itemTextColor="#000"
-                                displayKey="lable"
-                                searchInputStyle={{ color: '#000', paddingLeft: 10 }}
-                                submitButtonColor="#000"
-                                submitButtonText="Submit"
-                                itemBackground="#000"
-                                styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
-                            />
-                            <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
-                                {SelectedReasonForEnrolLabels.map((label, index) => (
-                                    <View style={{ margin: 5 }}>
-                                        <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                        {(enrollA?.label === "Yes" || enrollB?.label === "Yes" || enrollC?.label === "Yes" || enrollD?.label === "Yes") &&
+                            <View>
+                                <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
+                                    <Text style={{ marginBottom: 5, fontWeight: 'bold', flex: 1 }}>25. Where did you enrol for any of the above insurance product?</Text>
+                                    <Dropdown
+                                        style={[styles.dropdown, privateBorrowingFocus && { borderColor: 'blue' }]}
+                                        placeholderStyle={styles.placeholderStyle}
+                                        selectedTextStyle={styles.selectedTextStyle}
+                                        inputSearchStyle={styles.inputSearchStyle}
+                                        // iconStyle={styles.iconStyle}
+                                        // data={AccountType}
+                                        data={enrolPlace}
+                                        // search
+                                        maxHeight={300}
+                                        labelField="lable"
+                                        valueField="id"
+                                        placeholder={!privateBorrowingFocus ? 'Select' : privateBorrowing}
+                                        // searchPlaceholder="Search..."
+                                        value={privateBorrowing}
+                                        onFocus={() => setPrivateBorrowingFocus(true)}
+                                        onBlur={() => setPrivateBorrowingFocus(false)}
+                                        onChange={item => {
+                                            console.log(JSON.stringify(item))
+                                            setprivateBorrowing(item.id);
+                                            setPrivateBorrowingFocus(false);
+                                        }}
+                                    />
+                                </View>
+                                <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
+                                    <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>26 . Why did you enrol in this product?</Text>
+                                    <MultiSelect
+                                        hideTags
+                                        items={enrolReason}
+                                        uniqueKey="id"
+                                        ref={multiSelectRef}
+                                        onSelectedItemsChange={(items) =>
+                                            onSelectedReason(items)
+                                        }
+                                        selectedItems={reasonForEnroll}
+                                        selectText="Select Reason"
+                                        onChangeInput={(text) => console.log(text)}
+                                        altFontFamily="ProximaNova-Light"
+                                        tagRemoveIconColor="#000"
+                                        tagBorderColor="#000"
+                                        tagTextColor="#000"
+                                        selectedItemTextColor="#000"
+                                        selectedItemIconColor="#000"
+                                        itemTextColor="#000"
+                                        displayKey="lable"
+                                        searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                        submitButtonColor="#000"
+                                        submitButtonText="Submit"
+                                        itemBackground="#000"
+                                        styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
+                                    />
+                                    <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                        {SelectedReasonForEnrolLabels.map((label, index) => (
+                                            <View style={{ margin: 5 }}>
+                                                <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                            </View>
+                                        ))}
                                     </View>
-                                ))}
+                                </View>
                             </View>
-                        </View>
+                        }
+
+
 
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>27. Are you enrolled in any other life insurance (other than above)?</Text>
@@ -1042,41 +1065,44 @@ const BlockDSurveyScreen = () => {
                                 />
                             </View>
                         </View>
-                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>29 . If your insurance has become inactive, please indicate the reasons?</Text>
-                            <MultiSelect
-                                hideTags
-                                items={InsuranceInactiveReason}
-                                uniqueKey="id"
-                                ref={multiSelectRef}
-                                onSelectedItemsChange={(items) =>
-                                    onSelectedInsuranceInactiveReason(items)
-                                }
-                                selectedItems={insuranceInactive}
-                                selectText="Select Reason"
-                                onChangeInput={(text) => console.log(text)}
-                                altFontFamily="ProximaNova-Light"
-                                tagRemoveIconColor="#000"
-                                tagBorderColor="#000"
-                                tagTextColor="#000"
-                                selectedItemTextColor="#000"
-                                selectedItemIconColor="#000"
-                                itemTextColor="#000"
-                                displayKey="lable"
-                                searchInputStyle={{ color: '#000', paddingLeft: 10 }}
-                                submitButtonColor="#000"
-                                submitButtonText="Submit"
-                                itemBackground="#000"
-                                styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
-                            />
-                            <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
-                                {SelectedInsuranceInactiveLabels.map((label, index) => (
-                                    <View style={{ margin: 5 }}>
-                                        <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
-                                    </View>
-                                ))}
+                        {enrollA?.label === "Yes" || enrollB?.label === "Yes" || enrollC?.label === "Yes" || enrollD?.label === "Yes" &&
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
+                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>29 . If your insurance has become inactive, please indicate the reasons?</Text>
+                                <MultiSelect
+                                    hideTags
+                                    items={InsuranceInactiveReason}
+                                    uniqueKey="id"
+                                    ref={multiSelectRef}
+                                    onSelectedItemsChange={(items) =>
+                                        onSelectedInsuranceInactiveReason(items)
+                                    }
+                                    selectedItems={insuranceInactive}
+                                    selectText="Select Reason"
+                                    onChangeInput={(text) => console.log(text)}
+                                    altFontFamily="ProximaNova-Light"
+                                    tagRemoveIconColor="#000"
+                                    tagBorderColor="#000"
+                                    tagTextColor="#000"
+                                    selectedItemTextColor="#000"
+                                    selectedItemIconColor="#000"
+                                    itemTextColor="#000"
+                                    displayKey="lable"
+                                    searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                    submitButtonColor="#000"
+                                    submitButtonText="Submit"
+                                    itemBackground="#000"
+                                    styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
+                                />
+                                <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                    {SelectedInsuranceInactiveLabels.map((label, index) => (
+                                        <View style={{ margin: 5 }}>
+                                            <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                        </View>
+                                    ))}
+                                </View>
                             </View>
-                        </View>
+                        }
+
                         <View style={{ padding: 10, }} />
                         <TouchableOpacity disabled={isSubmitSurvey} onPress={() => {
                             //  navigation.replace('BlockESurveyScreen');
