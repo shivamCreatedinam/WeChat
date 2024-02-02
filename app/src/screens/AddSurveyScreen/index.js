@@ -561,9 +561,9 @@ const AddSurveyScreen = () => {
                                 maxHeight={300}
                                 labelField="education_title"
                                 valueField="id"
-                                placeholder={!is2Focus ? 'Select Education' : value}
+                                placeholder={!is2Focus ? 'Select Education' : selectedIncomes}
                                 // searchPlaceholder="Search..."
-                                value={value}
+                                value={selectedIncomes}
                                 onFocus={() => setIs2Focus(true)}
                                 onBlur={() => setIs2Focus(false)}
                                 onChange={item => {
@@ -587,9 +587,9 @@ const AddSurveyScreen = () => {
                                 maxHeight={300}
                                 labelField="icomes_title"
                                 valueField="id"
-                                placeholder={!is3Focus ? 'Select Annual Income' : value}
+                                placeholder={!is3Focus ? 'Select Annual Income' : selectedIncomes}
                                 // searchPlaceholder="Search..."
-                                value={value}
+                                value={selectedIncomes}
                                 onFocus={() => setIs3Focus(true)}
                                 onBlur={() => setIs3Focus(false)}
                                 onChange={item => {
