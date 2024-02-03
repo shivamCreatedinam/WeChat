@@ -63,7 +63,7 @@ const BlockBSurveyScreen = () => {
 
     // blockB    
     const [isAccountTypeFocus, setAccountTypeFocus] = React.useState(false);
-    const [AccountTypeValue, setAccountTypeValue] = React.useState(null);
+    const [AccountTypeValue, setAccountTypeValue] = React.useState([]);
     const [AccountFrequency, setAccountFrequency] = React.useState(null);
     const [AccountFrequencyFocus, setAccountFrequencyFocus] = React.useState(null);
     const [transaction, sTransaction] = React.useState(null);
@@ -158,7 +158,51 @@ const BlockBSurveyScreen = () => {
     const [LongOutlet, setLongOutlet] = React.useState(null);
     const [WithoutVisiting, setWithoutVisiting] = React.useState(null);
     const [AccountOpened, setAccountOpened] = React.useState(null);
-    const [AccountNumber, setAccountNumber] = React.useState(null);
+    const [AccountNumber, setAccountNumber] = React.useState([]);
+    const initialCommentInputValues = [];
+    const [commentInputValues, setCommentInputValues] = React.useState(
+        initialCommentInputValues
+    );
+    // const [selectedAccountLabels, setSelectedAccountLabels] = useState([]);
+    const [accountValues, setAccountValues] = React.useState([]);
+    const [errorMessages, setErrorMessages] = React.useState([]);
+    // const commentInputOnChange = (index, value) => {
+    //     const updatedValues = [...accountValues];
+    //     updatedValues[index] = { id: index, value };
+    //     console.log("value", updatedValues)
+    //     setAccountValues(updatedValues);
+
+    // };
+    // console.log("accountValues", accountValues)
+
+    const commentInputOnChange = (id, value) => {
+        value = String(value); // Ensure value is treated as a string
+        // Check if the value starts with '0'
+        if (value.startsWith('0')) {
+            setErrorMessages(prevMessages => {
+                const updatedMessages = [...prevMessages];
+                updatedMessages[id] = 'Value cannot start with 0';
+                return updatedMessages;
+            });
+        } else {
+            setErrorMessages(prevMessages => {
+                const updatedMessages = [...prevMessages];
+                updatedMessages[id] = '';
+                return updatedMessages;
+            });
+
+            setAccountValues(prevValues => {
+                const updatedValues = [...prevValues];
+                const existingIndex = updatedValues.findIndex(item => item.id === id);
+                if (existingIndex !== -1) {
+                    updatedValues[existingIndex].value = value;
+                } else {
+                    updatedValues.push({ id, value });
+                }
+                return updatedValues;
+            });
+        }
+    };
 
     const whatPurposesdata = [
         { id: 1, lable: 'Receive Salary/ Money' },
@@ -510,7 +554,7 @@ const BlockBSurveyScreen = () => {
                 type: "danger",
             });
         }
-        else if (bank?.label === 'Yes' && AccountTypeValue === null) {
+        else if (bank?.label === 'Yes' && AccountTypeValue?.length === 0) {
             showMessage({
                 message: "Please Select Type Of Account",
                 description: "Please Select Type Of Account!",
@@ -581,7 +625,7 @@ const BlockBSurveyScreen = () => {
             });
         }
         else {
-            stopRecording();
+            // stopRecording();
         }
 
     }
@@ -748,7 +792,7 @@ const BlockBSurveyScreen = () => {
                     'sub_q_no': "",
                     'sub_q_title': "",
                     'sub_q_type': "",
-                    'account_no': `${AccountNumber}`,
+                    'account_no': `${accountValues}`,
                     'response': `${AccountTypeValue}`
                 },
                 {
@@ -919,6 +963,11 @@ const BlockBSurveyScreen = () => {
         return selectedReason ? selectedReason.lable : '';
     });
 
+    const selectedAccountLabels = AccountTypeValue.map((selectedId) => {
+        const selectedReason = AccountType.find((reason) => reason.id === selectedId);
+        return selectedReason ? selectedReason.lable : '';
+    });
+
     const selectedCashReceiptLabels = selectCashReceipt.map((selectedId) => {
         const selectedReason = cashReceipt?.find((reason) => reason.id === selectedId);
         return selectedReason ? selectedReason.lable : '';
@@ -973,6 +1022,20 @@ const BlockBSurveyScreen = () => {
             return
         }
         setSelectedIncomes(selectedItems);
+    }
+
+    const onSelectedBankAccounts = (selectedItems) => {
+        if (selectedItems.length === 0) {
+            Alert.alert('Selection Required', 'Please select two valid reason.');
+            return
+        }
+        else if (selectedItems.length > 2) {
+            Alert.alert('Limit Exceeded', 'You cannot select more than 2 reasons.', [
+                { text: 'OK', onPress: () => multiSelectRef.current._removeItem(selectedItems[selectedItems.length - 1]) },
+            ]);
+            return
+        }
+        setAccountTypeValue(selectedItems);
     }
 
 
@@ -1239,30 +1302,65 @@ const BlockBSurveyScreen = () => {
                             <View>
                                 <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>10. How many bank accounts do you have?</Text>
                                 <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>Type of account</Text>
-                                <Dropdown
-                                    style={[styles.dropdown, isAccountTypeFocus && { borderColor: 'blue' }]}
-                                    placeholderStyle={styles.placeholderStyle}
-                                    selectedTextStyle={styles.selectedTextStyle}
-                                    inputSearchStyle={styles.inputSearchStyle}
-                                    // iconStyle={styles.iconStyle}
-                                    data={AccountType}
-                                    // search
-                                    maxHeight={300}
-                                    labelField="lable"
-                                    valueField="id"
-                                    placeholder={!isAccountTypeFocus ? 'Select Type of account' : AccountTypeValue}
-                                    // searchPlaceholder="Search..."
-                                    value={AccountTypeValue}
-                                    onFocus={() => setAccountTypeFocus(true)}
-                                    onBlur={() => setAccountTypeFocus(false)}
-                                    onChange={item => {
-                                        console.log(JSON.stringify(item))
-                                        setAccountTypeValue(item.id);
-                                        setAccountTypeFocus(false);
-                                    }}
+                                <MultiSelect
+                                    hideTags
+                                    items={AccountType}
+                                    uniqueKey="id"
+                                    ref={multiSelectRef}
+                                    onSelectedItemsChange={(items) =>
+                                        onSelectedBankAccounts(items)
+                                    }
+                                    selectedItems={AccountTypeValue}
+                                    selectText="Select Income Stream"
+                                    onChangeInput={(text) => console.log(text)}
+                                    altFontFamily="ProximaNova-Light"
+                                    tagRemoveIconColor="#000"
+                                    tagBorderColor="#000"
+                                    tagTextColor="#000"
+                                    selectedItemTextColor="#000"
+                                    selectedItemIconColor="#000"
+                                    itemTextColor="#000"
+                                    displayKey="lable"
+                                    searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                    submitButtonColor="#000"
+                                    submitButtonText="Submit"
+                                    itemBackground="#000"
+                                    styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
                                 />
+                                {/* <View>
+                                    {selectedAccountLabels.map((label, index) => (
+                                        <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                            <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                        </View>
+                                    ))}
+                                </View> */}
+
+                                {/* <View>
+                                        {selectedAccountLabels.map((label, index) => (
+                                            // <TextInput onChangeText={(e) => commentInputOnChange(index, e)} maxLength={2} style={{ backgroundColor: '#fff', paddingLeft: 15, elevation: 5, borderRadius: 5, marginTop: 10 }} keyboardType={'number-pad'} placeholder={label} />
+                                            <TextInput onChangeText={(value) => commentInputOnChange(index, Number(value))} maxLength={2} style={{ backgroundColor: '#fff', paddingLeft: 15, elevation: 5, borderRadius: 5, marginTop: 10 }} keyboardType={'number-pad'} placeholder={label} />
+                                            
+                                        ))}
+
+                                    </View> */}
+                                <View>
+                                    {selectedAccountLabels.map((label, index) => (
+                                        <View key={index} style={{ padding: 8, }}>
+                                            <Text style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                            <TextInput
+                                                onChangeText={(value) => commentInputOnChange(index, value)}
+                                                maxLength={2}
+                                                style={{ backgroundColor: '#fff', paddingLeft: 15, borderRadius: 5, marginTop: 10,borderColor: errorMessages[index] !== '' ? 'red' : '#DFDFDF',borderWidth:1.8 }}
+                                                keyboardType={'number-pad'}
+                                                placeholder={label}
+                                            />
+                                            {errorMessages[index] !== '' && <Text style={{ color: 'red',paddingTop:5,paddingLeft:5 }}>{errorMessages[index]}</Text>}
+                                        </View>
+                                    ))}
+                                </View>
                                 <View style={{ padding: 10, }} />
-                                {AccountTypeValue !== null ? <TextInput onChangeText={(e) => setAccountNumber(e)} maxLength={2} style={{ backgroundColor: '#fff', paddingLeft: 15, elevation: 5, borderRadius: 5 }} keyboardType={'number-pad'} placeholder='Numbers' /> : null}
+
+                                {/* {AccountTypeValue !== null ? <TextInput onChangeText={(e) => setAccountNumber(e)} maxLength={2} style={{ backgroundColor: '#fff', paddingLeft: 15, elevation: 5, borderRadius: 5 }} keyboardType={'number-pad'} placeholder='Numbers' /> : null} */}
                             </View>
                         </View>
                         <View style={{ padding: 10, }} />

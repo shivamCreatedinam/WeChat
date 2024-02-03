@@ -424,7 +424,7 @@ const BlockFSurveyScreen = () => {
 
     const onSelectedReasonInfoRelating = (selectedItems) => {
         if (selectedItems.length === 0) {
-            Alert.alert('Selection Required', 'Please select two valid reason.');
+            Alert.alert('Selection Required', 'Please select three valid reason.');
             return
         }
         else if (selectedItems.length > 3) {
@@ -578,7 +578,7 @@ const BlockFSurveyScreen = () => {
                 type: "danger",
             });
         }
-        else if (informationValue === null) {
+        else if (SpecificInformation?.label === "No" && informationValue === null) {
             showMessage({
                 message: "Please Select Necesssary Information",
                 description: "Please Select Necesssary Information!",
@@ -592,21 +592,21 @@ const BlockFSurveyScreen = () => {
                 type: "danger",
             });
         }
-        else if (SpecificInformation?.label === 'Yes' && InformationSharingValue === null) {
+        else if (SpecificInformation?.label === 'Yes' && InformationSharingValue?.length === 0) {
             showMessage({
                 message: "Please Select Information Sharing",
                 description: "Please Select Information Sharing!",
                 type: "danger",
             });
         }
-        else if (SpecificInformation?.label === 'Yes' && financialLiteracyValue === null) {
+        else if (SpecificInformation?.label === 'Yes' && financialLiteracyValue?.length === 0) {
             showMessage({
                 message: "Please Select Financial Literacy",
                 description: "Please Select Financial Literacy!",
                 type: "danger",
             });
         }
-        else if (SpecificInformation?.label === 'Yes' && Informationrelating === null) {
+        else if (SpecificInformation?.label === 'Yes' && InformationRelatingValue?.length === 0) {
             showMessage({
                 message: "Please Select Information Relating",
                 description: "Please Select Information Relating!",
@@ -1542,28 +1542,6 @@ const BlockFSurveyScreen = () => {
 
                                 <View style={{ padding: 10, }} />
                                 <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>34 (d). Information relating to which function is easy to obtain and understand?</Text>
-                                {/* <Dropdown
-                                    style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-                                    placeholderStyle={styles.placeholderStyle}
-                                    selectedTextStyle={styles.selectedTextStyle}
-                                    inputSearchStyle={styles.inputSearchStyle}
-                                    // iconStyle={styles.iconStyle}
-                                    data={Informationrelating}
-                                    // search
-                                    maxHeight={300}
-                                    labelField="lable"
-                                    valueField="id"
-                                    placeholder={!isFocus ? 'Select Information Relating' : InformationRelatingValue}
-                                    // searchPlaceholder="Search..."
-                                    value={InformationRelatingValue}
-                                    onFocus={() => setIsFocus(true)}
-                                    onBlur={() => setIsFocus(false)}
-                                    onChange={item => {
-                                        console.log('______>', JSON.stringify(item))
-                                        setInformationRelatingValue(item?.id);
-                                        setIsFocus(false);
-                                    }}
-                                /> */}
 
                                 <MultiSelect
                                     hideTags
@@ -1978,7 +1956,7 @@ const BlockFSurveyScreen = () => {
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>40 (g). Whether you raised any grievance related to service with BC?</Text>
                             <RadioButtonRN
                                 data={differently}
-                                selectedBtn={(e) => setGrievanceRelated(e?.index)}
+                                selectedBtn={(e) => setGrievanceRelated(e)}
                             />
                             {grievanceRelated?.label === 'Yes' ? <>
                                 <View style={{ padding: 10, }} />

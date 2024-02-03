@@ -198,7 +198,7 @@ class HomeScreen extends Component {
 
   CheckCurrentActiveSurvey = () => {
     // this.props.navigation.navigate('AddSurveyScreen');
-    this.props.navigation.replace('BlockFSurveyScreen');
+    this.props.navigation.replace('BlockBSurveyScreen');
   }
 
   navigateToPendingSurvey = () => {
