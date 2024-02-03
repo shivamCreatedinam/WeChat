@@ -111,8 +111,8 @@ class HomeScreen extends Component {
       const longitude = await AsyncStorage.getItem(AsyncStorageContaints.surveyLongitude);
 
       if (latitude !== null && longitude !== null) {
-        console.log('Latitude:', latitude);
-        console.log('Longitude:', longitude);
+        // console.log('Latitude:', latitude);
+        // console.log('Longitude:', longitude);
       } else {
         console.log('Latitude and longitude not found in AsyncStorage.');
       }
@@ -130,7 +130,7 @@ class HomeScreen extends Component {
       const surveyNextBlock = await AsyncStorage.getItem(AsyncStorageContaints.surveyNextBlock);
       const surveyCompleteCount = await AsyncStorage.getItem(AsyncStorageContaints.surveyCompleteCount);
       this.setState({ name: UserData, userToken: userId, surveyNextBlock: surveyNextBlock, surveCount: surveyCompleteCount });
-      console.log("readMessages" + surveyCompleteCount, JSON.stringify(this.state))
+      // console.log("readMessages" + surveyCompleteCount, JSON.stringify(this.state))
     } catch (error) {
       console.log("error", error)
     }
@@ -197,8 +197,8 @@ class HomeScreen extends Component {
   }
 
   CheckCurrentActiveSurvey = () => {
-    this.props.navigation.navigate('AddSurveyScreen');
-    // this.props.navigation.replace('BlockFSurveyScreen');
+    // this.props.navigation.navigate('AddSurveyScreen');
+    this.props.navigation.replace('BlockFSurveyScreen');
   }
 
   navigateToPendingSurvey = () => {

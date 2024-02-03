@@ -55,6 +55,7 @@ const BlockFSurveyScreen = () => {
     const [selectedOccupations, setSelectedOccupations] = React.useState([]);
     const [selectedReason, setSelectedReason] = React.useState([]);
     const [selectedIncomes, setSelectedIncomes] = React.useState([]);
+    const [financialliteracyReason, setfinancialliteracyReason] = React.useState([]);
     const [differentlyAble, setDifferently] = React.useState('');
     const [smartPhone, setSmartphone] = React.useState('');
     const [anyGroup, setAnyGroup] = React.useState('');
@@ -247,9 +248,9 @@ const BlockFSurveyScreen = () => {
     const multifinancialSelectRef = React.useRef(null);
     const [informationValue, setinformationValue] = React.useState(null);
     const [WhichLanguageValue, setWhichLanguageValue] = React.useState(null);
-    const [InformationSharingValue, setInformationSharingValue] = React.useState(null);
+    const [InformationSharingValue, setInformationSharingValue] = React.useState([]);
     const [financialLiteracyValue, setfinancialLiteracyValue] = React.useState(null);
-    const [InformationRelatingValue, setInformationRelatingValue] = React.useState(null);
+    const [InformationRelatingValue, setInformationRelatingValue] = React.useState([]);
     const [selectedFreeRefuseReason, selectedFreeLoanRefuseReason] = React.useState([]);
     const [hinderanceValue, sethinderanceValue] = React.useState(null);
     const [hinderanceFocus, sethinderanceFocus] = React.useState(false);
@@ -272,6 +273,7 @@ const BlockFSurveyScreen = () => {
 
     const [Lattitude, setLattitude] = React.useState('');
     const [Longitude, setLongitude] = React.useState('');
+
 
     const SelectedLoanTypeLabels = selectedOccupations.map((selectedId) => {
         const selectedReason = financialtransactions.find((reason) => reason.id === selectedId);
@@ -312,16 +314,131 @@ const BlockFSurveyScreen = () => {
     }
 
     const onSelectedOccupationsChange = (selectedItems) => {
+        if (selectedItems.length === 0) {
+            Alert.alert('Selection Required', 'Please select three valid reason.');
+            return
+        }
+        else if (selectedItems.length > 3) {
+            Alert.alert('Limit Exceeded', 'You cannot select more than 3 reasons.', [
+                { text: 'OK', onPress: () => multiSelectRef.current._removeItem(selectedItems[selectedItems.length - 1]) },
+            ]);
+            return
+        }
         setSelectedOccupations(selectedItems);
     }
 
     const onSelectedfinancialChange = (selectedItems) => {
+        if (selectedItems.length === 0) {
+            Alert.alert('Selection Required', 'Please select three valid reason.');
+            return
+        }
+        else if (selectedItems.length > 3) {
+            Alert.alert('Limit Exceeded', 'You cannot select more than 3 reasons.', [
+                { text: 'OK', onPress: () => multiSelectRef.current._removeItem(selectedItems[selectedItems.length - 1]) },
+            ]);
+            return
+        }
         setSelectedFinancial(selectedItems);
     }
 
     const onSelectedReasonChange = (selectedItems) => {
+        if (selectedItems.length === 0) {
+            Alert.alert('Selection Required', 'Please select two valid reason.');
+            return
+        }
+        else if (selectedItems.length > 2) {
+            Alert.alert('Limit Exceeded', 'You cannot select more than 2 reasons.', [
+                { text: 'OK', onPress: () => multiSelectRef.current._removeItem(selectedItems[selectedItems.length - 1]) },
+            ]);
+            return
+        }
         setSelectedReason(selectedItems);
     }
+
+    const onSelectedReason = (selectedItems) => {
+        if (selectedItems.length === 0) {
+            Alert.alert('Selection Required', 'Please select two valid reason.');
+            return
+        }
+        else if (selectedItems.length > 3) {
+            Alert.alert('Limit Exceeded', 'You cannot select more than 3 reasons.', [
+                { text: 'OK', onPress: () => multiSelectRef.current._removeItem(selectedItems[selectedItems.length - 1]) },
+            ]);
+            return
+        }
+        setfinancialliteracyReason(selectedItems);
+    }
+
+    const SelectedReasonTypeLabels = financialliteracyReason.map((selectedId) => {
+        const selectedReason = financialliteracy.find((reason) => reason.id === selectedId);
+        return selectedReason ? selectedReason.lable : '';
+    });
+
+
+    const onSelectedReasonForInformation = (selectedItems) => {
+        if (selectedItems.length === 0) {
+            Alert.alert('Selection Required', 'Please select three valid reason.');
+            return
+        }
+        else if (selectedItems.length > 3) {
+            Alert.alert('Limit Exceeded', 'You cannot select more than 3 reasons.', [
+                { text: 'OK', onPress: () => multiSelectRef.current._removeItem(selectedItems[selectedItems.length - 1]) },
+            ]);
+            return
+        }
+        setInformationSharingValue(selectedItems);
+    }
+    const onDigitalpreferredChangeFunc = (selectedItems) => {
+        if (selectedItems.length === 0) {
+            Alert.alert('Selection Required', 'Please select two valid reason.');
+            return
+        }
+        else if (selectedItems.length > 2) {
+            Alert.alert('Limit Exceeded', 'You cannot select more than 2 reasons.', [
+                { text: 'OK', onPress: () => multiSelectRef.current._removeItem(selectedItems[selectedItems.length - 1]) },
+            ]);
+            return
+        }
+        onDigitalpreferredChange(selectedItems);
+    }
+
+    const ondigitalChannelChangefunc = (selectedItems) => {
+        if (selectedItems.length === 0) {
+            Alert.alert('Selection Required', 'Please select two valid reason.');
+            return
+        }
+        else if (selectedItems.length > 2) {
+            Alert.alert('Limit Exceeded', 'You cannot select more than 2 reasons.', [
+                { text: 'OK', onPress: () => multiSelectRef.current._removeItem(selectedItems[selectedItems.length - 1]) },
+            ]);
+            return
+        }
+        ondigitalChannelChange(selectedItems);
+    }
+
+
+    const SelectedresonForInformationeLabels = InformationSharingValue.map((selectedId) => {
+        const selectedReason = informationsharing.find((reason) => reason.id === selectedId);
+        return selectedReason ? selectedReason.lable : '';
+    });
+
+    const onSelectedReasonInfoRelating = (selectedItems) => {
+        if (selectedItems.length === 0) {
+            Alert.alert('Selection Required', 'Please select two valid reason.');
+            return
+        }
+        else if (selectedItems.length > 3) {
+            Alert.alert('Limit Exceeded', 'You cannot select more than 3 reasons.', [
+                { text: 'OK', onPress: () => multiSelectRef.current._removeItem(selectedItems[selectedItems.length - 1]) },
+            ]);
+            return
+        }
+        setInformationRelatingValue(selectedItems);
+    }
+    const onSelectedReasonInfoRelatingLabels = InformationRelatingValue.map((selectedId) => {
+        const selectedReason = Informationrelating.find((reason) => reason.id === selectedId);
+        return selectedReason ? selectedReason.lable : '';
+    });
 
     useFocusEffect(
         React.useCallback(() => {
@@ -545,14 +662,14 @@ const BlockFSurveyScreen = () => {
                 type: "danger",
             });
         }
-        else if (serviceContinue === null) {
+        else if (payFraud?.label === "Yes" && serviceContinue === null) {
             showMessage({
                 message: "Please Select Service Continuity",
                 description: "Please Select Service Continuity!",
                 type: "danger",
             });
         }
-        else if (moneyRecover === null) {
+        else if (payFraud?.label === "Yes" && moneyRecover === null) {
             showMessage({
                 message: "Please Select Recovery Of Money",
                 description: "Please Select Recovery Of Money!",
@@ -602,21 +719,21 @@ const BlockFSurveyScreen = () => {
                 type: "danger",
             });
         }
-        else if (complaintSatisfy === null) {
+        else if (lodgeComplaint?.label === "Yes" && complaintSatisfy === null) {
             showMessage({
                 message: "Please Select Complaint Satisfaction",
                 description: "Please Select Complaint Satisfaction!",
                 type: "danger",
             });
         }
-        else if (selectedSatisfiedReasons === null) {
+        else if (lodgeComplaint?.label === "Yes" && selectedSatisfiedReasons === null) {
             showMessage({
                 message: "Please Select Reason For NotSatisfactory",
                 description: "Please Select Reason For NotSatisfactory!",
                 type: "danger",
             });
         }
-        else if (rbiScheme === null) {
+        else if (lodgeComplaint?.label === "No" && rbiScheme === null) {
             showMessage({
                 message: "Please Select RBI Scheme",
                 description: "Please Select RBI Scheme!",
@@ -1273,31 +1390,36 @@ const BlockFSurveyScreen = () => {
                             />
                         </View>
                         <View style={{ padding: 10, }} />
-                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>33. If no, do you possess all the necessary information for your financial well-being?</Text>
-                            <Dropdown
-                                style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-                                placeholderStyle={styles.placeholderStyle}
-                                selectedTextStyle={styles.selectedTextStyle}
-                                inputSearchStyle={styles.inputSearchStyle}
-                                // iconStyle={styles.iconStyle}
-                                data={possessnecessary}
-                                // search
-                                maxHeight={300}
-                                labelField="lable"
-                                valueField="id"
-                                placeholder={!isFocus ? 'Select Necessary information' : informationValue}
-                                // searchPlaceholder="Search..."
-                                value={informationValue}
-                                onFocus={() => setIsFocus(true)}
-                                onBlur={() => setIsFocus(false)}
-                                onChange={item => {
-                                    console.log('______>', JSON.stringify(item))
-                                    setinformationValue(item?.id);
-                                    setIsFocus(false);
-                                }}
-                            />
-                        </View>
+                        {SpecificInformation?.label === "No" &&
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>33. If no, do you possess all the necessary information for your financial well-being?</Text>
+                                <Dropdown
+                                    style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                                    placeholderStyle={styles.placeholderStyle}
+                                    selectedTextStyle={styles.selectedTextStyle}
+                                    inputSearchStyle={styles.inputSearchStyle}
+                                    // iconStyle={styles.iconStyle}
+                                    data={possessnecessary}
+                                    // search
+                                    maxHeight={300}
+                                    labelField="lable"
+                                    valueField="id"
+                                    placeholder={!isFocus ? 'Select Necessary information' : informationValue}
+                                    // searchPlaceholder="Search..."
+                                    value={informationValue}
+                                    onFocus={() => setIsFocus(true)}
+                                    onBlur={() => setIsFocus(false)}
+                                    onChange={item => {
+                                        console.log('______>', JSON.stringify(item))
+                                        setinformationValue(item?.id);
+                                        setIsFocus(false);
+                                    }}
+                                />
+                            </View>
+
+                        }
+
+
                         <View style={{ padding: 10, }} />
                         {SpecificInformation?.label === 'Yes' ?
                             <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
@@ -1326,7 +1448,7 @@ const BlockFSurveyScreen = () => {
                                 />
                                 <View style={{ padding: 10, }} />
                                 <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>34 (b). Which medium of information sharing do you prefer?</Text>
-                                <Dropdown
+                                {/* <Dropdown
                                     style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
                                     placeholderStyle={styles.placeholderStyle}
                                     selectedTextStyle={styles.selectedTextStyle}
@@ -1347,34 +1469,80 @@ const BlockFSurveyScreen = () => {
                                         setInformationSharingValue(item?.id);
                                         setIsFocus(false);
                                     }}
+                                /> */}
+                                <MultiSelect
+                                    hideTags
+                                    items={informationsharing}
+                                    uniqueKey="id"
+                                    ref={multiSelectRef}
+                                    onSelectedItemsChange={(items) =>
+                                        onSelectedReasonForInformation(items)
+                                    }
+                                    selectedItems={InformationSharingValue}
+                                    selectText="Select Reason"
+                                    onChangeInput={(text) => console.log(text)}
+                                    altFontFamily="ProximaNova-Light"
+                                    tagRemoveIconColor="#000"
+                                    tagBorderColor="#000"
+                                    tagTextColor="#000"
+                                    selectedItemTextColor="#000"
+                                    selectedItemIconColor="#000"
+                                    itemTextColor="#000"
+                                    displayKey="lable"
+                                    searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                    submitButtonColor="#000"
+                                    submitButtonText="Submit"
+                                    itemBackground="#000"
+                                    styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
                                 />
+                                <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                    {SelectedresonForInformationeLabels.map((label, index) => (
+                                        <View style={{ margin: 5 }}>
+                                            <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                        </View>
+                                    ))}
+                                </View>
+
+
+
                                 <View style={{ padding: 10, }} />
                                 <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>34 (c). Where do you want such financial literacy information to be disseminated?</Text>
-                                <Dropdown
-                                    style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-                                    placeholderStyle={styles.placeholderStyle}
-                                    selectedTextStyle={styles.selectedTextStyle}
-                                    inputSearchStyle={styles.inputSearchStyle}
-                                    // iconStyle={styles.iconStyle}
-                                    data={financialliteracy}
-                                    // search
-                                    maxHeight={300}
-                                    labelField="lable"
-                                    valueField="id"
-                                    placeholder={!isFocus ? 'Select Financial Literacy' : financialLiteracyValue}
-                                    // searchPlaceholder="Search..."
-                                    value={financialLiteracyValue}
-                                    onFocus={() => setIsFocus(true)}
-                                    onBlur={() => setIsFocus(false)}
-                                    onChange={item => {
-                                        console.log('______>', JSON.stringify(item))
-                                        setfinancialLiteracyValue(item?.id);
-                                        setIsFocus(false);
-                                    }}
+                                <MultiSelect
+                                    hideTags
+                                    items={financialliteracy}
+                                    uniqueKey="id"
+                                    ref={multiSelectRef}
+                                    onSelectedItemsChange={(items) =>
+                                        onSelectedReason(items)
+                                    }
+                                    selectedItems={financialliteracyReason}
+                                    selectText="Select Reason"
+                                    onChangeInput={(text) => console.log(text)}
+                                    altFontFamily="ProximaNova-Light"
+                                    tagRemoveIconColor="#000"
+                                    tagBorderColor="#000"
+                                    tagTextColor="#000"
+                                    selectedItemTextColor="#000"
+                                    selectedItemIconColor="#000"
+                                    itemTextColor="#000"
+                                    displayKey="lable"
+                                    searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                    submitButtonColor="#000"
+                                    submitButtonText="Submit"
+                                    itemBackground="#000"
+                                    styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
                                 />
+                                <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                    {SelectedReasonTypeLabels.map((label, index) => (
+                                        <View style={{ margin: 5 }}>
+                                            <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                        </View>
+                                    ))}
+                                </View>
+
                                 <View style={{ padding: 10, }} />
                                 <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>34 (d). Information relating to which function is easy to obtain and understand?</Text>
-                                <Dropdown
+                                {/* <Dropdown
                                     style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
                                     placeholderStyle={styles.placeholderStyle}
                                     selectedTextStyle={styles.selectedTextStyle}
@@ -1395,7 +1563,40 @@ const BlockFSurveyScreen = () => {
                                         setInformationRelatingValue(item?.id);
                                         setIsFocus(false);
                                     }}
+                                /> */}
+
+                                <MultiSelect
+                                    hideTags
+                                    items={Informationrelating}
+                                    uniqueKey="id"
+                                    ref={multiSelectRef}
+                                    onSelectedItemsChange={(items) =>
+                                        onSelectedReasonInfoRelating(items)
+                                    }
+                                    selectedItems={InformationRelatingValue}
+                                    selectText="Select Reason"
+                                    onChangeInput={(text) => console.log(text)}
+                                    altFontFamily="ProximaNova-Light"
+                                    tagRemoveIconColor="#000"
+                                    tagBorderColor="#000"
+                                    tagTextColor="#000"
+                                    selectedItemTextColor="#000"
+                                    selectedItemIconColor="#000"
+                                    itemTextColor="#000"
+                                    displayKey="lable"
+                                    searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                    submitButtonColor="#000"
+                                    submitButtonText="Submit"
+                                    itemBackground="#000"
+                                    styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
                                 />
+                                <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                    {onSelectedReasonInfoRelatingLabels.map((label, index) => (
+                                        <View style={{ margin: 5 }}>
+                                            <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                        </View>
+                                    ))}
+                                </View>
                                 <View style={{ padding: 10, }} />
                             </View> : null}
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
@@ -1480,7 +1681,7 @@ const BlockFSurveyScreen = () => {
                         </View>
                         <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>37 (b). do you carry out digital transactions on your own? transactions with someone’s help?</Text>
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>37 (b).If no, do you carry out digital transactions on your own? transactions with someone’s help?</Text>
                             <RadioButtonRN
                                 data={data}
                                 selectedBtn={(e) => stransactionHelp(e)}
@@ -1538,21 +1739,28 @@ const BlockFSurveyScreen = () => {
                                 />
                             </View>
                         </View>
-                        <View style={{ padding: 10, }} />
+                        {payFraud?.label === "Yes" && <View>
+                            {/* <View style={{ padding: 10, }} /> */}
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>37 (f). After the incident, do you continue to use digital banking services?</Text>
+                                <RadioButtonRN
+                                    data={smartphone}
+                                    selectedBtn={(e) => setServiceContinue(e)}
+                                />
+                            </View>
+                            {/* <View style={{ padding: 10, }} /> */}
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: 'bold', flex: 1 }}>37 (g). Were you or your family member could recover the money lost in digital payment fraud?</Text>
+                                <RadioButtonRN
+                                    data={smartphone}
+                                    selectedBtn={(e) => setMoneyRecover(e)}
+                                />
+                            </View>
+                        </View>}
+
+                        {/* <View style={{ padding: 10, }} /> */}
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>37 (f). After the incident, do you continue to use digital banking services?</Text>
-                            <RadioButtonRN
-                                data={smartphone}
-                                selectedBtn={(e) => setServiceContinue(e)}
-                            />
-                        </View>
-                        <View style={{ padding: 10, }} />
-                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold', flex: 1 }}>37 (g). Were you or your family member could recover the money lost in digital payment fraud?</Text>
-                            <RadioButtonRN
-                                data={smartphone}
-                                selectedBtn={(e) => setMoneyRecover(e)}
-                            />
+
                             <View style={{ padding: 10, }} />
                             <Text style={{ fontWeight: 'bold' }}>37 (h). Do you know about various precautions while using digital banking?</Text>
                             <RadioButtonRN
@@ -1569,7 +1777,7 @@ const BlockFSurveyScreen = () => {
                                 uniqueKey="id"
                                 ref={multiSelectRef}
                                 onSelectedItemsChange={(items) =>
-                                    ondigitalChannelChange(items)
+                                    ondigitalChannelChangefunc(items)
                                 }
                                 selectedItems={digitalChannelChange}
                                 selectText="Select digital channel"
@@ -1596,6 +1804,7 @@ const BlockFSurveyScreen = () => {
                                 ))}
                             </View>
                         </View>
+
                         <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>38 (b). If Digital is your preferred mode of transaction, rate them in your order of preference?</Text>
@@ -1605,7 +1814,7 @@ const BlockFSurveyScreen = () => {
                                 uniqueKey="id"
                                 ref={multiSelectRef}
                                 onSelectedItemsChange={(items) =>
-                                    onDigitalpreferredChange(items)
+                                    onDigitalpreferredChangeFunc(items)
                                 }
                                 selectedItems={DigitalpreferredChange}
                                 selectText="Select Digital preferred"
@@ -1652,52 +1861,58 @@ const BlockFSurveyScreen = () => {
                                 data={smartphone}
                                 selectedBtn={(e) => sLodgeComplaint(e)}
                             />
-                            <View style={{ padding: 10, }} />
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>39 (d). If you have ever lodged a complaint, are you satisfied with its resolution?</Text>
-                            <RadioButtonRN
-                                data={smartphone}
-                                selectedBtn={(e) => setComplaintSatisfy(e)}
-                            />
-                            <View style={{ padding: 10, }} />
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>39 (e). If no, what could be the reasons?</Text>
-                            <MultiSelect
-                                hideTags
-                                items={lodgedcomplaintreasons}
-                                uniqueKey="id"
-                                ref={multiSelectRef}
-                                onSelectedItemsChange={(items) =>
-                                    onSelectedSatisfiedReasons(items)
-                                }
-                                selectedItems={selectedSatisfiedReasons}
-                                selectText="Select Satisfied Reasons"
-                                onChangeInput={(text) => console.log(text)}
-                                altFontFamily="ProximaNova-Light"
-                                tagRemoveIconColor="#000"
-                                tagBorderColor="#000"
-                                tagTextColor="#000"
-                                selectedItemTextColor="#000"
-                                selectedItemIconColor="#000"
-                                itemTextColor="#000"
-                                displayKey="lable"
-                                searchInputStyle={{ color: '#000', paddingLeft: 10 }}
-                                submitButtonColor="#000"
-                                submitButtonText="Submit"
-                                itemBackground="#000"
-                                styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
-                            />
-                            <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
-                                {SelectedSatisfiedReasonsLabels.map((label, index) => (
-                                    <View style={{ margin: 5 }}>
-                                        <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
-                                    </View>
-                                ))}
-                            </View>
-                            <View style={{ padding: 10, }} />
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>39 (f). Do you know about the RBI Integrated Banking Ombudsman Scheme?</Text>
-                            <RadioButtonRN
-                                data={smartphone}
-                                selectedBtn={(e) => sRbiScheme(e)}
-                            />
+                            {lodgeComplaint?.label === "Yes" && <View>
+                                <View style={{ padding: 10, }} />
+                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>39 (d). If you have ever lodged a complaint, are you satisfied with its resolution?</Text>
+                                <RadioButtonRN
+                                    data={smartphone}
+                                    selectedBtn={(e) => setComplaintSatisfy(e)}
+                                />
+                                <View style={{ padding: 10, }} />
+                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>39 (e). If no, what could be the reasons?</Text>
+                                <MultiSelect
+                                    hideTags
+                                    items={lodgedcomplaintreasons}
+                                    uniqueKey="id"
+                                    ref={multiSelectRef}
+                                    onSelectedItemsChange={(items) =>
+                                        onSelectedSatisfiedReasons(items)
+                                    }
+                                    selectedItems={selectedSatisfiedReasons}
+                                    selectText="Select Satisfied Reasons"
+                                    onChangeInput={(text) => console.log(text)}
+                                    altFontFamily="ProximaNova-Light"
+                                    tagRemoveIconColor="#000"
+                                    tagBorderColor="#000"
+                                    tagTextColor="#000"
+                                    selectedItemTextColor="#000"
+                                    selectedItemIconColor="#000"
+                                    itemTextColor="#000"
+                                    displayKey="lable"
+                                    searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                    submitButtonColor="#000"
+                                    submitButtonText="Submit"
+                                    itemBackground="#000"
+                                    styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
+                                />
+                                <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                    {SelectedSatisfiedReasonsLabels.map((label, index) => (
+                                        <View style={{ margin: 5 }}>
+                                            <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                        </View>
+                                    ))}
+                                </View>
+                            </View>}
+                            {lodgeComplaint?.label === "No" && <View>
+                                <View style={{ padding: 10, }} />
+                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>39 (f). Do you know about the RBI Integrated Banking Ombudsman Scheme?</Text>
+                                <RadioButtonRN
+                                    data={smartphone}
+                                    selectedBtn={(e) => sRbiScheme(e)}
+                                />
+                            </View>}
+
+
                             <View style={{ padding: 10, }} />
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>39 (g). Do you know about the complaint process regarding others such as Insurance, Pension, etc.?</Text>
                             <RadioButtonRN
@@ -1712,7 +1927,7 @@ const BlockFSurveyScreen = () => {
                                 selectedBtn={(e) => setComfortableConducting(e)}
                             />
                             <View style={{ padding: 10, }} />
-                            {comfortableConducting?.label === 'No' ? <><Text style={{ marginBottom: 5, fontWeight: 'bold' }}>40 (b). Please indicate the reasons?</Text>
+                            {comfortableConducting?.label === 'No' ? <><Text style={{ marginBottom: 5, fontWeight: 'bold' }}>40 (b). If response to Q49(a) is ‘No’, please indicate the reasons?</Text>
                                 <Dropdown
                                     style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
                                     placeholderStyle={styles.placeholderStyle}
