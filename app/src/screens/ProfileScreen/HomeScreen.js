@@ -80,8 +80,10 @@ class HomeScreen extends Component {
       name: '',
       userToken: '',
       surveyNextBlock: '',
+      DraftSection: '',
       surveCount: null,
       loading: false,
+      DraftLoading: false,
       counter: null,
     };
   }
@@ -131,6 +133,7 @@ class HomeScreen extends Component {
       const surveyCompleteCount = await AsyncStorage.getItem(AsyncStorageContaints.surveyCompleteCount);
       this.setState({ name: UserData, userToken: userId, surveyNextBlock: surveyNextBlock, surveCount: surveyCompleteCount });
       // console.log("readMessages" + surveyCompleteCount, JSON.stringify(this.state))
+      this.getDraftSurvey();
     } catch (error) {
       console.log("error", error)
     }
@@ -196,9 +199,43 @@ class HomeScreen extends Component {
       })
   }
 
+  async getDraftSurvey() {
+    // api/generate-survey-token
+    let SERVER = 'https://createdinam.in/RBI-CBCD/public/api/get-survey-token'
+    this.setState({ DraftLoading: true });
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.state.userToken}`
+    }
+    axios.get(`${SERVER}`, {
+      headers: headers
+    })
+      .then((response) => {
+        if (response.data.status === true) {
+          console.log('getDraftSurvey', JSON.stringify(response.data?.surveyToken))
+          let serverToken = response?.data?.surveyToken
+          AsyncStorage.setItem(AsyncStorageContaints.tempServerTokenId, serverToken);
+          let CurrentDraft = response?.data?.section_status;
+          this.setState({ DraftLoading: false, DraftSection: CurrentDraft });
+        } else {
+
+        }
+        this.setState({ DraftLoading: false });
+      }).catch((error) => {
+        console.log('getDraftSurvey', JSON.stringify(error))
+        showMessage({
+          message: "Something went wrong!",
+          description: "Something went wrong. " + error,
+          type: "danger",
+        });
+        this.setState({ DraftLoading: false });
+      })
+
+  }
+
   CheckCurrentActiveSurvey = () => {
-    // this.props.navigation.navigate('AddSurveyScreen');
-    this.props.navigation.replace('BlockBSurveyScreen');
+    this.props.navigation.navigate('AddSurveyScreen');
+    // this.props.navigation.replace('BlockFSurveyScreen');
   }
 
   navigateToPendingSurvey = () => {
@@ -210,21 +247,21 @@ class HomeScreen extends Component {
         type: "danger",
       });
       // this.props.navigation.replace('AddSurveyScreen');
-    } else if (this.state.surveyNextBlock === 'B') {
+    } else if (this.state.DraftSection === 'B') {
       console.log("inside B")
-      this.props.navigation.replace('BlockBSurveyScreen');
-    } else if (this.state.surveyNextBlock === 'C') {
-      console.log("inside C")
       this.props.navigation.replace('BlockCSurveyScreen');
-    } else if (this.state.surveyNextBlock === 'D') {
+    } else if (this.state.DraftSection === 'C') {
+      console.log("inside C")
       this.props.navigation.replace('BlockDSurveyScreen');
-      console.log("inside D")
-    } else if (this.state.surveyNextBlock === 'E') {
+    } else if (this.state.DraftSection === 'D') {
       this.props.navigation.replace('BlockESurveyScreen');
-      console.log("inside E")
-    } else if (this.state.surveyNextBlock === 'F') {
-      console.log("inside F")
+      console.log("inside D")
+    } else if (this.state.DraftSection === 'E') {
       this.props.navigation.replace('BlockFSurveyScreen');
+      console.log("inside E")
+    } else if (this.state.DraftSection === 'A') {
+      console.log("inside F")
+      this.props.navigation.replace('BlockBSurveyScreen');
     }
   }
 
@@ -253,7 +290,7 @@ class HomeScreen extends Component {
           {this.state.surveyNextBlock !== '' ? <TouchableOpacity onPress={() => this.navigateToPendingSurvey()} style={{ paddingVertical: 14, paddingHorizontal: 20, backgroundColor: '#000', borderRadius: 5, flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
             <Image style={{ width: 20, height: 20, resizeMode: 'contain', tintColor: '#fff' }} source={require('../../../res/images/add_survery_logo.png')} />
             {/* {this.state.loading === false ?  */}
-            <Text style={{ textAlign: 'center', fontWeight: 'bold', color: '#fff', flex: 1 }}>Draft Survey {this.state.surveyNextBlock}</Text>
+            <Text style={{ textAlign: 'center', fontWeight: 'bold', color: '#fff', flex: 1 }}>Draft Survey {this.state.DraftSection}</Text>
             {/* : <ActivityIndicator style={{ alignSelf: 'center', flex: 1 }} color={'#fff'} />} */}
           </TouchableOpacity> : null}
         </View>

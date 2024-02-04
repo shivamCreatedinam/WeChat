@@ -610,7 +610,7 @@ const BlockBSurveyScreen = () => {
                 type: "danger",
             });
         }
-        else if (selectCashReceipt?.length === 0) {
+        else if (selectedIncomeLabels.includes("Cash") && selectCashReceipt?.length === 0) {
             showMessage({
                 message: "Please Select Cash Receipt",
                 description: "Please Select Cash Receipt!",
@@ -625,7 +625,7 @@ const BlockBSurveyScreen = () => {
             });
         }
         else {
-            // stopRecording();
+            stopRecording();
         }
 
     }
@@ -1350,11 +1350,11 @@ const BlockBSurveyScreen = () => {
                                             <TextInput
                                                 onChangeText={(value) => commentInputOnChange(index, value)}
                                                 maxLength={2}
-                                                style={{ backgroundColor: '#fff', paddingLeft: 15, borderRadius: 5, marginTop: 10,borderColor: errorMessages[index] !== '' ? 'red' : '#DFDFDF',borderWidth:1.8 }}
+                                                style={{ backgroundColor: '#fff', paddingLeft: 15, borderRadius: 5, marginTop: 10, borderColor: errorMessages[index] !== '' ? 'red' : '#DFDFDF', borderWidth: 1.8 }}
                                                 keyboardType={'number-pad'}
                                                 placeholder={label}
                                             />
-                                            {errorMessages[index] !== '' && <Text style={{ color: 'red',paddingTop:5,paddingLeft:5 }}>{errorMessages[index]}</Text>}
+                                            {errorMessages[index] !== '' && <Text style={{ color: 'red', paddingTop: 5, paddingLeft: 5 }}>{errorMessages[index]}</Text>}
                                         </View>
                                     ))}
                                 </View>

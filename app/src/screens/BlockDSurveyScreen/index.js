@@ -1065,7 +1065,7 @@ const BlockDSurveyScreen = () => {
                                 />
                             </View>
                         </View>
-                        {enrollA?.label === "Yes" || enrollB?.label === "Yes" || enrollC?.label === "Yes" || enrollD?.label === "Yes" &&
+                        {(enrollA?.label === "Yes" || enrollB?.label === "Yes" || enrollC?.label === "Yes" || enrollD?.label === "Yes") &&
                             <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
                                 <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>29 . If your insurance has become inactive, please indicate the reasons?</Text>
                                 <MultiSelect

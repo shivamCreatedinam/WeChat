@@ -847,7 +847,7 @@ const BlockFSurveyScreen = () => {
                     'sub_q_title': "",
                     'sub_q_type': "",
                     'response1': ``,
-                    'response': `${informationValue}`
+                    'response': informationValue === null ? "" : `${informationValue}`
                 },
                 {
                     'section_no': "F",
@@ -886,20 +886,20 @@ const BlockFSurveyScreen = () => {
                     'response2': ``,
                     'response3': ``,
                     'response4': ``,
-                    'response': [financialLiteracyValue]
+                    'response': financialliteracyReason.length === 0 ? [] : financialliteracyReason
                 },
                 {
                     'section_no': "F",
                     'q_no': "34",
                     'q_type': "CHILD",
                     'sub_q_no': "d",
-                    'sub_q_title': "Where do you want such financial literacy information to be disseminated?",
+                    'sub_q_title': "Information relating to which function is easy to obtain and understand?",
                     'sub_q_type': "MULTICHECK",
                     'response1': ``,
                     'response2': ``,
                     'response3': ``,
                     'response4': ``,
-                    'response': [financialLiteracyValue]
+                    'response': InformationRelatingValue.length === 0 ? [] : InformationRelatingValue
                 },
                 {
                     'section_no': "F",
@@ -1133,7 +1133,7 @@ const BlockFSurveyScreen = () => {
                     'response2': ``,
                     'response3': ``,
                     'response4': ``,
-                    'response': `${rbiScheme?.label}`
+                    'response': rbiScheme === null ? "" : `${rbiScheme?.label}`
                 },
                 {
                     'section_no': "F",
@@ -1146,7 +1146,7 @@ const BlockFSurveyScreen = () => {
                     'response2': ``,
                     'response3': ``,
                     'response4': ``,
-                    'response': `${rbiScheme?.label}`
+                    'response': compProcess === null ? "" : `${compProcess?.label}`
                 },
                 {
                     'section_no': "F",
@@ -1159,7 +1159,7 @@ const BlockFSurveyScreen = () => {
                     'response2': ``,
                     'response3': ``,
                     'response4': ``,
-                    'response': `${comfortableConducting?.label}`
+                    'response': comfortableConducting === null ? "" : `${comfortableConducting?.label}`
                 },
                 {
                     'section_no': "F",
@@ -1172,7 +1172,7 @@ const BlockFSurveyScreen = () => {
                     'response2': ``,
                     'response3': ``,
                     'response4': ``,
-                    'response': `${value}`
+                    'response': value === null ? "" : `${value}`
                 },
                 {
                     'section_no': "F",
@@ -1185,7 +1185,7 @@ const BlockFSurveyScreen = () => {
                     'response2': ``,
                     'response3': ``,
                     'response4': ``,
-                    'response': `${offerPdt}`
+                    'response': offerPdt === null ? "" : `${offerPdt}`
                 },
                 {
                     'section_no': "F",
@@ -1198,7 +1198,7 @@ const BlockFSurveyScreen = () => {
                     'response2': ``,
                     'response3': ``,
                     'response4': ``,
-                    'response': `${queryRespond?.label}`
+                    'response': queryRespond === null ? "" : `${queryRespond}`
                 },
                 {
                     'section_no': "F",
@@ -1211,7 +1211,7 @@ const BlockFSurveyScreen = () => {
                     'response2': ``,
                     'response3': ``,
                     'response4': ``,
-                    'response': `${charges?.label}`
+                    'response': charges === null ? "" : `${charges}`
                 },
                 {
                     'section_no': "F",
@@ -1224,7 +1224,7 @@ const BlockFSurveyScreen = () => {
                     'response2': ``,
                     'response3': ``,
                     'response4': ``,
-                    'response': `${compBC?.label}`
+                    'response': compBC === null ? "" : `${compBC}`
                 },
                 {
                     'section_no': "F",
@@ -1237,7 +1237,7 @@ const BlockFSurveyScreen = () => {
                     'response2': ``,
                     'response3': ``,
                     'response4': ``,
-                    'response': `${grievanceRelated?.label}`,
+                    'response': grievanceRelated === null ? "" : `${grievanceRelated?.label}`,
                 },
                 {
                     'section_no': "F",
@@ -1250,7 +1250,7 @@ const BlockFSurveyScreen = () => {
                     'response2': ``,
                     'response3': ``,
                     'response4': ``,
-                    'response': `${isgrievanceAddressed?.label}`
+                    'response': isgrievanceAddressed === null ? "" : `${isgrievanceAddressed?.label}`
                 },
                 {
                     'section_no': "F",
@@ -1263,7 +1263,7 @@ const BlockFSurveyScreen = () => {
                     'response2': ``,
                     'response3': ``,
                     'response4': ``,
-                    'response': `${reasonprovidedBC}`
+                    'response': reasonprovidedBC === null ? "" : `${reasonprovidedBC}`
                 },
             ],
         });
@@ -1291,6 +1291,7 @@ const BlockFSurveyScreen = () => {
                     });
                     finishSurvey();
                 } else {
+                    setSubmitSurvey(false);
                     showMessage({
                         message: "Something went wrong!",
                         description: result.message,
@@ -1298,7 +1299,10 @@ const BlockFSurveyScreen = () => {
                     });
                 }
             })
-            .catch(error => console.log('error', error));
+            .catch(error => {
+                setSubmitSurvey(false);
+                console.log('error', error);
+            });
     }
 
 
