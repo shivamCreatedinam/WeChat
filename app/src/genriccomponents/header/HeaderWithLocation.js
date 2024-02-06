@@ -138,7 +138,7 @@ const HeaderWithLocation = props => {
             />
           </View>
           <View style={{ marginLeft: 10 }}>
-            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
+            <Text style={{ fontSize: 18, fontWeight: 'bold', textTransform: 'capitalize' }}>
               {props.headerTitle?.name}
             </Text>
           </View>

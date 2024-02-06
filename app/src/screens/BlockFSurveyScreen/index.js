@@ -873,7 +873,7 @@ const BlockFSurveyScreen = () => {
                     'response2': ``,
                     'response3': ``,
                     'response4': ``,
-                    'response': [InformationSharingValue]
+                    'response': InformationSharingValue.length === 0 ? [] : InformationSharingValue
                 },
                 {
                     'section_no': "F",

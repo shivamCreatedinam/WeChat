@@ -535,9 +535,9 @@ const AddSurveyScreen = () => {
                                 maxHeight={300}
                                 labelField="occupation_name"
                                 valueField="id"
-                                placeholder={!is1Focus ? 'Select Occupation' : value}
+                                placeholder={!is1Focus ? 'Select Occupation' : selectedOccupations}
                                 // searchPlaceholder="Search..."
-                                value={value}
+                                value={selectedOccupations}
                                 onFocus={() => setIs1Focus(true)}
                                 onBlur={() => setIs1Focus(false)}
                                 onChange={item => {
@@ -561,9 +561,9 @@ const AddSurveyScreen = () => {
                                 maxHeight={300}
                                 labelField="education_title"
                                 valueField="id"
-                                placeholder={!is2Focus ? 'Select Education' : selectedIncomes}
+                                placeholder={!is2Focus ? 'Select Education' : selectedEducation}
                                 // searchPlaceholder="Search..."
-                                value={selectedIncomes}
+                                value={selectedEducation}
                                 onFocus={() => setIs2Focus(true)}
                                 onBlur={() => setIs2Focus(false)}
                                 onChange={item => {
@@ -663,9 +663,9 @@ const AddSurveyScreen = () => {
                                     maxHeight={300}
                                     labelField="area_title"
                                     valueField="id"
-                                    placeholder={!is6Focus ? 'Select Areas' : value}
+                                    placeholder={!is6Focus ? 'Select Areas' : areasSelected}
                                     // searchPlaceholder="Search..."
-                                    value={value}
+                                    value={areasSelected}
                                     onFocus={() => setIs6Focus(true)}
                                     onBlur={() => setIs6Focus(false)}
                                     onChange={item => {

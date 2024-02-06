@@ -1025,16 +1025,16 @@ const BlockBSurveyScreen = () => {
     }
 
     const onSelectedBankAccounts = (selectedItems) => {
-        if (selectedItems.length === 0) {
-            Alert.alert('Selection Required', 'Please select two valid reason.');
-            return
-        }
-        else if (selectedItems.length > 2) {
-            Alert.alert('Limit Exceeded', 'You cannot select more than 2 reasons.', [
-                { text: 'OK', onPress: () => multiSelectRef.current._removeItem(selectedItems[selectedItems.length - 1]) },
-            ]);
-            return
-        }
+        // if (selectedItems.length === 0) {
+        //     Alert.alert('Selection Required', 'Please select two valid reason.');
+        //     return
+        // }
+        // else if (selectedItems.length > 2) {
+        //     Alert.alert('Limit Exceeded', 'You cannot select more than 2 reasons.', [
+        //         { text: 'OK', onPress: () => multiSelectRef.current._removeItem(selectedItems[selectedItems.length - 1]) },
+        //     ]);
+        //     return
+        // }
         setAccountTypeValue(selectedItems);
     }
 

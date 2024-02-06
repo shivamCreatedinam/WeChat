@@ -239,8 +239,8 @@ class HomeScreen extends Component {
   }
 
   navigateToPendingSurvey = () => {
-    console.log("this.state.surveyNextBlock", this.state.surveyNextBlock)
-    if (this.state.surveyNextBlock === '' || this.state.surveyNextBlock === null) {
+    console.log("this.state.surveyNextBlock", this.state.DraftSection)
+    if (this.state.DraftSection === '' || this.state.DraftSection === null) {
       showMessage({
         message: "You Haven't Any Draft Survey",
         description: "Create new survey!",
@@ -266,7 +266,7 @@ class HomeScreen extends Component {
   }
 
   checkStartSurvey() {
-    (this.state.surveyNextBlock === '' || this.state.surveyNextBlock === null) ? this.navigateToSurvey() : showMessage({
+    (this.state.DraftSection === '' || this.state.DraftSection === null) ? this.navigateToSurvey() : showMessage({
       message: "Please Check",
       description: "You May Have A Draft Survey!",
       type: "danger",
