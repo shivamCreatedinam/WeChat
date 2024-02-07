@@ -12,6 +12,8 @@ const AsyncStorageContaints = {
   surveyLongitude: '@LONGITUDE',
   surveyNextBlock: '@SURVEYNEXTBLOCK',
   surveyCompleteCount: '@CountSurveyComplete',
+  surveyCountInProcessing: '@CountSurveyInProcessing',
+  surveyCountInTotal: '@CountSurveyTotal',
 };
 
 for (const key in AsyncStorageContaints) {

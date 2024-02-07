@@ -18,6 +18,7 @@ import BlockCSurveyScreen from '../screens/BlockCSurveyScreen';
 import BlockDSurveyScreen from '../screens/BlockDSurveyScreen';
 import BlockESurveyScreen from '../screens/BlockESurveyScreen';
 import BlockFSurveyScreen from '../screens/BlockFSurveyScreen';
+import DraftSurveyScreen from '../screens/DraftSurveyScreen';
 
 const Stack = createStackNavigator();
 
@@ -141,6 +142,7 @@ function AppNavigation() {
         <Stack.Screen name={'BlockDSurveyScreen'} component={BlockDSurveyScreen} />
         <Stack.Screen name={'BlockESurveyScreen'} component={BlockESurveyScreen} />
         <Stack.Screen name={'BlockFSurveyScreen'} component={BlockFSurveyScreen} />
+        <Stack.Screen name={'DraftSurveyScreen'} component={DraftSurveyScreen} />
         {/* <Stack.Screen
           name={'AutoPaymentScreen'}  BlockBSurveyScreen
           component={AutoPaymentScreen}PermissionScreenMain

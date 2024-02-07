@@ -13,6 +13,7 @@ import {
   ImageBackground,
   Alert
 } from 'react-native';
+import { version } from '../../../../package.json';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import AsyncStorage from '@react-native-community/async-storage';
 import AsyncStorageContaints from '../../utility/AsyncStorageConstants';
@@ -84,7 +85,14 @@ class HomeScreen extends Component {
       surveCount: null,
       loading: false,
       DraftLoading: false,
+      CountLoading: false,
       counter: null,
+      surveyCount: null,
+      surveyCountInProcessing: null,
+      surveyCountInTotal: null,
+      surveyCompleteCount: null,
+      surveyToken: null,
+      appVersion: version
     };
   }
 
@@ -103,8 +111,11 @@ class HomeScreen extends Component {
 
 
   componentDidMount() {
-    this.readMessages();
-    this.getSavedLocation();
+    this.unsubscribe = this.props.navigation.addListener('focus', () => {
+      //do your api call
+      this.readMessages();
+      this.getSavedLocation();
+    });
   }
 
   getSavedLocation = async () => {
@@ -123,7 +134,6 @@ class HomeScreen extends Component {
     }
   };
 
-
   async readMessages() {
     try {
       AudioRecord.init(options);
@@ -134,6 +144,7 @@ class HomeScreen extends Component {
       this.setState({ name: UserData, userToken: userId, surveyNextBlock: surveyNextBlock, surveCount: surveyCompleteCount });
       // console.log("readMessages" + surveyCompleteCount, JSON.stringify(this.state))
       this.getDraftSurvey();
+      this.getSurveyCount();
     } catch (error) {
       console.log("error", error)
     }
@@ -225,12 +236,48 @@ class HomeScreen extends Component {
         console.log('getDraftSurvey', JSON.stringify(error))
         showMessage({
           message: "Something went wrong!",
-          description: "Something went wrong. " + error,
+          description: "Something went wrong",
           type: "danger",
         });
         this.setState({ DraftLoading: false });
       })
 
+  }
+
+  async getSurveyCount() {
+    let SERVER = 'https://createdinam.in/RBI-CBCD/public/api/get-my-survey-count'
+    this.setState({ DraftLoading: true });
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.state.userToken}`,
+    }
+    axios.get(`${SERVER}`, {
+      headers: headers
+    })
+      .then((response) => {
+        if (response.data.status === true) {
+          console.log('getSurveyCount', JSON.stringify(response.data?.surveyToken))
+          AsyncStorage.setItem(AsyncStorageContaints.surveyCompleteCount, response.data?.in_processing);
+          AsyncStorage.setItem(AsyncStorageContaints.surveyCountInProcessing, response.data?.completed);
+          AsyncStorage.setItem(AsyncStorageContaints.surveyCountInTotal, response.data?.total);
+          this.setState({
+            surveyCountInProcessing: response.data?.in_processing,
+            surveyCompleteCount: response.data?.completed,
+            surveyCountInTotal: response.data?.total,
+          });
+        } else {
+
+        }
+        this.setState({ DraftLoading: false });
+      }).catch((error) => {
+        console.log('getDraftSurvey', JSON.stringify(error))
+        showMessage({
+          message: "Something went wrong!",
+          description: "Something went wrong. " + error,
+          type: "danger",
+        });
+        this.setState({ DraftLoading: false });
+      })
   }
 
   CheckCurrentActiveSurvey = () => {
@@ -240,29 +287,30 @@ class HomeScreen extends Component {
 
   navigateToPendingSurvey = () => {
     console.log("this.state.surveyNextBlock", this.state.DraftSection)
-    if (this.state.DraftSection === '' || this.state.DraftSection === null) {
-      showMessage({
-        message: "You Haven't Any Draft Survey",
-        description: "Create new survey!",
-        type: "danger",
-      });
-      // this.props.navigation.replace('AddSurveyScreen');
-    } else if (this.state.DraftSection === 'B') {
-      console.log("inside B")
-      this.props.navigation.replace('BlockCSurveyScreen');
-    } else if (this.state.DraftSection === 'C') {
-      console.log("inside C")
-      this.props.navigation.replace('BlockDSurveyScreen');
-    } else if (this.state.DraftSection === 'D') {
-      this.props.navigation.replace('BlockESurveyScreen');
-      console.log("inside D")
-    } else if (this.state.DraftSection === 'E') {
-      this.props.navigation.replace('BlockFSurveyScreen');
-      console.log("inside E")
-    } else if (this.state.DraftSection === 'A') {
-      console.log("inside F")
-      this.props.navigation.replace('BlockBSurveyScreen');
-    }
+    this.props.navigation.replace('DraftSurveyScreen');
+    // if (this.state.DraftSection === '' || this.state.DraftSection === null) {
+    //   showMessage({
+    //     message: "You Haven't Any Draft Survey",
+    //     description: "Create new survey!",
+    //     type: "danger",
+    //   });
+    //   // this.props.navigation.replace('AddSurveyScreen');
+    // } else if (this.state.DraftSection === 'B') {
+    //   console.log("inside B")
+    //   this.props.navigation.replace('BlockCSurveyScreen');
+    // } else if (this.state.DraftSection === 'C') {
+    //   console.log("inside C")
+    //   this.props.navigation.replace('BlockDSurveyScreen');
+    // } else if (this.state.DraftSection === 'D') {
+    //   this.props.navigation.replace('BlockESurveyScreen');
+    //   console.log("inside D")
+    // } else if (this.state.DraftSection === 'E') {
+    //   this.props.navigation.replace('BlockFSurveyScreen');
+    //   console.log("inside E")
+    // } else if (this.state.DraftSection === 'A') {
+    //   console.log("inside F")
+    //   this.props.navigation.replace('BlockBSurveyScreen');
+    // }
   }
 
   checkStartSurvey() {
@@ -290,10 +338,15 @@ class HomeScreen extends Component {
           {this.state.surveyNextBlock !== '' ? <TouchableOpacity onPress={() => this.navigateToPendingSurvey()} style={{ paddingVertical: 14, paddingHorizontal: 20, backgroundColor: '#000', borderRadius: 5, flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
             <Image style={{ width: 20, height: 20, resizeMode: 'contain', tintColor: '#fff' }} source={require('../../../res/images/add_survery_logo.png')} />
             {/* {this.state.loading === false ?  */}
-            <Text style={{ textAlign: 'center', fontWeight: 'bold', color: '#fff', flex: 1 }}>Draft Survey {this.state.DraftSection}</Text>
+            <Text style={{ textAlign: 'center', fontWeight: 'bold', color: '#fff', flex: 1 }}>Draft Survey</Text>
             {/* : <ActivityIndicator style={{ alignSelf: 'center', flex: 1 }} color={'#fff'} />} */}
           </TouchableOpacity> : null}
         </View>
+        <View style={{ position: 'absolute', bottom: 50, alignSelf: 'center', flexDirection: 'row' }}>
+          <Text style={{ marginRight: 50, fontWeight: 'bold', fontSize: 18 }}>Survey in Progress:- {this.state.surveyCountInProcessing}</Text>
+          <Text style={{ marginRight: 0, fontWeight: 'bold' }}>Complete Survey:- {this.state.surveyCompleteCount}</Text>
+        </View>
+        <Text style={{ position: 'absolute', textAlign: 'center', alignSelf: 'center', bottom: 5, fontWeight: 'bold' }}>App Version - {this.state.appVersion}</Text>
       </SafeAreaView>
     );
   }

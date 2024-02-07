@@ -144,7 +144,8 @@ const HeaderWithLocation = props => {
           </View>
         </TouchableOpacity>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={{ color: 'green', fontSize: 14, fontWeight: 'bold', textAlign: 'center', paddingTop: 3, backgroundColor: '#fff', elevation: 5, paddingVertical: 5, paddingHorizontal: 10 }}>Survey Count {props.headerTitle?.surveCount}</Text>
+          {/* <Text style={{ color: 'green', fontSize: 14, fontWeight: 'bold', textAlign: 'center', paddingTop: 3, backgroundColor: '#fff', elevation: 5, paddingVertical: 5, paddingHorizontal: 10 }}>Pending Survey {props.headerTitle?.surveyCountInProcessing}</Text> */}
+          <Text style={{ color: 'green', fontSize: 14, fontWeight: 'bold', textAlign: 'center', paddingTop: 3, backgroundColor: '#fff', elevation: 5, paddingVertical: 5, paddingHorizontal: 10 }}>Total Survey {props.headerTitle?.surveyCountInTotal}</Text>
         </View>
       </View>
     </View>
