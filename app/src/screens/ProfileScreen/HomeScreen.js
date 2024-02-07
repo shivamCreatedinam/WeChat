@@ -342,9 +342,9 @@ class HomeScreen extends Component {
             {/* : <ActivityIndicator style={{ alignSelf: 'center', flex: 1 }} color={'#fff'} />} */}
           </TouchableOpacity> : null}
         </View>
-        <View style={{ position: 'absolute', bottom: 50, alignSelf: 'center', flexDirection: 'row' }}>
-          <Text style={{ marginRight: 50, fontWeight: 'bold', fontSize: 18 }}>Survey in Progress:- {this.state.surveyCountInProcessing}</Text>
-          <Text style={{ marginRight: 0, fontWeight: 'bold' }}>Complete Survey:- {this.state.surveyCompleteCount}</Text>
+        <View style={{ position: 'absolute', bottom: 50, alignSelf: 'center', flexDirection: 'row',margin:10 }}>
+          <Text adjustsFontSizeToFit style={{ marginRight: 20, fontWeight: 'bold'}}>Survey in Progress:- {this.state.surveyCountInProcessing}</Text>
+          <Text adjustsFontSizeToFit style={{ marginRight: 0, fontWeight: 'bold' }}>Complete Survey:- {this.state.surveyCompleteCount}</Text>
         </View>
         <Text style={{ position: 'absolute', textAlign: 'center', alignSelf: 'center', bottom: 5, fontWeight: 'bold' }}>App Version - {this.state.appVersion}</Text>
       </SafeAreaView>

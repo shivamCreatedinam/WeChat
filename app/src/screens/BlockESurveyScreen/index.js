@@ -516,7 +516,7 @@ const BlockESurveyScreen = () => {
                                 selectedBtn={(e) => setSchemesSubscription(e)}
                             />
                             <View style={{ padding: 10, }} />
-                            <Text>30 (b) 4. Account is inactive due to non-payment of subscription.</Text>
+                            <Text>30 (b) 4. {PensionEnrolled?.label} {PensionAwareness?.label} Account is inactive due to non-payment of subscription.</Text>
                             <RadioButtonRN
                                 data={data}
                                 selectedBtn={(e) => setSchemesAccount(e)}
@@ -524,7 +524,7 @@ const BlockESurveyScreen = () => {
                             <View style={{ padding: 10, }} />
                         </View>
 
-                        {PensionEnrolled?.label === "Yes" &&
+                        {PensionEnrolled?.label === "No" && PensionAwareness?.label === "No" &&
                             <View>
                                 <View style={{ padding: 10, }} />
                                 <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>

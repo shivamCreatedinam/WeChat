@@ -744,7 +744,7 @@ const BlockDSurveyScreen = () => {
 
     // SelectedReasonTypeLabels
 
-    const SelectedReasonTypeLabels = selectedReason.map((selectedId) => {
+    const SelectedReasonTypeLabels = reasonForEnroll.map((selectedId) => {
         const selectedReason = reason.find((reason) => reason.id === selectedId);
         return selectedReason ? selectedReason.lable : '';
     });
@@ -802,7 +802,7 @@ const BlockDSurveyScreen = () => {
                                     onSelectedItemsChange={(items) =>
                                         onSelectedReason(items)
                                     }
-                                    selectedItems={selectedReason}
+                                    selectedItems={reasonForEnroll}
                                     selectText="Select Reason"
                                     onChangeInput={(text) => console.log(text)}
                                     altFontFamily="ProximaNova-Light"

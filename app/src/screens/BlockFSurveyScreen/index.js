@@ -1909,7 +1909,7 @@ const BlockFSurveyScreen = () => {
                                 selectedBtn={(e) => setComfortableConducting(e)}
                             />
                             <View style={{ padding: 10, }} />
-                            {comfortableConducting?.label === 'No' ? <><Text style={{ marginBottom: 5, fontWeight: 'bold' }}>40 (b). If response to Q49(a) is ‘No’, please indicate the reasons?</Text>
+                            {comfortableConducting?.label === 'No' ? <><Text style={{ marginBottom: 5, fontWeight: 'bold' }}>40 (b). If response to Q40(a) is ‘No’, please indicate the reasons?</Text>
                                 <Dropdown
                                     style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
                                     placeholderStyle={styles.placeholderStyle}

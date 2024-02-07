@@ -857,6 +857,16 @@ const BlockCSurveyScreen = () => {
     }
 
     const onSelectedReason = (selectedItems) => {
+        if (selectedItems.length === 0) {
+            Alert.alert('Selection Required', 'Please select two valid reason.');
+            return
+        }
+        else if (selectedItems.length > 2) {
+            Alert.alert('Limit Exceeded', 'You cannot select more than 2 reasons.', [
+                { text: 'OK', onPress: () => multiSelectRef.current._removeItem(selectedItems[selectedItems.length - 1]) },
+            ]);
+            return
+        }
         setSelectedReason(selectedItems);
     }
 
@@ -895,7 +905,7 @@ const BlockCSurveyScreen = () => {
     });
 
     const SelectedReasonTypeLabels = selectedReason.map((selectedId) => {
-        const selectedReason = loanType.find((reason) => reason.id === selectedId);
+        const selectedReason = reason.find((reason) => reason.id === selectedId);
         return selectedReason ? selectedReason.lable : '';
     });
     const SelectedRefuseReasonTypeLabels = selectedRefuseReason.map((selectedId) => {
@@ -1078,8 +1088,6 @@ const BlockCSurveyScreen = () => {
 
                             {credFacility?.label === "No" && <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
                                 <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>19(g). why don’t you seek a loan from banks/NBFCs/ NBFC-MFIs?</Text>
-
-
                                 <MultiSelect
                                     hideTags
                                     items={reason}
@@ -1270,7 +1278,7 @@ const BlockCSurveyScreen = () => {
                                     selectedBtn={(e) => setPrivateLend(e)}
                                 />
                             </View>
-                            {privateLend?.label === "Yes" && <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
                                 <Text style={{ marginBottom: 5, fontWeight: 'bold', flex: 1 }}>22(b). How much is your total borrowing (amount outstanding) from Private Money Lenders/ Informal sources?</Text>
                                 <Dropdown
                                     style={[styles.dropdown, privateBorrowingFocus && { borderColor: 'blue' }]}
@@ -1295,8 +1303,7 @@ const BlockCSurveyScreen = () => {
                                         setPrivateBorrowingFocus(false);
                                     }}
                                 />
-                            </View>}
-
+                            </View>
                         </View>
 
                         <View style={{ padding: 10, }} />

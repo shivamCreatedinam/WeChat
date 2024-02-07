@@ -190,7 +190,7 @@ export default class DraftSurveyScreen extends Component {
                 {this.renderCustomHeader()}
                 <View style={{ margin: 20 }}>
                     <View style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
-                        <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Draft Survey {this.state?.DraftSection} - {this.state?.tempServerTokenId}</Text>
+                        <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Draft Survey {this.state?.DraftSection !== '' && this.state?.DraftSection} - {this.state?.DraftSection !== '' && this.state?.tempServerTokenId}</Text>
                     </View>
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center', margin: 20, marginTop: 0 }}>
