@@ -242,19 +242,27 @@ const BlockDSurveyScreen = () => {
     }
 
     const startRecording = async () => {
-        setSurveyInstruction(false);
-        setIsRecording(true);
-        AudioRecord.start();
+        try {
+            setSurveyInstruction(false);
+            setIsRecording(true);
+            AudioRecord.start();
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     const stopRecording = async () => {
-        // or to get the wav file path
-        console.warn('startRecording')
-        const audioFile = await AudioRecord.stop();
-        console.warn(audioFile)
-        setAudioPath(audioFile);
-        uploadAudioFinal(audioFile);
-        submitSurvey(audioFile);
+        try {
+            // or to get the wav file path
+            console.warn('startRecording')
+            const audioFile = await AudioRecord.stop();
+            console.warn(audioFile)
+            setAudioPath(audioFile);
+            uploadAudioFinal(audioFile);
+            submitSurvey(audioFile);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
 
@@ -282,8 +290,17 @@ const BlockDSurveyScreen = () => {
             });
             const json = await res.json();
             setAudioUploading(false);
+            showMessage({
+                message: "Audio Upload",
+                description: "Audio Upload Successfully!",
+                type: "success",
+            });
         } catch (err) {
-            alert(err)
+            showMessage({
+                message: "Audio Upload",
+                description: "Audio Upload Successfully",
+                type: "success",
+            });
         }
     }
 
@@ -753,16 +770,14 @@ const BlockDSurveyScreen = () => {
         <SafeAreaView style={{ flex: 1, backgroundColor: '#F8F8FF' }}>
             {renderCustomHeader()}
             <Modal isVisible={isInstruction}>
-                <View style={{ height: 250, width: Dimensions.get('screen').width - 50, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 5, padding: 20 }}>
+                <View style={{ width: Dimensions.get('screen').width - 50, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 5, padding: 20 }}>
                     <View style={{ alignItems: 'center' }}>
                         <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Survey Instructions</Text>
                         <Text style={{ textAlign: 'center', paddingVertical: 15 }}>Once your start the survey, this will track your location, and also record your audio, by click on start button all the featurs enable and track your location and record your audio.</Text>
-                        <TouchableOpacity
-                            onPress={() => startRecording()}
-                            style={{ paddingVertical: 10, paddingHorizontal: 50, backgroundColor: '#000', borderRadius: 5, elevation: 5, }}>
-                            <Text style={{ fontWeight: 'bold', color: '#fff' }}>Start</Text>
-                        </TouchableOpacity>
                     </View>
+                    <TouchableOpacity onPress={() => startRecording()} style={{ paddingVertical: 10, paddingHorizontal: 50, backgroundColor: '#000', borderRadius: 5, elevation: 5, zIndex: 999 }}>
+                        <Text style={{ fontWeight: 'bold', color: '#fff', textAlign: 'center', padding: 5 }}>Start</Text>
+                    </TouchableOpacity>
                 </View>
             </Modal>
             <Text style={{ fontWeight: 'bold', paddingLeft: 20, paddingTop: 10 }}>D. ACCESS and USAGE OF FINANCIAL SERVICES – INSURANCE FACILITIES</Text>
@@ -1109,7 +1124,7 @@ const BlockDSurveyScreen = () => {
                             validate()
                         }}
                             style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
-                            <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Next Block E</Text>
+                            {isSubmitSurvey === true ? <ActivityIndicator style={{ alignItems: 'center' }} color={'#fff'} /> : <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Next Block E</Text>}
                         </TouchableOpacity>
                     </View>
                 </ScrollView> : <ActivityIndicator style={{ alignItems: 'center', marginTop: Dimensions.get('screen').width }} color={'#000'} />}

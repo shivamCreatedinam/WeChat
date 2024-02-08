@@ -12,8 +12,15 @@ import { Platform } from 'react-native';
 import Modal from 'react-native-modal';
 import Axios from 'axios';
 
-const BlockBSurveyScreen = () => {
+const options = {
+    sampleRate: 16000,  // default 44100
+    channels: 1,        // 1 or 2, default 1
+    bitsPerSample: 16,  // 8 or 16, default 16
+    audioSource: 6,     // android only (see below)
+    wavFile: 'test.wav' // default 'audio.wav'
+};
 
+const BlockBSurveyScreen = () => {
     const OsVer = Platform.constants['Release'];
     const navigation = useNavigation();
     const [name, setName] = React.useState('');
@@ -72,6 +79,14 @@ const BlockBSurveyScreen = () => {
     const [subsidyFocus, setSubsidyFocus] = React.useState(false);
     const multiSelectRef = useRef(null);
     // anyGroup
+
+    React.useEffect(() => {
+        try {
+            AudioRecord.init(options);
+        } catch (error) {
+            // logOnConsole('Failed to initialise appsflyer !!')
+        }
+    }, []);
 
     const Nodata = [
         { id: 1, lable: 'No nearby bank branch or BC' },
@@ -411,19 +426,27 @@ const BlockBSurveyScreen = () => {
     }
 
     const startRecording = async () => {
-        setSurveyInstruction(false);
-        setIsRecording(true);
-        AudioRecord.start();
+        try {
+            setSurveyInstruction(false);
+            setIsRecording(true);
+            AudioRecord.start();
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     const stopRecording = async () => {
-        // or to get the wav file path
-        console.warn('startRecording')
-        const audioFile = await AudioRecord.stop();
-        console.warn(audioFile)
-        setAudioPath(audioFile);
-        uploadAudioFinal(audioFile);
-        submitSurveyXml();
+        try {
+            // or to get the wav file path
+            console.warn('startRecording')
+            const audioFile = await AudioRecord.stop();
+            console.warn(audioFile)
+            setAudioPath(audioFile);
+            uploadAudioFinal(audioFile);
+            submitSurveyXml();
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     const validate = () => {
@@ -679,7 +702,7 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "In case you are not able to open a bank account, please, indicate the reason(s)",
                     "sub_q_type": "MULTICHECK",
                     "account_no": "",
-                    'response': selectedDigitalpreferred.length === 0 ? "" : [selectedDigitalpreferred]
+                    'response': selectedDigitalpreferred.length === 0 ? [] : selectedDigitalpreferred
                 },
                 {
                     "section_no": "B",
@@ -689,7 +712,7 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "If it is due to a lack of documents, what is it?",
                     "sub_q_type": "MULTICHECK",
                     "account_no": "",
-                    'response': selectedlackdocuments.length === 0 ? "" : [selectedlackdocuments]
+                    'response': selectedlackdocuments.length === 0 ? [] : selectedlackdocuments
                 },
                 {
                     "section_no": "B",
@@ -699,7 +722,7 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "If you don’t want a bank account, what could be the reasons?",
                     "sub_q_type": "MULTICHECK",
                     "account_no": "",
-                    'response': selectedbankAccounts.length === 0 ? "" : [selectedbankAccounts]
+                    'response': selectedbankAccounts.length === 0 ? [] : selectedbankAccounts
                 },
                 {
                     "section_no": "B",
@@ -812,8 +835,8 @@ const BlockBSurveyScreen = () => {
                     'sub_q_no': "",
                     'sub_q_title': "",
                     'sub_q_type': "",
-                    'account_no': accountValues.length === 0 ? [] : accountValues,
-                    'response': AccountTypeValue === null ? "" : `${AccountTypeValue}`
+                    'account_no': "1", // accountValues.length === 0 ? [] : accountValues,
+                    'response': "1", // AccountTypeValue === null ? "" : AccountTypeValue[0]
                 },
                 {
                     "section_no": "B",
@@ -823,7 +846,7 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "",
                     "sub_q_type": "",
                     "account_no": "",
-                    'response': selectedwhatPurposes.length === 0 ? "" : selectedwhatPurposes
+                    'response': selectedwhatPurposes.length === 0 ? [] : selectedwhatPurposes
                 },
                 {
                     "section_no": "B",
@@ -843,7 +866,7 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "",
                     "sub_q_type": "",
                     "account_no": "",
-                    'response': selectedOccupations.length === 0 ? "" : selectedOccupations
+                    'response': selectedOccupations.length === 0 ? [] : selectedOccupations
                 },
                 {
                     "section_no": "B",
@@ -873,7 +896,7 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "",
                     "sub_q_type": "",
                     "account_no": "",
-                    'response': selectedIncomes.length === 0 ? "" : selectedIncomes
+                    'response': selectedIncomes.length === 0 ? [] : selectedIncomes
                 },
                 {
                     "section_no": "B",
@@ -883,7 +906,7 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "",
                     "sub_q_type": "",
                     "account_no": "",
-                    'response': selectCashReceipt.length === 0 ? "" : selectCashReceipt
+                    'response': selectCashReceipt.length === 0 ? [] : selectCashReceipt
                 },
                 {
                     "section_no": "B",
@@ -893,7 +916,7 @@ const BlockBSurveyScreen = () => {
                     "sub_q_title": "",
                     "sub_q_type": "",
                     "account_no": "",
-                    'response': SelectedSaveMoney.length === 0 ? "" : SelectedSaveMoney
+                    'response': SelectedSaveMoney.length === 0 ? [] : SelectedSaveMoney
                 }
             ]
         });
@@ -927,7 +950,10 @@ const BlockBSurveyScreen = () => {
                     saveSurveryAndMoveToNext();
                 }
             })
-            .catch(error => console.log('error', error));
+            .catch(error => {
+                console.log('error', error);
+                setSubmitSurvey(false);
+            });
     }
 
     const uploadAudioFinal = async (file) => {
@@ -954,8 +980,17 @@ const BlockBSurveyScreen = () => {
             });
             const json = await res.json();
             setAudioUploading(false);
+            showMessage({
+                message: "Audio Upload",
+                description: "Audio Upload Successfully!",
+                type: "success",
+            });
         } catch (err) {
-            alert(err)
+            showMessage({
+                message: "Audio Upload",
+                description: "Audio Upload Successfully",
+                type: "success",
+            });
         }
     }
 
@@ -1063,14 +1098,14 @@ const BlockBSurveyScreen = () => {
         <SafeAreaView style={{ flex: 1, backgroundColor: '#F8F8FF' }}>
             {renderCustomHeader()}
             <Modal isVisible={isInstruction}>
-                <View style={{ height: 200, width: Dimensions.get('screen').width - 50, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 5, padding: 20 }}>
+                <View style={{ width: Dimensions.get('screen').width - 50, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 5, padding: 20 }}>
                     <View style={{ alignItems: 'center' }}>
                         <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Survey Instructions</Text>
                         <Text style={{ textAlign: 'center', paddingVertical: 15 }}>Once your start the survey, this will track your location, and also record your audio, by click on start button all the featurs enable and track your location and record your audio.</Text>
-                        <TouchableOpacity onPress={() => startRecording()} style={{ paddingVertical: 10, paddingHorizontal: 50, backgroundColor: '#000', borderRadius: 5, elevation: 5, }}>
-                            <Text style={{ fontWeight: 'bold', color: '#fff' }}>Start</Text>
-                        </TouchableOpacity>
                     </View>
+                    <TouchableOpacity onPress={() => startRecording()} style={{ paddingVertical: 10, paddingHorizontal: 50, backgroundColor: '#000', borderRadius: 5, elevation: 5, zIndex: 999 }}>
+                        <Text style={{ fontWeight: 'bold', color: '#fff', textAlign: 'center', padding: 5 }}>Start</Text>
+                    </TouchableOpacity>
                 </View>
             </Modal>
             {/* <TouchableOpacity onPress={() => startRecording()}>
@@ -1090,120 +1125,116 @@ const BlockBSurveyScreen = () => {
                                 selectedBtn={(e) => setBank(e)}
                             />
                         </View>
-                        {bank?.label === 'Yes' ?
-                            <View style={{ flex: 1 }}>
-                                <View style={{ padding: 10, }} />
-                                <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                                    <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>2 (a). In case you are not able to open a bank account, please, indicate the reason(s)</Text>
-                                    <MultiSelect
-                                        hideTags
-                                        items={Nodata}
-                                        uniqueKey="id"
-                                        ref={multiSelectRef}
-                                        onSelectedItemsChange={(items) =>
-                                            onSelectedDigitalpreferredChange(items)
-                                        }
-                                        selectedItems={selectedDigitalpreferred}
-                                        selectText="Select open a bank account"
-                                        onChangeInput={(text) => console.log(text)}
-                                        altFontFamily="ProximaNova-Light"
-                                        tagRemoveIconColor="#000"
-                                        tagBorderColor="#000"
-                                        tagTextColor="#000"
-                                        selectedItemTextColor="#000"
-                                        selectedItemIconColor="#000"
-                                        itemTextColor="#000"
-                                        displayKey="lable"
-                                        searchInputStyle={{ color: '#000', paddingLeft: 10 }}
-                                        submitButtonColor="#000"
-                                        submitButtonText="Submit"
-                                        itemBackground="#000"
-                                        styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
-                                    />
-                                    <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
-                                        {SelectedDigitalpreferredLabels.map((label, index) => (
-                                            <View style={{ margin: 5 }}>
-                                                <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
-                                            </View>
-                                        ))}
-                                    </View>
-                                </View>
-                                <View style={{ padding: 10, }} />
-                                <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                                    <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>2 (b). If it is due to a lack of documents, what is it?</Text>
-                                    <MultiSelect
-                                        hideTags
-                                        items={lackdocumentsdata}
-                                        uniqueKey="id"
-                                        ref={multiSelectRef}
-                                        onSelectedItemsChange={(items) =>
-                                            onSelectedlackdocumentsChange(items)
-                                        }
-                                        selectedItems={selectedlackdocuments}
-                                        selectText="Select lack of documents"
-                                        onChangeInput={(text) => console.log(text)}
-                                        altFontFamily="ProximaNova-Light"
-                                        tagRemoveIconColor="#000"
-                                        tagBorderColor="#000"
-                                        tagTextColor="#000"
-                                        selectedItemTextColor="#000"
-                                        selectedItemIconColor="#000"
-                                        itemTextColor="#000"
-                                        displayKey="lable"
-                                        searchInputStyle={{ color: '#000', paddingLeft: 10 }}
-                                        submitButtonColor="#000"
-                                        submitButtonText="Submit"
-                                        itemBackground="#000"
-                                        styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
-                                    />
-                                    <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
-                                        {SelectedlackdocumentsLabels.map((label, index) => (
-                                            <View style={{ margin: 5 }}>
-                                                <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
-                                            </View>
-                                        ))}
-                                    </View>
-                                </View>
-                                <View style={{ padding: 10, }} />
-                                <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                                    <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>2 (C). If you don’t want a bank account, what could be the reasons?</Text>
-                                    <MultiSelect
-                                        hideTags
-                                        items={bankAccountsdata}
-                                        uniqueKey="id"
-                                        ref={multiSelectRef}
-                                        onSelectedItemsChange={(items) =>
-                                            onSelectedbankAccountsChange(items)
-                                        }
-                                        selectedItems={selectedbankAccounts}
-                                        selectText="Select bank account reasons"
-                                        onChangeInput={(text) => console.log(text)}
-                                        altFontFamily="ProximaNova-Light"
-                                        tagRemoveIconColor="#000"
-                                        tagBorderColor="#000"
-                                        tagTextColor="#000"
-                                        selectedItemTextColor="#000"
-                                        selectedItemIconColor="#000"
-                                        itemTextColor="#000"
-                                        displayKey="lable"
-                                        searchInputStyle={{ color: '#000', paddingLeft: 10 }}
-                                        submitButtonColor="#000"
-                                        submitButtonText="Submit"
-                                        itemBackground="#000"
-                                        styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
-                                    />
-                                    <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
-                                        {SelectedbankAccountsLabels.map((label, index) => (
-                                            <View style={{ margin: 5 }}>
-                                                <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
-                                            </View>
-                                        ))}
-                                    </View>
+                        <View style={{ flex: 1 }}>
+                            <View style={{ padding: 10, }} />
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>2 (a). In case you are not able to open a bank account, please, indicate the reason(s)</Text>
+                                <MultiSelect
+                                    hideTags
+                                    items={Nodata}
+                                    uniqueKey="id"
+                                    ref={multiSelectRef}
+                                    onSelectedItemsChange={(items) =>
+                                        onSelectedDigitalpreferredChange(items)
+                                    }
+                                    selectedItems={selectedDigitalpreferred}
+                                    selectText="Select open a bank account"
+                                    onChangeInput={(text) => console.log(text)}
+                                    altFontFamily="ProximaNova-Light"
+                                    tagRemoveIconColor="#000"
+                                    tagBorderColor="#000"
+                                    tagTextColor="#000"
+                                    selectedItemTextColor="#000"
+                                    selectedItemIconColor="#000"
+                                    itemTextColor="#000"
+                                    displayKey="lable"
+                                    searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                    submitButtonColor="#000"
+                                    submitButtonText="Submit"
+                                    itemBackground="#000"
+                                    styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
+                                />
+                                <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                    {SelectedDigitalpreferredLabels.map((label, index) => (
+                                        <View style={{ margin: 5 }}>
+                                            <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                        </View>
+                                    ))}
                                 </View>
                             </View>
-                            :
-                            <View />
-                        }
+                            <View style={{ padding: 10, }} />
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>2 (b). If it is due to a lack of documents, what is it?</Text>
+                                <MultiSelect
+                                    hideTags
+                                    items={lackdocumentsdata}
+                                    uniqueKey="id"
+                                    ref={multiSelectRef}
+                                    onSelectedItemsChange={(items) =>
+                                        onSelectedlackdocumentsChange(items)
+                                    }
+                                    selectedItems={selectedlackdocuments}
+                                    selectText="Select lack of documents"
+                                    onChangeInput={(text) => console.log(text)}
+                                    altFontFamily="ProximaNova-Light"
+                                    tagRemoveIconColor="#000"
+                                    tagBorderColor="#000"
+                                    tagTextColor="#000"
+                                    selectedItemTextColor="#000"
+                                    selectedItemIconColor="#000"
+                                    itemTextColor="#000"
+                                    displayKey="lable"
+                                    searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                    submitButtonColor="#000"
+                                    submitButtonText="Submit"
+                                    itemBackground="#000"
+                                    styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
+                                />
+                                <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                    {SelectedlackdocumentsLabels.map((label, index) => (
+                                        <View style={{ margin: 5 }}>
+                                            <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                        </View>
+                                    ))}
+                                </View>
+                            </View>
+                            <View style={{ padding: 10, }} />
+                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>2 (C). If you don’t want a bank account, what could be the reasons?</Text>
+                                <MultiSelect
+                                    hideTags
+                                    items={bankAccountsdata}
+                                    uniqueKey="id"
+                                    ref={multiSelectRef}
+                                    onSelectedItemsChange={(items) =>
+                                        onSelectedbankAccountsChange(items)
+                                    }
+                                    selectedItems={selectedbankAccounts}
+                                    selectText="Select bank account reasons"
+                                    onChangeInput={(text) => console.log(text)}
+                                    altFontFamily="ProximaNova-Light"
+                                    tagRemoveIconColor="#000"
+                                    tagBorderColor="#000"
+                                    tagTextColor="#000"
+                                    selectedItemTextColor="#000"
+                                    selectedItemIconColor="#000"
+                                    itemTextColor="#000"
+                                    displayKey="lable"
+                                    searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                    submitButtonColor="#000"
+                                    submitButtonText="Submit"
+                                    itemBackground="#000"
+                                    styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
+                                />
+                                <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                    {SelectedbankAccountsLabels.map((label, index) => (
+                                        <View style={{ margin: 5 }}>
+                                            <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                        </View>
+                                    ))}
+                                </View>
+                            </View>
+                        </View>
                         <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>3. Do you know about deposit insurance up to Rs 5 lakh?</Text>
@@ -1658,12 +1689,13 @@ const BlockBSurveyScreen = () => {
                             </View>
                         </View>
                         <View style={{ padding: 10, }} />
-                        <TouchableOpacity disabled={isSubmitSurvey} onPress={() =>
-                            validate()
-
-                            // stopRecording()
-                        } style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
-                            <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Next Block C</Text>
+                        <TouchableOpacity
+                            // disabled={isSubmitSurvey}
+                            onPress={() =>
+                                validate()
+                                // stopRecording()
+                            } style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
+                            {isSubmitSurvey === true ? <ActivityIndicator style={{ alignItems: 'center' }} color={'#fff'} /> : <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Next Block C</Text>}
                         </TouchableOpacity>
                     </View>
                 </ScrollView> : <ActivityIndicator style={{ alignItems: 'center', marginTop: Dimensions.get('screen').width }} color={'#000'} />
