@@ -1171,44 +1171,42 @@ const BlockCSurveyScreen = () => {
                                             selectedBtn={(e) => setRefuse(e)}
                                         />
                                     </View>
-
-                                    <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
-                                        <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>20(e). If refused, what was the reason cited?</Text>
-
-
-                                        <MultiSelect
-                                            hideTags
-                                            items={refuseReason}
-                                            uniqueKey="id"
-                                            ref={multiSelectRef}
-                                            onSelectedItemsChange={(items) =>
-                                                onSelecteRefusedReason(items)
-                                            }
-                                            selectedItems={selectedRefuseReason}
-                                            selectText="Select Reason"
-                                            onChangeInput={(text) => console.log(text)}
-                                            altFontFamily="ProximaNova-Light"
-                                            tagRemoveIconColor="#000"
-                                            tagBorderColor="#000"
-                                            tagTextColor="#000"
-                                            selectedItemTextColor="#000"
-                                            selectedItemIconColor="#000"
-                                            itemTextColor="#000"
-                                            displayKey="lable"
-                                            searchInputStyle={{ color: '#000', paddingLeft: 10 }}
-                                            submitButtonColor="#000"
-                                            submitButtonText="Submit"
-                                            itemBackground="#000"
-                                            styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
-                                        />
-                                        <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
-                                            {SelectedRefuseReasonTypeLabels.map((label, index) => (
-                                                <View style={{ margin: 5 }}>
-                                                    <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
-                                                </View>
-                                            ))}
-                                        </View>
-                                    </View>
+                                    {refuse.label === 'Yes' &&
+                                        <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
+                                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>20(e). If refused, what was the reason cited?</Text>
+                                            <MultiSelect
+                                                hideTags
+                                                items={refuseReason}
+                                                uniqueKey="id"
+                                                ref={multiSelectRef}
+                                                onSelectedItemsChange={(items) =>
+                                                    onSelecteRefusedReason(items)
+                                                }
+                                                selectedItems={selectedRefuseReason}
+                                                selectText="Select Reason"
+                                                onChangeInput={(text) => console.log(text)}
+                                                altFontFamily="ProximaNova-Light"
+                                                tagRemoveIconColor="#000"
+                                                tagBorderColor="#000"
+                                                tagTextColor="#000"
+                                                selectedItemTextColor="#000"
+                                                selectedItemIconColor="#000"
+                                                itemTextColor="#000"
+                                                displayKey="lable"
+                                                searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                                submitButtonColor="#000"
+                                                submitButtonText="Submit"
+                                                itemBackground="#000"
+                                                styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
+                                            />
+                                            <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                                {SelectedRefuseReasonTypeLabels.map((label, index) => (
+                                                    <View style={{ margin: 5 }}>
+                                                        <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                                    </View>
+                                                ))}
+                                            </View>
+                                        </View>}
                                 </>
                             }
 
@@ -1241,8 +1239,6 @@ const BlockCSurveyScreen = () => {
                             {loanRefuseByYou?.label === "Yes" ?
                                 <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
                                     <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>21(d). If yes, what was the reason for refusal.</Text>
-
-
                                     <MultiSelect
                                         hideTags
                                         items={freeLoanRefuse}
@@ -1278,7 +1274,6 @@ const BlockCSurveyScreen = () => {
                                 </View>
                                 : null}
                         </View>
-
                         <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>22. Informal Sources of Credit</Text>
@@ -1289,32 +1284,33 @@ const BlockCSurveyScreen = () => {
                                     selectedBtn={(e) => setPrivateLend(e)}
                                 />
                             </View>
-                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
-                                <Text style={{ marginBottom: 5, fontWeight: 'bold', flex: 1 }}>22(b). How much is your total borrowing (amount outstanding) from Private Money Lenders/ Informal sources?</Text>
-                                <Dropdown
-                                    style={[styles.dropdown, privateBorrowingFocus && { borderColor: 'blue' }]}
-                                    placeholderStyle={styles.placeholderStyle}
-                                    selectedTextStyle={styles.selectedTextStyle}
-                                    inputSearchStyle={styles.inputSearchStyle}
-                                    // iconStyle={styles.iconStyle}
-                                    // data={AccountType}
-                                    data={outstandingAmount}
-                                    // search
-                                    maxHeight={300}
-                                    labelField="lable"
-                                    valueField="id"
-                                    placeholder={!privateBorrowingFocus ? 'Select' : privateBorrowing}
-                                    // searchPlaceholder="Search..."
-                                    value={privateBorrowing}
-                                    onFocus={() => setPrivateBorrowingFocus(true)}
-                                    onBlur={() => setPrivateBorrowingFocus(false)}
-                                    onChange={item => {
-                                        console.log(JSON.stringify(item))
-                                        setprivateBorrowing(item.id);
-                                        setPrivateBorrowingFocus(false);
-                                    }}
-                                />
-                            </View>
+                            {privateLend?.label === 'Yes' &&
+                                <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
+                                    <Text style={{ marginBottom: 5, fontWeight: 'bold', flex: 1 }}>22(b). How much is your total borrowing (amount outstanding) from Private Money Lenders/ Informal sources?</Text>
+                                    <Dropdown
+                                        style={[styles.dropdown, privateBorrowingFocus && { borderColor: 'blue' }]}
+                                        placeholderStyle={styles.placeholderStyle}
+                                        selectedTextStyle={styles.selectedTextStyle}
+                                        inputSearchStyle={styles.inputSearchStyle}
+                                        // iconStyle={styles.iconStyle}
+                                        // data={AccountType}
+                                        data={outstandingAmount}
+                                        // search
+                                        maxHeight={300}
+                                        labelField="lable"
+                                        valueField="id"
+                                        placeholder={!privateBorrowingFocus ? 'Select' : privateBorrowing}
+                                        // searchPlaceholder="Search..."
+                                        value={privateBorrowing}
+                                        onFocus={() => setPrivateBorrowingFocus(true)}
+                                        onBlur={() => setPrivateBorrowingFocus(false)}
+                                        onChange={item => {
+                                            console.log(JSON.stringify(item))
+                                            setprivateBorrowing(item.id);
+                                            setPrivateBorrowingFocus(false);
+                                        }}
+                                    />
+                                </View>}
                         </View>
 
                         <View style={{ padding: 10, }} />

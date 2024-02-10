@@ -252,6 +252,16 @@ const BlockBSurveyScreen = () => {
     const [selectedwhatPurposes, setSelectedwhatPurposes] = React.useState([]);
 
     const onSelectedwhatPurposesChange = (selectedItems) => {
+        if (selectedItems.length === 0) {
+            Alert.alert('Selection Required', 'Please select two valid reason.');
+            return
+        }
+        else if (selectedItems.length > 2) {
+            Alert.alert('Limit Exceeded', 'You cannot select more than 2 reasons.', [
+                { text: 'OK', onPress: () => multiSelectRef.current._removeItem(selectedItems[selectedItems.length - 1]) },
+            ]);
+            return
+        }
         setSelectedwhatPurposes(selectedItems);
     }
 
@@ -1163,41 +1173,42 @@ const BlockBSurveyScreen = () => {
                                 </View>
                             </View>
                             <View style={{ padding: 10, }} />
-                            <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>2 (b). If it is due to a lack of documents, what is it?</Text>
-                                <MultiSelect
-                                    hideTags
-                                    items={lackdocumentsdata}
-                                    uniqueKey="id"
-                                    ref={multiSelectRef}
-                                    onSelectedItemsChange={(items) =>
-                                        onSelectedlackdocumentsChange(items)
-                                    }
-                                    selectedItems={selectedlackdocuments}
-                                    selectText="Select lack of documents"
-                                    onChangeInput={(text) => console.log(text)}
-                                    altFontFamily="ProximaNova-Light"
-                                    tagRemoveIconColor="#000"
-                                    tagBorderColor="#000"
-                                    tagTextColor="#000"
-                                    selectedItemTextColor="#000"
-                                    selectedItemIconColor="#000"
-                                    itemTextColor="#000"
-                                    displayKey="lable"
-                                    searchInputStyle={{ color: '#000', paddingLeft: 10 }}
-                                    submitButtonColor="#000"
-                                    submitButtonText="Submit"
-                                    itemBackground="#000"
-                                    styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
-                                />
-                                <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
-                                    {SelectedlackdocumentsLabels.map((label, index) => (
-                                        <View style={{ margin: 5 }}>
-                                            <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
-                                        </View>
-                                    ))}
-                                </View>
-                            </View>
+                            {selectedDigitalpreferred.length > 0 &&
+                                <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
+                                    <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>2 (b). If it is due to a lack of documents, what is it?</Text>
+                                    <MultiSelect
+                                        hideTags
+                                        items={lackdocumentsdata}
+                                        uniqueKey="id"
+                                        ref={multiSelectRef}
+                                        onSelectedItemsChange={(items) =>
+                                            onSelectedlackdocumentsChange(items)
+                                        }
+                                        selectedItems={selectedlackdocuments}
+                                        selectText="Select lack of documents"
+                                        onChangeInput={(text) => console.log(text)}
+                                        altFontFamily="ProximaNova-Light"
+                                        tagRemoveIconColor="#000"
+                                        tagBorderColor="#000"
+                                        tagTextColor="#000"
+                                        selectedItemTextColor="#000"
+                                        selectedItemIconColor="#000"
+                                        itemTextColor="#000"
+                                        displayKey="lable"
+                                        searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                        submitButtonColor="#000"
+                                        submitButtonText="Submit"
+                                        itemBackground="#000"
+                                        styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
+                                    />
+                                    <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                        {SelectedlackdocumentsLabels.map((label, index) => (
+                                            <View style={{ margin: 5 }}>
+                                                <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                            </View>
+                                        ))}
+                                    </View>
+                                </View>}
                             <View style={{ padding: 10, }} />
                             <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
                                 <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>2 (C). If you don’t want a bank account, what could be the reasons?</Text>
@@ -1573,7 +1584,7 @@ const BlockBSurveyScreen = () => {
                         </View> : null}
                         <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>16. If you are not using your bank account, please indicate reasons?</Text>
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>16. How do you receive most of your income stream (salary/wages/revenue)?</Text>
                             <MultiSelect
                                 hideTags
                                 items={Incomedata}
