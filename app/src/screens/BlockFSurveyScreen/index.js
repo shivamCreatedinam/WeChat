@@ -310,6 +310,16 @@ const BlockFSurveyScreen = () => {
     }
 
     const onSelectedSatisfiedReasons = (selectedItems) => {
+        if (selectedItems.length === 0) {
+            Alert.alert('Selection Required', 'Please select three valid reason.');
+            return
+        }
+        else if (selectedItems.length > 3) {
+            Alert.alert('Limit Exceeded', 'You cannot select more than 3 reasons.', [
+                { text: 'OK', onPress: () => multiSelectRef.current._removeItem(selectedItems[selectedItems.length - 1]) },
+            ]);
+            return
+        }
         setSatisfiedReasons(selectedItems);
     }
 
@@ -665,14 +675,14 @@ const BlockFSurveyScreen = () => {
                 type: "danger",
             });
         }
-        else if (selectedReason?.length === 0) {
+        else if (isHinderance.label === 'Yes' && selectedReason?.length === 0) {
             showMessage({
                 message: "Please Select Hinderance Reasons",
                 description: "Please Select Hinderance Reasons!",
                 type: "danger",
             });
         }
-        else if (payFraud === null) {
+        else if (isHinderance.label === 'No' && payFraud === null) {
             showMessage({
                 message: "Please Select Payment Fraud",
                 description: "Please Select Payment Fraud!",
@@ -750,7 +760,7 @@ const BlockFSurveyScreen = () => {
                 type: "danger",
             });
         }
-        else if (lodgeComplaint?.label === "No" && rbiScheme === null) {
+        else if (rbiScheme === null) {
             showMessage({
                 message: "Please Select RBI Scheme",
                 description: "Please Select RBI Scheme!",
@@ -1680,7 +1690,7 @@ const BlockFSurveyScreen = () => {
                         </View>
                         <View style={{ padding: 10, }} />
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
-                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>37 (b).If no, do you carry out digital transactions on your own? transactions with someone’s help?</Text>
+                            <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>37 (b).If no, do you carry out digital transactions with someone’s help?</Text>
                             <RadioButtonRN
                                 data={data}
                                 selectedBtn={(e) => stransactionHelp(e)}
@@ -1693,50 +1703,51 @@ const BlockFSurveyScreen = () => {
                                     selectedBtn={(e) => setIsHinderance(e)}
                                 />
                             </View>
-                            <View>
-                                <View style={{ padding: 10, }} />
-                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>37 (d). If yes, please indicate top two reasons?</Text>
-                                <MultiSelect
-                                    hideTags
-                                    items={transactionsdigitally}
-                                    uniqueKey="id"
-                                    ref={multiSelectRef}
-                                    onSelectedItemsChange={(items) =>
-                                        onSelectedReasonChange(items)
-                                    }
-                                    selectedItems={selectedReason}
-                                    selectText="Select financial transactions"
-                                    onChangeInput={(text) => console.log(text)}
-                                    altFontFamily="ProximaNova-Light"
-                                    tagRemoveIconColor="#000"
-                                    tagBorderColor="#000"
-                                    tagTextColor="#000"
-                                    selectedItemTextColor="#000"
-                                    selectedItemIconColor="#000"
-                                    itemTextColor="#000"
-                                    displayKey="lable"
-                                    searchInputStyle={{ color: '#000', paddingLeft: 10 }}
-                                    submitButtonColor="#000"
-                                    submitButtonText="Submit"
-                                    itemBackground="#000"
-                                    styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
-                                />
-                                <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
-                                    {SelectedReasonlabels.map((label, index) => (
-                                        <View style={{ margin: 5 }}>
-                                            <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
-                                        </View>
-                                    ))}
-                                </View>
-                            </View>
-                            <View style={{ padding: 10, }} />
-                            <View>
-                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>37 (e). Have you or anyone in your family lost money in digital payment fraud?</Text>
-                                <RadioButtonRN
-                                    data={data}
-                                    selectedBtn={(e) => sPayFraud(e)}
-                                />
-                            </View>
+                            {isHinderance?.label === 'Yes' ?
+                                <View>
+                                    <View style={{ padding: 10, }} />
+                                    <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>37 (d). If yes, please indicate top two reasons?</Text>
+                                    <MultiSelect
+                                        hideTags
+                                        items={transactionsdigitally}
+                                        uniqueKey="id"
+                                        ref={multiSelectRef}
+                                        onSelectedItemsChange={(items) =>
+                                            onSelectedReasonChange(items)
+                                        }
+                                        selectedItems={selectedReason}
+                                        selectText="Select financial transactions"
+                                        onChangeInput={(text) => console.log(text)}
+                                        altFontFamily="ProximaNova-Light"
+                                        tagRemoveIconColor="#000"
+                                        tagBorderColor="#000"
+                                        tagTextColor="#000"
+                                        selectedItemTextColor="#000"
+                                        selectedItemIconColor="#000"
+                                        itemTextColor="#000"
+                                        displayKey="lable"
+                                        searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                        submitButtonColor="#000"
+                                        submitButtonText="Submit"
+                                        itemBackground="#000"
+                                        styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
+                                    />
+                                    <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                        {SelectedReasonlabels.map((label, index) => (
+                                            <View style={{ margin: 5 }}>
+                                                <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                            </View>
+                                        ))}
+                                    </View>
+                                </View> :
+                                <View>
+                                    <View style={{ padding: 10, }} />
+                                    <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>37 (e). Have you or anyone in your family lost money in digital payment fraud?</Text>
+                                    <RadioButtonRN
+                                        data={data}
+                                        selectedBtn={(e) => sPayFraud(e)}
+                                    />
+                                </View>}
                         </View>
                         {payFraud?.label === "Yes" && <View>
                             {/* <View style={{ padding: 10, }} /> */}
@@ -1867,51 +1878,52 @@ const BlockFSurveyScreen = () => {
                                     data={smartphone}
                                     selectedBtn={(e) => setComplaintSatisfy(e)}
                                 />
-                                <View style={{ padding: 10, }} />
-                                <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>39 (e). If no, what could be the reasons?</Text>
-                                <MultiSelect
-                                    hideTags
-                                    items={lodgedcomplaintreasons}
-                                    uniqueKey="id"
-                                    ref={multiSelectRef}
-                                    onSelectedItemsChange={(items) =>
-                                        onSelectedSatisfiedReasons(items)
-                                    }
-                                    selectedItems={selectedSatisfiedReasons}
-                                    selectText="Select Satisfied Reasons"
-                                    onChangeInput={(text) => console.log(text)}
-                                    altFontFamily="ProximaNova-Light"
-                                    tagRemoveIconColor="#000"
-                                    tagBorderColor="#000"
-                                    tagTextColor="#000"
-                                    selectedItemTextColor="#000"
-                                    selectedItemIconColor="#000"
-                                    itemTextColor="#000"
-                                    displayKey="lable"
-                                    searchInputStyle={{ color: '#000', paddingLeft: 10 }}
-                                    submitButtonColor="#000"
-                                    submitButtonText="Submit"
-                                    itemBackground="#000"
-                                    styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
-                                />
-                                <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
-                                    {SelectedSatisfiedReasonsLabels.map((label, index) => (
-                                        <View style={{ margin: 5 }}>
-                                            <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                {complaintSatisfy?.label === "No" &&
+                                    <View>
+                                        <View style={{ padding: 10, }} />
+                                        <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>39 (e). If no, what could be the reasons?</Text>
+                                        <MultiSelect
+                                            hideTags
+                                            items={lodgedcomplaintreasons}
+                                            uniqueKey="id"
+                                            ref={multiSelectRef}
+                                            onSelectedItemsChange={(items) =>
+                                                onSelectedSatisfiedReasons(items)
+                                            }
+                                            selectedItems={selectedSatisfiedReasons}
+                                            selectText="Select Satisfied Reasons"
+                                            onChangeInput={(text) => console.log(text)}
+                                            altFontFamily="ProximaNova-Light"
+                                            tagRemoveIconColor="#000"
+                                            tagBorderColor="#000"
+                                            tagTextColor="#000"
+                                            selectedItemTextColor="#000"
+                                            selectedItemIconColor="#000"
+                                            itemTextColor="#000"
+                                            displayKey="lable"
+                                            searchInputStyle={{ color: '#000', paddingLeft: 10 }}
+                                            submitButtonColor="#000"
+                                            submitButtonText="Submit"
+                                            itemBackground="#000"
+                                            styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
+                                        />
+                                        <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                                            {SelectedSatisfiedReasonsLabels.map((label, index) => (
+                                                <View style={{ margin: 5 }}>
+                                                    <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
+                                                </View>
+                                            ))}
                                         </View>
-                                    ))}
-                                </View>
+                                    </View>}
                             </View>}
-                            {lodgeComplaint?.label === "No" && <View>
+                            <View>
                                 <View style={{ padding: 10, }} />
                                 <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>39 (f). Do you know about the RBI Integrated Banking Ombudsman Scheme?</Text>
                                 <RadioButtonRN
                                     data={smartphone}
                                     selectedBtn={(e) => sRbiScheme(e)}
                                 />
-                            </View>}
-
-
+                            </View>
                             <View style={{ padding: 10, }} />
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>39 (g). Do you know about the complaint process regarding others such as Insurance, Pension, etc.?</Text>
                             <RadioButtonRN

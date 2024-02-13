@@ -79,6 +79,7 @@ const BlockDSurveyScreen = () => {
     const [privateBorrowing, setprivateBorrowing] = React.useState(null);
     const [privateBorrowingFocus, setPrivateBorrowingFocus] = React.useState(null);
     const [reasonForEnroll, setReasonForEnroll] = React.useState([]);
+    const [reasonForEnrollProducts, setReasonForEnrollProducts] = React.useState([]);
     const [enrolledOtherInsurance, setEnrolledOtherInsurance] = React.useState(null);
     const [rupayCover, setRupayCover] = React.useState(null);
     const [PMJJBY, setPMJJBY] = React.useState(null);
@@ -442,14 +443,14 @@ const BlockDSurveyScreen = () => {
         // }
         else if ((enrollA?.label === "Yes" || enrollB?.label === "Yes" || enrollC?.label === "Yes" || enrollD?.label === "Yes") && privateBorrowing === null) {
             showMessage({
-                message: "Please Select  Place Of Enroll",
+                message: "Please Select Place Of Enroll",
                 description: "Please Select  Place Of Enroll!",
                 type: "danger",
             });
         }
-        else if ((enrollA?.label === "Yes" || enrollB?.label === "Yes" || enrollC?.label === "Yes" || enrollD?.label === "Yes") && reasonForEnroll?.length === 0) {
+        if ((enrollA?.label === "Yes" || enrollB?.label === "Yes" || enrollC?.label === "Yes" || enrollD?.label === "Yes") && reasonForEnroll?.length === 0) {
             showMessage({
-                message: "Please Select Reason For Enroll",
+                message: "Please Select Reason For Enroll x",
                 description: "Please Select Reason For Enroll!",
                 type: "danger",
             });
@@ -504,7 +505,12 @@ const BlockDSurveyScreen = () => {
             });
         }
         else {
-            stopRecording();
+            showMessage({
+                message: 'All Set',
+                description: "All Set",
+                type: "danger",
+            });
+            // stopRecording();
         }
     }
 
@@ -646,7 +652,7 @@ const BlockDSurveyScreen = () => {
                     "sub_q_no": "",
                     "sub_q_title": "",
                     "sub_q_type": "",
-                    "response": reasonForEnroll.length === 0 ? "" : reasonForEnroll
+                    "response": reasonForEnroll.length === 0 ? [] : reasonForEnroll
                 },
                 {
                     "section_no": "D",
@@ -724,7 +730,31 @@ const BlockDSurveyScreen = () => {
     }
 
     const onSelectedReason = (selectedItems) => {
+        if (selectedItems.length === 0) {
+            Alert.alert('Selection Required', 'Please select two valid reason.');
+            return
+        }
+        else if (selectedItems.length > 2) {
+            Alert.alert('Limit Exceeded', 'You cannot select more than 2 reasons.', [
+                { text: 'OK', onPress: () => multiSelectRef.current._removeItem(selectedItems[selectedItems.length - 1]) },
+            ]);
+            return
+        }
         setReasonForEnroll(selectedItems);
+    }
+
+    const onSelectedEnrollProductsReason = (selectedItems) => {
+        if (selectedItems.length === 0) {
+            Alert.alert('Selection Required', 'Please select two valid reason.');
+            return
+        }
+        else if (selectedItems.length > 2) {
+            Alert.alert('Limit Exceeded', 'You cannot select more than 2 reasons.', [
+                { text: 'OK', onPress: () => multiSelectRef.current._removeItem(selectedItems[selectedItems.length - 1]) },
+            ]);
+            return
+        }
+        setReasonForEnrollProducts(selectedItems);
     }
 
     const onSelectedInsuranceInactiveReason = (selectedItems) => {
@@ -750,6 +780,11 @@ const BlockDSurveyScreen = () => {
     }
 
     const SelectedReasonForEnrolLabels = reasonForEnroll.map((selectedId) => {
+        const selectedReason = enrolReason.find((reason) => reason.id === selectedId);
+        return selectedReason ? selectedReason.lable : '';
+    });
+
+    const SelectedReasonForEnrolProductsLabels = reasonForEnrollProducts.map((selectedId) => {
         const selectedReason = enrolReason.find((reason) => reason.id === selectedId);
         return selectedReason ? selectedReason.lable : '';
     });
@@ -1001,9 +1036,9 @@ const BlockDSurveyScreen = () => {
                                         uniqueKey="id"
                                         ref={multiSelectRef}
                                         onSelectedItemsChange={(items) =>
-                                            onSelectedReason(items)
+                                            onSelectedEnrollProductsReason(items)
                                         }
-                                        selectedItems={reasonForEnroll}
+                                        selectedItems={reasonForEnrollProducts}
                                         selectText="Select Reason"
                                         onChangeInput={(text) => console.log(text)}
                                         altFontFamily="ProximaNova-Light"
@@ -1021,7 +1056,7 @@ const BlockDSurveyScreen = () => {
                                         styleTextDropdownSelected={{ color: '#000', paddingLeft: 8, fontSize: 16 }}
                                     />
                                     <View style={{ padding: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
-                                        {SelectedReasonForEnrolLabels.map((label, index) => (
+                                        {SelectedReasonForEnrolProductsLabels.map((label, index) => (
                                             <View style={{ margin: 5 }}>
                                                 <Text key={index} style={{ color: '#000', borderColor: '#DFDFDF', borderWidth: 0.8, padding: 10 }}>{label}</Text>
                                             </View>

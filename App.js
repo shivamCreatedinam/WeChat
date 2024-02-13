@@ -4,12 +4,10 @@ import AsyncStorage from '@react-native-community/async-storage';
 import AsyncStorageContaints from './app/src//utility/AsyncStorageConstants';
 import Geolocation from '@react-native-community/geolocation';
 import { Provider } from 'react-redux';
-import Store from './app/src/redux/store/Store';
-import RNOtpVerify from 'react-native-otp-verify';
+import Store from './app/src/redux/store/Store'; 
 import FlashMessage from 'react-native-flash-message';
 import messaging from '@react-native-firebase/messaging';
-import { logOnConsole } from './app/src/utility/Utils';
-import { init } from '@amplitude/analytics-react-native';
+import { logOnConsole } from './app/src/utility/Utils'; 
 import { SafeAreaView, StatusBar } from 'react-native';
 import AudioRecord from 'react-native-audio-record';
 
@@ -61,13 +59,7 @@ const App = () => {
     },
     { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 },
   );
-
-  // const saveLocationForFutureUse = async (lat, long) => {
-  //   console.log("lat",lat, "long",long)
-  //   AsyncStorage.setItem(AsyncStorageContaints.surveyLatitude, lat + '');
-  //   AsyncStorage.setItem(AsyncStorageContaints.surveyLongitude, long + '');
-  //   console.log('saveLocationForFutureUse',AsyncStorage.getItem("AsyncStorageContaints.surveyLatitude"));
-  // }
+ 
 
   const saveLocationForFutureUse = async (latitude, longitude) => {
     try {

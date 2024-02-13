@@ -350,7 +350,7 @@ const BlockESurveyScreen = () => {
                 type: "danger",
             });
         }
-        else if (PensionEnrolled?.label === "Yes" && selectedReason?.length === 0) {
+        else if ((PensionEnrolled?.label === "Yes" || SchemesEnrolled?.label === "Yes") && selectedReason?.length === 0) {
             showMessage({
                 message: "Please Select Reason",
                 description: "Please Select Reason!",
@@ -409,7 +409,7 @@ const BlockESurveyScreen = () => {
                     'sub_q_no': "",
                     'sub_q_title': "",
                     'sub_q_type': "",
-                    'response': selectedReason?.length === 0 ? "" : selectedReason
+                    'response': selectedReason?.length === 0 ? [] : selectedReason
                 },
             ],
         });
@@ -541,7 +541,7 @@ const BlockESurveyScreen = () => {
                             <View style={{ padding: 10, }} />
                         </View>
 
-                        {PensionEnrolled?.label === "No" && PensionAwareness?.label === "No" &&
+                        {(PensionEnrolled?.label === "Yes" || SchemesEnrolled?.label === "Yes") &&
                             <View>
                                 <View style={{ padding: 10, }} />
                                 <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>

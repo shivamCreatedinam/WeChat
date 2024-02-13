@@ -1171,7 +1171,7 @@ const BlockCSurveyScreen = () => {
                                             selectedBtn={(e) => setRefuse(e)}
                                         />
                                     </View>
-                                    {refuse.label === 'Yes' &&
+                                    {refuse?.label === 'Yes' &&
                                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
                                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>20(e). If refused, what was the reason cited?</Text>
                                             <MultiSelect
