@@ -50,8 +50,7 @@ import {
 } from '../../appnavigation/AppNavigation';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorageContaints from '../../utility/AsyncStorageConstants';
-import { CommonActions } from '@react-navigation/native';
-import WishListScreen from '../wishList/WishlistScreen';
+import { CommonActions } from '@react-navigation/native'; 
 const MessageStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 

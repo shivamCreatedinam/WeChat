@@ -4,10 +4,9 @@ import AsyncStorage from '@react-native-community/async-storage';
 import AsyncStorageContaints from './app/src//utility/AsyncStorageConstants';
 import Geolocation from '@react-native-community/geolocation';
 import { Provider } from 'react-redux';
-import Store from './app/src/redux/store/Store'; 
+import Store from './app/src/redux/store/Store';
 import FlashMessage from 'react-native-flash-message';
 import messaging from '@react-native-firebase/messaging';
-import { logOnConsole } from './app/src/utility/Utils'; 
 import { SafeAreaView, StatusBar } from 'react-native';
 import AudioRecord from 'react-native-audio-record';
 
@@ -29,7 +28,7 @@ const App = () => {
     try {
       AudioRecord.init(options);
     } catch (error) {
-      logOnConsole('Failed to initialise appsflyer !!')
+      
     }
   }, []);
 
@@ -59,7 +58,7 @@ const App = () => {
     },
     { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 },
   );
- 
+
 
   const saveLocationForFutureUse = async (latitude, longitude) => {
     try {

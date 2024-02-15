@@ -306,6 +306,200 @@ const BlockDSurveyScreen = () => {
     }
 
     const validate = () => {
+        console.log('validate', enrollA?.label, enrollB?.label, enrollC?.label, enrollD?.label, enrolledOtherInsurance?.label);
+        if (life === null) {
+            showMessage({
+                message: "Please Select Insurance Facility!",
+                description: "Please Select Insurance Facility!",
+                type: "danger",
+            });
+        } else if (nonLife === null) {
+            showMessage({
+                message: "Please Select Non-life Insurance Facility!",
+                description: "Please Select Insurance Facility!",
+                type: "danger",
+            });
+        } else if (nonLife?.label === "No" && getInsurance === null) {
+            showMessage({
+                message: "Please Select You Want Inusrance Reason!",
+                description: "Please Select You Want Inusrance Reason!",
+                type: "danger",
+            });
+        } else if (awareA === null) {
+            showMessage({
+                message: "Please Select Insurance Facility Awareness A",
+                description: "Please Select IF Awareness A!",
+                type: "danger",
+            });
+        }
+        else if (enrollA === null || enrollA === undefined) {
+            showMessage({
+                message: "Please Select IF Enroll A",
+                description: "Please Select IF Enroll A!",
+                type: "danger",
+            });
+        }
+        else if (awareB === null || awareB === undefined) {
+            showMessage({
+                message: "Please Select IF Awareness B",
+                description: "Please Select IF Awareness B!",
+                type: "danger",
+            });
+        } else if (getInsurance?.label === "No") {
+            if (reasonForEnroll.length === 0) {
+                showMessage({
+                    message: "Please Select Insurance Facility",
+                    description: "Please Select Insurance Facility",
+                    type: "danger",
+                });
+            }
+        } else if (enrollA === null || enrollA === undefined) {
+            showMessage({
+                message: "Please Select IF Enroll A",
+                description: "Please Select IF Enroll A!",
+                type: "danger",
+            });
+        } else if (renewalA === null || renewalA === undefined) {
+            showMessage({
+                message: "Please Select IF renewal A",
+                description: "Please Select IF renewal A!",
+                type: "danger",
+            });
+        }
+        else if (inactiveA === null || inactiveA === undefined) {
+            showMessage({
+                message: "Please Select IF inactive A",
+                description: "Please Select IF inactive A!",
+                type: "danger",
+            });
+        } else if (enrollB === null || enrollB === undefined) {
+            showMessage({
+                message: "Please Select IF Enroll B",
+                description: "Please Select IF Enroll B!",
+                type: "danger",
+            });
+        } else if (awareC === null || awareC === undefined) {
+            showMessage({
+                message: "Please Select IF Awareness C",
+                description: "Please Select IF Awareness C!",
+                type: "danger",
+            });
+        }
+        else if (enrollC === null || enrollC === undefined) {
+            showMessage({
+                message: "Please Select IF Enroll C",
+                description: "Please Select IF Enroll A!",
+                type: "danger",
+            });
+        }
+        else if (renewalC === null || renewalC === undefined) {
+            showMessage({
+                message: "Please Select IF renewal C",
+                description: "Please Select IF renewal C!",
+                type: "danger",
+            });
+        }
+        else if (inactiveC === null || inactiveC === undefined) {
+            showMessage({
+                message: "Please Select IF inactive C",
+                description: "Please Select IF inactive C!",
+                type: "danger",
+            });
+        } else if (awareD === null || awareD === undefined) {
+            showMessage({
+                message: "Please Select IF Awareness D",
+                description: "Please Select IF Awareness D!",
+                type: "danger",
+            });
+        }
+        else if (enrollD === null || enrollD === undefined) {
+            showMessage({
+                message: "Please Select IF Enroll D",
+                description: "Please Select IF Enroll D!",
+                type: "danger",
+            });
+        }
+        else if (renewalD === null || renewalD === undefined) {
+            showMessage({
+                message: "Please Select IF renewal D",
+                description: "Please Select IF renewal D!",
+                type: "danger",
+            });
+        }
+        else if (inactiveD === null || inactiveD === undefined) {
+            showMessage({
+                message: "Please Select IF inactive D",
+                description: "Please Select IF inactive D!",
+                type: "danger",
+            });
+        } else if (enrollA?.label === "Yes" || enrollB?.label === "Yes" || enrollC?.label === "Yes" || enrollD?.label === "Yes") {
+            if (privateBorrowing === null) {
+                showMessage({
+                    message: "Please Select Insurance Product Of Enroll",
+                    description: "Please Select Insurance Product Of Enroll!",
+                    type: "danger",
+                });
+            }
+        }
+        if ((enrollA?.label === "Yes" || enrollB?.label === "Yes" || enrollC?.label === "Yes" || enrollD?.label === "Yes") && reasonForEnrollProducts?.length === 0) {
+            showMessage({
+                message: "Please Select Reason For Enroll",
+                description: "Please Select Reason For Enroll!",
+                type: "danger",
+            });
+        } else if (enrolledOtherInsurance === null || enrolledOtherInsurance === undefined) {
+            showMessage({
+                message: "Please Select Other Life Insurance Enroll",
+                description: "Please Select Other Life Insurance Enroll!",
+                type: "danger",
+            });
+        } else if (rupayCover === null || rupayCover === undefined) {
+            showMessage({
+                message: "Please Select Rupay Accident Cover",
+                description: "Please Select Rupay Accident Cover!",
+                type: "danger",
+            });
+        }
+        else if (PMJJBY === null || PMJJBY?.label === undefined) {
+            showMessage({
+                message: "Please Select PMJJBY",
+                description: "Please Select PMJJBY!",
+                type: "danger",
+            });
+        }
+        else if (PMSBY === null) {
+            showMessage({
+                message: "Please Select PMSBY",
+                description: "Please Select PMSBY!",
+                type: "danger",
+            });
+        }
+        else if (PMFBY === null) {
+            showMessage({
+                message: "Please Select PMFBY",
+                description: "Please Select PMFBY!",
+                type: "danger",
+            });
+        } else if (other === null) {
+            showMessage({
+                message: "Please Select Any Other",
+                description: "Please Select Any Othe!",
+                type: "danger",
+            });
+        } else if (enrollA?.label === "Yes" && enrollB?.label === "Yes" && enrollC?.label === "Yes" && enrollD?.label === "Yes" && enrolledOtherInsurance?.label === "Yes") {
+            if (insuranceInactive.length === 0) {
+                showMessage({
+                    message: "Please Select Insurance Inactive Resaon",
+                    description: "Please Select Insurance Inactive Resaon!",
+                    type: "danger",
+                });
+            }
+        } else {
+            stopRecording();
+        }
+    }
+
+    const validateX = () => {
         if (life === null) {
             showMessage({
                 message: "Please Select Insurance Facility!",
@@ -450,7 +644,7 @@ const BlockDSurveyScreen = () => {
         }
         if ((enrollA?.label === "Yes" || enrollB?.label === "Yes" || enrollC?.label === "Yes" || enrollD?.label === "Yes") && reasonForEnroll?.length === 0) {
             showMessage({
-                message: "Please Select Reason For Enroll x",
+                message: "Please Select Reason For Enroll",
                 description: "Please Select Reason For Enroll!",
                 type: "danger",
             });
@@ -839,7 +1033,7 @@ const BlockDSurveyScreen = () => {
                                 <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>23(c). If not, do you want to get any insurance facilities?</Text>
                                 <RadioButtonRN
                                     data={dataGroup}
-                                    selectedBtn={(e) => { console.log("RRRRR", e); setGetInsurance(e) }}
+                                    selectedBtn={(e) => setGetInsurance(e)}
                                 />
                             </View> : null}
                             {getInsurance?.label === "No" ? <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
@@ -999,7 +1193,6 @@ const BlockDSurveyScreen = () => {
                                 />
                             </View>
                         </View>
-
                         {(enrollA?.label === "Yes" || enrollB?.label === "Yes" || enrollC?.label === "Yes" || enrollD?.label === "Yes") &&
                             <View>
                                 <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
@@ -1065,9 +1258,6 @@ const BlockDSurveyScreen = () => {
                                 </View>
                             </View>
                         }
-
-
-
                         <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff' }}>
                             <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>27. Are you enrolled in any other life insurance (other than above)?</Text>
                             <RadioButtonRN
@@ -1115,7 +1305,8 @@ const BlockDSurveyScreen = () => {
                                 />
                             </View>
                         </View>
-                        {(enrollA?.label === "Yes" || enrollB?.label === "Yes" || enrollC?.label === "Yes" || enrollD?.label === "Yes") &&
+                        <Text>{enrollA?.label}{enrollB?.label}{enrollA?.label}{enrollC?.label}{enrollD?.label}{enrolledOtherInsurance?.label}</Text>
+                        {(enrollA?.label === "Yes" && enrollB?.label === "Yes" && enrollC?.label === "Yes" && enrollD?.label === "Yes") && enrolledOtherInsurance?.label === 'Yes' &&
                             <View style={{ padding: 5, elevation: 1, backgroundColor: '#fff', paddingTop: 10 }}>
                                 <Text style={{ marginBottom: 5, fontWeight: 'bold' }}>29 . If your insurance has become inactive, please indicate the reasons?</Text>
                                 <MultiSelect
@@ -1154,10 +1345,7 @@ const BlockDSurveyScreen = () => {
                         }
 
                         <View style={{ padding: 10, }} />
-                        <TouchableOpacity disabled={isSubmitSurvey} onPress={() => {
-                            //  navigation.replace('BlockESurveyScreen');
-                            validate()
-                        }}
+                        <TouchableOpacity disabled={isSubmitSurvey} onPress={() => validate()}
                             style={{ paddingVertical: 20, paddingHorizontal: 10, backgroundColor: '#000', borderRadius: 10 }}>
                             {isSubmitSurvey === true ? <ActivityIndicator style={{ alignItems: 'center' }} color={'#fff'} /> : <Text style={{ color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', textAlign: 'center' }}>Next Block E</Text>}
                         </TouchableOpacity>

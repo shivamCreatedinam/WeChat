@@ -12,7 +12,6 @@ import AppUser from '../../utility/AppUser';
 import AsyncStorageContaints from '../../utility/AsyncStorageConstants';
 import { onUpdateCartBadgeCount } from '../../redux/actions/CartAction';
 import { onUpdateWishlistBadgeCount } from '../../redux/actions/WishListAction';
-import { isPlatformIOS } from '../../utility/Utils';
 
 import RNOtpVerify from 'react-native-otp-verify';
 

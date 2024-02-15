@@ -1,7 +1,6 @@
 'use strict';
 import { Platform, Dimensions, StatusBar, Alert, PixelRatio } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import appsFlyer from 'react-native-appsflyer';
 
 const MapAPIKey = 'AIzaSyBdR-ro5cVTRIihxT_upuFy9qzw7P2OXrQ';
 const myWidth =
@@ -30,20 +29,7 @@ export const getRazorpayKey = () => {
 };
 
 export const HandleAppsFlyer = (eventName, eventValues) => {
-  try {
-    appsFlyer.logEvent(
-      eventName,
-      eventValues,
-      res => {
-        logOnConsole('appsflyer success response----', res);
-      },
-      err => {
-        logOnConsole('appsflyer error response----', err);
-      },
-    );
-  } catch (error) {
-    logOnConsole('Appsflyer failed to log event !!!');
-  }
+
 };
 
 export const myOS = Platform.OS;
